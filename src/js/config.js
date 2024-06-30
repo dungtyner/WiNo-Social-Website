@@ -1,9 +1,4 @@
-const HOST_SERVER='http://localhost:5000';  
-// const HOST_SERVER='https://testsocialmusic.herokuapp.com';
+const HOST_SERVER = process.env.REACT_APP_BACKEND_API_URL;
+const SITE_KEY_RECAPTCHA = process.env.REACT_APP_SITE_KEY_RECAPTCHA;
 
-
-const SITE_KEY_RECAPTCHA='6LcCK0ciAAAAAED2CNknmxcjTqVQ4SwMwlYi9qAc'
-export {
-    HOST_SERVER
-    ,SITE_KEY_RECAPTCHA
-} ;
+export { HOST_SERVER, SITE_KEY_RECAPTCHA };

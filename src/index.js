@@ -23,11 +23,11 @@ async function run() {
     const get_isLoginEd = async () => {
       
       return await fetch( config.HOST_SERVER +"/account/check-is-active", {
-        // headers:{
-        //   "Access-Control-Allow-Origin": "*"
-        // },
+        headers:{
+          "Access-Control-Allow-Origin": "*"
+        },
         method: "GET",
-        // mode: "cors",
+        mode: "cors",
         credentials: 'include'
       });
     };

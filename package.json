@@ -34,7 +34,7 @@
   "scripts": {
     "postinstall": "bash ./scripts/postinstall.sh",
     "build": "npm run postinstall && react-scripts build",
-    "start": "react-scripts start",
+    "start": "npm run postinstall && react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

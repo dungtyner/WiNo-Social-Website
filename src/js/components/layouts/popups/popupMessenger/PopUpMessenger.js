@@ -1,9 +1,9 @@
-import "../popupMessenger/PopUpMessenger.css";
+import '../popupMessenger/PopUpMessenger.css';
 
-import FormMessenger from "../../../parts/inputs/forms/formMessenger/FormMessenger";
-import LabelCircle from "../../../parts/labels/labelCircle/LabelCircle";
-import ItemOpt from "../../../parts/item/itemOpt/ItemOpt";
-import HeaderSpaceBetween from "../../../parts/subHeaders/headerSpaceBetween/HeaderSpaceBetween";
+import FormMessenger from '../../../parts/inputs/forms/formMessenger/FormMessenger';
+import LabelCircle from '../../../parts/labels/labelCircle/LabelCircle';
+import ItemOpt from '../../../parts/item/itemOpt/ItemOpt';
+import HeaderSpaceBetween from '../../../parts/subHeaders/headerSpaceBetween/HeaderSpaceBetween';
 import {
   Icon_Angle_Down,
   Icon_Arrow_Down,
@@ -13,30 +13,34 @@ import {
   Icon_Phone,
   Icon_Video,
   Icon_Window_MiniSize,
-} from "../../../parts/icons/fontAwesome/FontAwesome";
+} from '../../../parts/icons/fontAwesome/FontAwesome';
 
-import { singleObj_constructor_toList } from "../../../../store/functions";
-import Message from "../../../parts/messages/Message";
+import { singleObj_constructor_toList } from '../../../../store/functions';
+import Message from '../../../parts/messages/Message';
 
-import { createContext, useRef, useState, useEffect } from "react";
-import PopupSettingMessenger from "../popupSettingMessenger/PopupSettingMessenger/PopupSettingMessenger";
-import PopUp_ from "../popup";
-import { useStore } from "../../../../store";
-import { add_popup_call_video, delete_popup_call_video, delete_popup_messenger } from "../../../../store/actions";
+import { createContext, useRef, useState, useEffect } from 'react';
+import PopupSettingMessenger from '../popupSettingMessenger/PopupSettingMessenger/PopupSettingMessenger';
+import PopUp_ from '../popup';
+import { useStore } from '../../../../store';
+import {
+  add_popup_call_video,
+  delete_popup_call_video,
+  delete_popup_messenger,
+} from '../../../../store/actions';
 import {
   isMeSender,
   shortLassSessionMess as Display_shortLassSessionMess,
-} from "../popupHeader/popupMessageHeader/PopupMessageHeader";
-import PopUpCallVideo from "../popupCallVideo/PopUpCallVideo";
-import { HOST_SERVER } from "../../../../config";
-import Peer from "peerjs";
+} from '../popupHeader/popupMessageHeader/PopupMessageHeader';
+import PopUpCallVideo from '../popupCallVideo/PopUpCallVideo';
+import { HOST_SERVER } from '../../../../config';
+import Peer from 'peerjs';
 export const Context_Message = createContext();
 function PopUpMessenger({
   idChat,
   nameChat,
   avatarChat,
   last_interact,
-  membersChat=[],
+  membersChat = [],
   contentsPopUpMessenger = [],
 }) {
   const [state_contentsPopUpMessenger, setState_contentsPopUpMessenger] =
@@ -62,24 +66,29 @@ function PopUpMessenger({
   useEffect(() => {
     // console.log(`PEOPLE_${idChat}_UPDATE_BOX_CHAT`);
 
-    state.socketChat.on(`${state.account.slug_personal}_SHUTDOWN_CALL_VIDEO`, (data) => {
-      // dispatch(delete_popup_call_video(null));
-    })
+    state.socketChat.on(
+      `${state.account.slug_personal}_SHUTDOWN_CALL_VIDEO`,
+      (data) => {
+        // dispatch(delete_popup_call_video(null));
+      },
+    );
 
     state.socketChat.on(`PEOPLE_${idChat}_UPDATE_BOX_CHAT`, (data) => {
       set_state_name_chat(data.box_chat.name_chat);
-      set_state_avatar_chat(data.box_chat.avatar_chat)
-    })
+      set_state_avatar_chat(data.box_chat.avatar_chat);
+    });
     state.socketChat.on(`PEOPLE_${idChat}_SENDING`, (content_messages) => {
-      
       var state_tmp = state_contentsPopUpMessenger;
-      var last_content_mess=state_contentsPopUpMessenger[state_contentsPopUpMessenger.length - 1];
-      var last_session_mess=null;
+      var last_content_mess =
+        state_contentsPopUpMessenger[state_contentsPopUpMessenger.length - 1];
+      var last_session_mess = null;
       console.log(content_messages.value_content_sessionMessage);
-      if(last_content_mess)
-      {
+      if (last_content_mess) {
         // console.log('_SENDING',last_content_mess.session_messages.length);
-        last_session_mess=last_content_mess.session_messages[last_content_mess.session_messages.length-1];
+        last_session_mess =
+          last_content_mess.session_messages[
+            last_content_mess.session_messages.length - 1
+          ];
         if (
           state_contentsPopUpMessenger.length > 0 &&
           content_messages.value_content_sessionMessage.session_messages
@@ -95,18 +104,18 @@ function PopUpMessenger({
                 isMe:
                   state.account.slug_personal ==
                   content_messages.account.slug_personal,
-                name_sender:content_messages.value_content_sessionMessage.name_sender,
+                name_sender:
+                  content_messages.value_content_sessionMessage.name_sender,
                 avatar_account: content_messages.account.avatar_account,
                 session_messages:
-                  content_messages.value_content_sessionMessage.session_messages,
+                  content_messages.value_content_sessionMessage
+                    .session_messages,
                 slug_sender: content_messages.account.slug_personal,
               }),
             ]);
           }
         }
-      }
-      else
-      {
+      } else {
         setState_contentsPopUpMessenger(() => [
           ...state_tmp,
           new contentPopUpMessenger({
@@ -115,7 +124,7 @@ function PopUpMessenger({
               content_messages.account.slug_personal,
             name_sender:
               content_messages.account.user_fname +
-              " " +
+              ' ' +
               content_messages.account.user_lname,
             avatar_account: content_messages.account.avatar_account,
             session_messages:
@@ -123,7 +132,7 @@ function PopUpMessenger({
             slug_sender: content_messages.account.slug_personal,
           }),
         ]);
-        console.log('_SENDING',[
+        console.log('_SENDING', [
           ...state_tmp,
           new contentPopUpMessenger({
             isMe:
@@ -131,7 +140,7 @@ function PopUpMessenger({
               content_messages.account.slug_personal,
             name_sender:
               content_messages.account.user_fname +
-              " " +
+              ' ' +
               content_messages.account.user_lname,
             avatar_sender: content_messages.account.avatar_account,
             session_messages:
@@ -140,15 +149,17 @@ function PopUpMessenger({
           }),
         ]);
       }
-      state.socketChat.off(`PEOPLE_${idChat}_REMOVING`)
+      state.socketChat.off(`PEOPLE_${idChat}_REMOVING`);
     });
 
     state.socketChat.on(
       `PEOPLE_${idChat}_REMOVING`,
       ({ idx_sessionMessage, slug_sender, idChat }) => {
-        console.log('_REMOVING',state_contentsPopUpMessenger);
-        var idx_content_message = parseInt(idx_sessionMessage.split("/")[0]);
-        var idx_sessionMessageUpdate = parseInt(idx_sessionMessage.split("/")[1]);
+        console.log('_REMOVING', state_contentsPopUpMessenger);
+        var idx_content_message = parseInt(idx_sessionMessage.split('/')[0]);
+        var idx_sessionMessageUpdate = parseInt(
+          idx_sessionMessage.split('/')[1],
+        );
         var tmp_ContentMessage = state_contentsPopUpMessenger;
         // console.log('_REMOVING',tmp_ContentMessage,idx_content_message);
         var tmp_session_mess =
@@ -161,8 +172,8 @@ function PopUpMessenger({
         tmp_ContentMessage[idx_content_message].session_messages[
           idx_sessionMessageUpdate
         ] = new content_sessionMessage({
-          time_send:tmp_session_mess.time_send
-        })
+          time_send: tmp_session_mess.time_send,
+        });
         tmp_ContentMessage.forEach((content_message) => {
           content_message.session_messages.forEach((session_message) => {
             if (session_message != null) {
@@ -178,13 +189,13 @@ function PopUpMessenger({
           });
         });
         setState_contentsPopUpMessenger(tmp_ContentMessage.concat([]));
-      }
+      },
     );
     if (!isShowMoveDownMess) {
       if (refContentPopUp.current) {
         refContentPopUp.current.scrollTo(
           0,
-          refContentPopUp.current.scrollHeight
+          refContentPopUp.current.scrollHeight,
         );
       }
     }
@@ -194,7 +205,7 @@ function PopUpMessenger({
       if (refContentPopUp.current) {
         refContentPopUp.current.scrollTo(
           0,
-          refContentPopUp.current.scrollHeight
+          refContentPopUp.current.scrollHeight,
         );
       }
     }
@@ -215,36 +226,44 @@ function PopUpMessenger({
     });
     // console.log(`PEOPLE_${idChat}_REACTING`);
     state.socketChat.on(`PEOPLE_${idChat}_REACTING`, (dataReacting) => {
-
-      var idx_content_message = parseInt(dataReacting.idx_sessionMessage.split("/")[0]);
-      var idx_sessionMessageUpdate =
-      parseInt(dataReacting.idx_sessionMessage.split("/")[1]);
-        var dataMemberInteract_er =  membersChat.filter(member=>member.slug_member===dataReacting.slug_interact_er)[0];
-        membersChat.forEach(member=>{
-          if(member.slug_member===state.account.slug_personal)
-          {
-            if(member.startContent)
-            {
-              console.log(`PEOPLE_${idChat}_REACTING`,idx_content_message,state_contentsPopUpMessenger[idx_content_message]);
-              idx_content_message=idx_content_message-member.startContent-1;
-            }
-            if(dataMemberInteract_er&&dataMemberInteract_er.startContent>0)
-            {
-              idx_content_message=idx_content_message+dataMemberInteract_er.startContent+1;
-            }
-            console.log(`PEOPLE_${idChat}_REACTING`,idx_content_message,state_contentsPopUpMessenger[idx_content_message]);
-            if (state_contentsPopUpMessenger[idx_content_message]) {
-              state_contentsPopUpMessenger[idx_content_message].session_messages[
-                idx_sessionMessageUpdate
-              ] = dataReacting.value_sessionMessage;
-              setState_contentsPopUpMessenger([].concat(state_contentsPopUpMessenger));
-            }
+      var idx_content_message = parseInt(
+        dataReacting.idx_sessionMessage.split('/')[0],
+      );
+      var idx_sessionMessageUpdate = parseInt(
+        dataReacting.idx_sessionMessage.split('/')[1],
+      );
+      var dataMemberInteract_er = membersChat.filter(
+        (member) => member.slug_member === dataReacting.slug_interact_er,
+      )[0];
+      membersChat.forEach((member) => {
+        if (member.slug_member === state.account.slug_personal) {
+          if (member.startContent) {
+            console.log(
+              `PEOPLE_${idChat}_REACTING`,
+              idx_content_message,
+              state_contentsPopUpMessenger[idx_content_message],
+            );
+            idx_content_message = idx_content_message - member.startContent - 1;
           }
-
-
-
-        })
-
+          if (dataMemberInteract_er && dataMemberInteract_er.startContent > 0) {
+            idx_content_message =
+              idx_content_message + dataMemberInteract_er.startContent + 1;
+          }
+          console.log(
+            `PEOPLE_${idChat}_REACTING`,
+            idx_content_message,
+            state_contentsPopUpMessenger[idx_content_message],
+          );
+          if (state_contentsPopUpMessenger[idx_content_message]) {
+            state_contentsPopUpMessenger[idx_content_message].session_messages[
+              idx_sessionMessageUpdate
+            ] = dataReacting.value_sessionMessage;
+            setState_contentsPopUpMessenger(
+              [].concat(state_contentsPopUpMessenger),
+            );
+          }
+        }
+      });
     });
   }, [state_contentsPopUpMessenger]);
   useEffect(() => {
@@ -287,32 +306,33 @@ function PopUpMessenger({
   }, [stateCountMess, isZoomOut]);
   useEffect(() => {
     refContentPopUp.current.scrollTo(0, refContentPopUp.current.scrollHeight);
-    refContentPopUp.current.addEventListener("resize", (event) => {
-      console.log("WIDTH", event.currentTarget.innerWidth);
+    refContentPopUp.current.addEventListener('resize', (event) => {
+      console.log('WIDTH', event.currentTarget.innerWidth);
     });
   }, [refContentPopUp]);
   useEffect(() => {
     document
-      .querySelectorAll(".container_zoomOutPopUpMessenger")
+      .querySelectorAll('.container_zoomOutPopUpMessenger')
       .forEach((el, idx) => {
-        el.style.position = "absolute";
-        el.style.bottom = (idx + 1) * 60 + "px";
-        el.style.right = "0";
+        el.style.position = 'absolute';
+        el.style.bottom = (idx + 1) * 60 + 'px';
+        el.style.right = '0';
       });
     if (!isZoomOut) {
       if (refContentPopUp.current) {
         refContentPopUp.current.scrollTo(
           0,
-          refContentPopUp.current.scrollHeight
+          refContentPopUp.current.scrollHeight,
         );
       }
     }
   }, [isZoomOut]);
   return (
     !isClose && (
-      <PopUp_ 
-      // showContainerOutside={true}
-      isClickOutside={false}>
+      <PopUp_
+        // showContainerOutside={true}
+        isClickOutside={false}
+      >
         <Context_Message.Provider
           value={{
             refContentPopUp,
@@ -324,12 +344,14 @@ function PopUpMessenger({
             set_stateReplyMess,
             statePopupContentMess,
             set_statePopupContentMess,
-            isShowSettingMess, setIsShowSettingMess,
-            isClose, setIs_close,
+            isShowSettingMess,
+            setIsShowSettingMess,
+            isClose,
+            setIs_close,
             idChat,
             membersChat,
-            nameChat:state_name_chat,
-            avatarChat:state_avatar_chat,
+            nameChat: state_name_chat,
+            avatarChat: state_avatar_chat,
           }}
         >
           {!isZoomOut && (
@@ -348,15 +370,21 @@ function PopUpMessenger({
                           }}
                         >
                           <ItemOpt
-                            component_Left={<LabelCircle urlImg={state_avatar_chat} />}
-                            children_centerItemOpt={<b
-                            style={{
-                              "whiteSpace": "nowrap",
-                              "textOverflow": "ellipsis",
-                              "width": "160px",
-                              "overflow": "hidden"
-                            }}
-                            >{state_name_chat}</b>}
+                            component_Left={
+                              <LabelCircle urlImg={state_avatar_chat} />
+                            }
+                            children_centerItemOpt={
+                              <b
+                                style={{
+                                  whiteSpace: 'nowrap',
+                                  textOverflow: 'ellipsis',
+                                  width: '160px',
+                                  overflow: 'hidden',
+                                }}
+                              >
+                                {state_name_chat}
+                              </b>
+                            }
                             component_Right={
                               <div>
                                 <Icon_Angle_Down />
@@ -374,30 +402,45 @@ function PopUpMessenger({
                                 socket: state.socketChat,
                                 accountTyping: state.account,
                               });
-                              const peer = new Peer()
-                              fetch(`${HOST_SERVER}/chat/callVideo`,{
-                                body:JSON.stringify({
+                              const peer = new Peer();
+                              fetch(`${HOST_SERVER}/chat/callVideo`, {
+                                body: JSON.stringify({
                                   idChat,
-                                  socketId:state.socketChat.id,
+                                  socketId: state.socketChat.id,
                                   content_message: new contentPopUpMessenger({
-                                    slug_sender:state.account.slug_personal,
-                                    session_messages: [new content_sessionMessage({
-                                      notification: new notificationMess({
-                                        callVideo : new notification_callVideo({
-                                          isEnded:false,
-                                          slug_caller:state.account.slug_personal
-                                        })
-                                      })
-                                    })]
-                                  })
+                                    slug_sender: state.account.slug_personal,
+                                    session_messages: [
+                                      new content_sessionMessage({
+                                        notification: new notificationMess({
+                                          callVideo: new notification_callVideo(
+                                            {
+                                              isEnded: false,
+                                              slug_caller:
+                                                state.account.slug_personal,
+                                            },
+                                          ),
+                                        }),
+                                      }),
+                                    ],
+                                  }),
                                 }),
-                                headers:{
-                                  'Content-Type':'application/json'
+                                headers: {
+                                  'Content-Type': 'application/json',
                                 },
-                                credentials:'include',
-                                method:'POST'
-                              })
-                              dispatch(add_popup_call_video(<PopUpCallVideo membersChat={membersChat} peer={peer} avatarCallVideo={state_avatar_chat} nameCallVideo={state_name_chat} idChat={idChat}/>));
+                                credentials: 'include',
+                                method: 'POST',
+                              });
+                              dispatch(
+                                add_popup_call_video(
+                                  <PopUpCallVideo
+                                    membersChat={membersChat}
+                                    peer={peer}
+                                    avatarCallVideo={state_avatar_chat}
+                                    nameCallVideo={state_name_chat}
+                                    idChat={idChat}
+                                  />,
+                                ),
+                              );
                             }}
                           >
                             <Icon_CallVideo />
@@ -469,7 +512,7 @@ function PopUpMessenger({
                         <Message
                           idxMessage={idx}
                           time={el.time}
-                          isMe={el.slug_sender==state.account.slug_personal}
+                          isMe={el.slug_sender == state.account.slug_personal}
                           key={idx}
                           name_sender={el.name_sender}
                           slug_sender={el.slug_sender}
@@ -489,7 +532,7 @@ function PopUpMessenger({
                         onClick={() => {
                           refContentPopUp.current.scrollTo(
                             0,
-                            refContentPopUp.current.scrollHeight
+                            refContentPopUp.current.scrollHeight,
                           );
                         }}
                       >
@@ -500,23 +543,23 @@ function PopUpMessenger({
                       <div
                         className="body-replyMess"
                         style={{
-                          width: "100%",
-                          height: "60px",
+                          width: '100%',
+                          height: '60px',
                         }}
                       >
                         <div className="title-replyMess">
-                          Be replying{" "}
+                          Be replying{' '}
                           <b>
                             {stateReplyMess.slug_sender ==
                             state.account.slug_personal
-                              ? "My Self"
+                              ? 'My Self'
                               : stateReplyMess.name_sender}
                           </b>
                         </div>
                         <div className="mess-replyMess">
                           {Display_shortLassSessionMess(
                             stateReplyMess.sessionMessage,
-                            ""
+                            '',
                           )}
                         </div>
                         <div
@@ -540,8 +583,8 @@ function PopUpMessenger({
             <div
               className="container_zoomOutPopUpMessenger"
               style={{
-                display: "flex",
-                alignItems: "center",
+                display: 'flex',
+                alignItems: 'center',
                 zIndex: 1,
               }}
               onClick={() => {
@@ -553,65 +596,66 @@ function PopUpMessenger({
                 <div
                   className="contentTextMessage_zoomOut"
                   style={{
-                    position: "absolute",
+                    position: 'absolute',
                     left: 0,
-                    transform: "translateX(-100%)",
-                    background: "var(--greenColorBegin_Background)",
-                    padding: "11px 10px",
-                    borderRadius: "10px",
-                    boxShadow: "1px 1px 1px 1px var(--greenColorHot)",
-                    color: "var(--greenColorHot)",
-                    minWidth: "250px",
+                    transform: 'translateX(-100%)',
+                    background: 'var(--greenColorBegin_Background)',
+                    padding: '11px 10px',
+                    borderRadius: '10px',
+                    boxShadow: '1px 1px 1px 1px var(--greenColorHot)',
+                    color: 'var(--greenColorHot)',
+                    minWidth: '250px',
                   }}
                 >
                   <div
                     style={{
-                      fontWeight: "bolder",
-                      marginBottom:'10px',
-                      
-
+                      fontWeight: 'bolder',
+                      marginBottom: '10px',
                     }}
                   >
                     {nameChat}
                   </div>
-                  {state_contentsPopUpMessenger[state_contentsPopUpMessenger.length - 1] &&
-                    <div style={{ display: "flex",marginLeft:'10px', }}>
-                    <div style={{ marginRight: "10px" }}>
-                      {last_interact
-                        ? isMeSender({
-                            name_sender: last_interact.name_interact_er,
-                            slug_me: state.account.slug_personal,
-                            slug_sender: last_interact._interact_er,
-                          })
-                        : isMeSender({
-                            name_sender:
+                  {state_contentsPopUpMessenger[
+                    state_contentsPopUpMessenger.length - 1
+                  ] && (
+                    <div style={{ display: 'flex', marginLeft: '10px' }}>
+                      <div style={{ marginRight: '10px' }}>
+                        {last_interact
+                          ? isMeSender({
+                              name_sender: last_interact.name_interact_er,
+                              slug_me: state.account.slug_personal,
+                              slug_sender: last_interact._interact_er,
+                            })
+                          : isMeSender({
+                              name_sender:
+                                state_contentsPopUpMessenger[
+                                  state_contentsPopUpMessenger.length - 1
+                                ].name_sender,
+                              slug_me: state.account.slug_personal,
+                              slug_sender:
+                                state_contentsPopUpMessenger[
+                                  state_contentsPopUpMessenger.length - 1
+                                ].slug_sender,
+                            })}
+                      </div>{' '}
+                      <p>
+                        {last_interact
+                          ? `Expressed feeling ${last_interact.value_interact}`
+                          : Display_shortLassSessionMess(
                               state_contentsPopUpMessenger[
                                 state_contentsPopUpMessenger.length - 1
-                              ].name_sender,
-                            slug_me: state.account.slug_personal,
-                            slug_sender: state_contentsPopUpMessenger[
-                              state_contentsPopUpMessenger.length - 1
-                            ].slug_sender,
-                          })}
-                    </div>{" "}
-                    <p>
-                      {last_interact
-                        ? `Expressed feeling ${last_interact.value_interact}`
-                        : Display_shortLassSessionMess(
-                            state_contentsPopUpMessenger[
-                              state_contentsPopUpMessenger.length - 1
-                            ].session_messages[
-                              state_contentsPopUpMessenger[
-                                state_contentsPopUpMessenger.length - 1
-                              ].session_messages.length - 1
-                            ]
-                          )}
-                    </p>
-                  </div>
-                  }
+                              ].session_messages[
+                                state_contentsPopUpMessenger[
+                                  state_contentsPopUpMessenger.length - 1
+                                ].session_messages.length - 1
+                              ],
+                            )}
+                      </p>
+                    </div>
+                  )}
                 </div>
               ) : (
-                ""
+                ''
               )}
               <span
                 onMouseOver={() => {
@@ -655,7 +699,7 @@ export function content_sessionMessage({
   gif = null,
   application = null,
   isShare = false,
-  notification=null
+  notification = null,
 } = {}) {
   this.time_send = time_send;
   this.text = text;
@@ -669,24 +713,21 @@ export function content_sessionMessage({
   this.application = application;
   this.isShare = isShare;
   this.notification = notification;
-
-
 }
 export function notificationMess({
-  join_chat=null,
-  leave_chat=null,
-  modify_name_chat=null,
-  modify_nick_name=null,
-  change_avatar_chat=null,
-  callVideo=null,
-})
-{
-  this.join_chat=join_chat;
-  this.leave_chat=leave_chat;
-  this.modify_name_chat=modify_name_chat;
-  this.modify_nick_name=modify_nick_name;
-  this.change_avatar_chat=change_avatar_chat;
-  this.callVideo=callVideo;
+  join_chat = null,
+  leave_chat = null,
+  modify_name_chat = null,
+  modify_nick_name = null,
+  change_avatar_chat = null,
+  callVideo = null,
+}) {
+  this.join_chat = join_chat;
+  this.leave_chat = leave_chat;
+  this.modify_name_chat = modify_name_chat;
+  this.modify_nick_name = modify_nick_name;
+  this.change_avatar_chat = change_avatar_chat;
+  this.callVideo = callVideo;
 }
 export function notification_modify_name_chat_Mess({
   slug_performer,
@@ -694,12 +735,11 @@ export function notification_modify_name_chat_Mess({
   new_name_chat,
 
   slug_affecter,
-})
-{
-  this.slug_performer=slug_performer;
-  this.new_name_chat=new_name_chat;
-  this.old_name_chat=old_name_chat;
-  this.slug_affecter=slug_affecter;
+}) {
+  this.slug_performer = slug_performer;
+  this.new_name_chat = new_name_chat;
+  this.old_name_chat = old_name_chat;
+  this.slug_affecter = slug_affecter;
 }
 export function notification_modify_nick_name_Mess({
   slug_performer,
@@ -707,40 +747,27 @@ export function notification_modify_nick_name_Mess({
   new_nick_name,
 
   slug_affecter,
-})
-{
-  this.slug_performer=slug_performer;
-  this.new_nick_name=new_nick_name;
-  this.old_nick_name=old_nick_name;
-  this.slug_affecter=slug_affecter;
+}) {
+  this.slug_performer = slug_performer;
+  this.new_nick_name = new_nick_name;
+  this.old_nick_name = old_nick_name;
+  this.slug_affecter = slug_affecter;
 }
-export function notification_leave_chat_Mess({
-  slug_performer,
-})
-{
-  this.slug_performer=slug_performer;
+export function notification_leave_chat_Mess({ slug_performer }) {
+  this.slug_performer = slug_performer;
 }
-export function notification_callVideo({
-  isEnded,
-  slug_caller,
-})
-{
-  this.isEnded=isEnded;
-  this.slug_caller=slug_caller;
-
+export function notification_callVideo({ isEnded, slug_caller }) {
+  this.isEnded = isEnded;
+  this.slug_caller = slug_caller;
 }
-export function notification_change_avatar_chat_Mess({
-  slug_performer,
-})
-{
-  this.slug_performer=slug_performer;
+export function notification_change_avatar_chat_Mess({ slug_performer }) {
+  this.slug_performer = slug_performer;
 }
 export function notification_join_chat_Mess({
   slug_performer,
   name_affecter,
   slug_affecter,
-})
-{
+}) {
   this.slug_performer = slug_performer;
   this.slug_affecter = slug_affecter;
   this.name_affecter = name_affecter;
@@ -755,7 +782,7 @@ export function interactMessage({
   this.slug_interact_er = slug_interact_er;
   this.name_interact_er = name_interact_er;
   this.time_interact = time_interact;
-  console.log("TIME", time_interact);
+  console.log('TIME', time_interact);
 }
 export function noTyping_chat({ idChat, socket, accountTyping }) {
   socket.emit(`IN_${idChat}_NO_TYPING`, accountTyping);

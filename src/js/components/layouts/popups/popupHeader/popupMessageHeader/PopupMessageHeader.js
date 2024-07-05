@@ -1,10 +1,9 @@
-
-import PopUpHeader from "../PopUpHeader";
-import HeaderSpaceBetween from "../../../../parts/subHeaders/headerSpaceBetween/HeaderSpaceBetween";
-import Link_ from "../../../../parts/links/link/Link";
+import PopUpHeader from '../PopUpHeader';
+import HeaderSpaceBetween from '../../../../parts/subHeaders/headerSpaceBetween/HeaderSpaceBetween';
+import Link_ from '../../../../parts/links/link/Link';
 import FormSearch, {
   NoResult,
-} from "../../../../parts/inputs/forms/formSearch/FormSearch";
+} from '../../../../parts/inputs/forms/formSearch/FormSearch';
 import {
   Icon_Circle,
   Icon_Ellipsis,
@@ -12,32 +11,32 @@ import {
   Icon_Plus,
   Icon_Square,
   Icon_Square_Check,
-} from "../../../../parts/icons/fontAwesome/FontAwesome";
-import ItemOpt from "../../../../parts/item/itemOpt/ItemOpt";
-import LabelCircle from "../../../../parts/labels/labelCircle/LabelCircle";
-import { useStore } from "../../../../../store";
-import { actions } from "../../../../../store";
-import PopUpMessenger, { member } from "../../popupMessenger/PopUpMessenger";
+} from '../../../../parts/icons/fontAwesome/FontAwesome';
+import ItemOpt from '../../../../parts/item/itemOpt/ItemOpt';
+import LabelCircle from '../../../../parts/labels/labelCircle/LabelCircle';
+import { useStore } from '../../../../../store';
+import { actions } from '../../../../../store';
+import PopUpMessenger, { member } from '../../popupMessenger/PopUpMessenger';
 import {
   content_sessionMessage,
   contentPopUpMessenger,
-} from "../../popupMessenger/PopUpMessenger";
-import { useEffect, useContext, useRef, Fragment, useState } from "react";
-import { dateTo_textAgo } from "../../../../../store/functions";
+} from '../../popupMessenger/PopUpMessenger';
+import { useEffect, useContext, useRef, Fragment, useState } from 'react';
+import { dateTo_textAgo } from '../../../../../store/functions';
 import {
   Context_Account,
   ContextPopUp,
   Context_PopUpMessengers,
-} from "../../../../../store/Context";
-import { HOST_SERVER } from "../../../../../config";
+} from '../../../../../store/Context';
+import { HOST_SERVER } from '../../../../../config';
 import {
   add_popup_review,
   delete_pop_content,
-} from "../../../../../store/actions";
-import PopUpReviews from "../../popupReview/PopUpReviews";
+} from '../../../../../store/actions';
+import PopUpReviews from '../../popupReview/PopUpReviews';
 
-import "./PopupMessageHeader.css";
-import ButtonNormal from "../../../../parts/buttons/buttonNormal/ButtonNormal";
+import './PopupMessageHeader.css';
+import ButtonNormal from '../../../../parts/buttons/buttonNormal/ButtonNormal';
 function PopupMessageHeader({ listChat = [] }) {
   const [state_listChat, set_state_listChat] = useState(listChat);
   const [state_showResult, set_state_showResult] = useState(false);
@@ -61,10 +60,10 @@ function PopupMessageHeader({ listChat = [] }) {
             bodyRight={[<Icon_Plus />, <Icon_Pen_Square />].map((el, idx) => {
               return (
                 <ItemOpt
-                key={idx}
+                  key={idx}
                   handleClick={() => {
                     fetch(`${HOST_SERVER}/friend/getListFriend?limit=20`, {
-                      credentials: "include",
+                      credentials: 'include',
                     })
                       .then((res) => res.text())
                       .then((dataJson) => {
@@ -74,8 +73,8 @@ function PopupMessageHeader({ listChat = [] }) {
                           add_popup_review(
                             <PopupCreateGroupChat
                               initSuggestMembers={data.result}
-                            />
-                          )
+                            />,
+                          ),
                         );
                       });
                   }}
@@ -88,7 +87,7 @@ function PopupMessageHeader({ listChat = [] }) {
             handler_Search={(value) => {
               if (value.trim().length > 0) {
                 fetch(`${HOST_SERVER}/chat/search?keyword=${value}`, {
-                  credentials: "include",
+                  credentials: 'include',
                 })
                   .then((res) => res.text())
                   .then((dataJson) => {
@@ -105,11 +104,11 @@ function PopupMessageHeader({ listChat = [] }) {
                 set_state_showResult(false);
               }
             }}
-            placeholder_text={"Search on Message"}
+            placeholder_text={'Search on Message'}
           />
         </>
       }
-      footer={<Link_ text={"See all in mess"} isUnderline={true} />}
+      footer={<Link_ text={'See all in mess'} isUnderline={true} />}
       body={
         <>
           {state_showResult && <NoResult />}
@@ -159,7 +158,7 @@ function PopupMessageHeader({ listChat = [] }) {
                         />
                       )
                     ) : (
-                      ""
+                      ''
                     )}
                   </div>
                 }
@@ -170,7 +169,7 @@ function PopupMessageHeader({ listChat = [] }) {
                     {/* <div><span>You: </span> A zo what sup men <span>15 minutes ago </span></div> */}
                   </>
                 }
-                component_Right={!el.isSeen ? <Icon_Circle /> : ""}
+                component_Right={!el.isSeen ? <Icon_Circle /> : ''}
                 key={idx}
               />
             );
@@ -183,36 +182,36 @@ function PopupMessageHeader({ listChat = [] }) {
 export const shortLassSessionMess = (lastSessionMessage, typeDisplay) => {
   var result;
   if (typeDisplay == null) {
-    typeDisplay = "Send";
+    typeDisplay = 'Send';
   }
   if (lastSessionMessage) {
     Object.entries(lastSessionMessage).forEach(([key, value]) => {
-      if (value && key != "time_send") {
+      if (value && key != 'time_send') {
         switch (key) {
-          case "reply":
-            result = " Replied a message ";
+          case 'reply':
+            result = ' Replied a message ';
             break;
-          case "image":
+          case 'image':
             result = ` ${typeDisplay} image`;
             break;
-          case "text":
+          case 'text':
             result = ` ${
               value.length > 20 ? `${value.substring(0, 20)}...` : value
             } `;
             break;
-          case "video":
+          case 'video':
             result = ` ${typeDisplay} Video `;
             break;
-          case "audio":
+          case 'audio':
             result = ` ${typeDisplay} Audio `;
             break;
-          case "gif":
+          case 'gif':
             result = ` ${typeDisplay} Gif `;
             break;
-          case "application":
+          case 'application':
             result = ` ${typeDisplay} File `;
             break;
-          case "notification":
+          case 'notification':
             result = RenderNotificationMess({ notification: value });
             break;
           default:
@@ -220,12 +219,12 @@ export const shortLassSessionMess = (lastSessionMessage, typeDisplay) => {
         }
       } else {
         if (check_UnsentMessage(lastSessionMessage)) {
-          result = "unsent a message";
+          result = 'unsent a message';
         }
       }
     });
   } else {
-    result = "unsent a message";
+    result = 'unsent a message';
   }
   return result;
 };
@@ -234,41 +233,37 @@ export function isMeSender({
   slug_sender,
   name_sender,
   typeDisplay,
-  textForMe = "You",
+  textForMe = 'You',
   isShort = true,
 }) {
-  if(name_sender)
-  {
+  if (name_sender) {
     if (typeDisplay == null) {
-      typeDisplay = ":";
+      typeDisplay = ':';
     }
     if (slug_me == slug_sender) {
       return ` ${textForMe} ${typeDisplay}`;
     } else {
       if (isShort) {
-        var shortName = name_sender.split(" ");
+        var shortName = name_sender.split(' ');
         return `${shortName[shortName.length - 1]} ${typeDisplay}`;
       } else {
         return `${name_sender} ${typeDisplay}`;
       }
     }
-  }
-  else
-  {
-    return ''
+  } else {
+    return '';
   }
   // console.log('isMeSender() running',name_sender);
-  
 }
 function LastSessionMessageHeader({ el, state, slug_last }) {
-  var shortText = shortLassSessionMess(el.lastSessionMessage, "Send", {
+  var shortText = shortLassSessionMess(el.lastSessionMessage, 'Send', {
     slug_me: state.account.slug_personal,
     name_sender: el.name_sender,
     slug_sender: slug_last,
   });
   return (
     <div
-      style={{ display: "flex", alignItems: "center", whiteSpace: "nowrap" }}
+      style={{ display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}
     >
       <span>
         {isMeSender({
@@ -280,7 +275,7 @@ function LastSessionMessageHeader({ el, state, slug_last }) {
       <i>{`${
         shortText.length > 30 ? `${shortText.substring(0, 30)}...` : shortText
       }`}</i>
-      <span style={{ marginLeft: "20px" }}>
+      <span style={{ marginLeft: '20px' }}>
         {dateTo_textAgo(new Date(el.lastSessionMessage.time_send))}
       </span>
     </div>
@@ -288,49 +283,49 @@ function LastSessionMessageHeader({ el, state, slug_last }) {
 }
 function RenderNotificationMess({ notification }) {
   const [state, dispatch] = useStore();
-  var result = "renderNotificationMess";
+  var result = 'renderNotificationMess';
   var [[key, value]] = Object.entries(notification).filter(
-    ([key, value]) => value != null
+    ([key, value]) => value != null,
   );
   console.log({
     slug_sender: value.slug_affecter,
     slug_me: state.account.slug_personal,
   });
   switch (key) {
-    case "modify_nick_name":
+    case 'modify_nick_name':
       // console.log(key);
       result = `changed nickname of ${isMeSender({
         name_sender: value.old_nick_name,
-        typeDisplay: "",
-        textForMe: "you",
+        typeDisplay: '',
+        textForMe: 'you',
         slug_sender: value.slug_affecter,
         slug_me: state.account.slug_personal,
       })} to ${value.new_nick_name} `;
       break;
-    case "modify_name_chat":
+    case 'modify_name_chat':
       result = `changed name of chat to ${value.new_name_chat} `;
       break;
-    case "leave_chat":
+    case 'leave_chat':
       result = ` has left chat`;
       break;
-    case "join_chat":
+    case 'join_chat':
       result = `has added ${isMeSender({
         name_sender: value.name_affecter,
-        typeDisplay: "",
-        textForMe: "you",
+        typeDisplay: '',
+        textForMe: 'you',
         slug_sender: value.slug_affecter,
         slug_me: state.account.slug_personal,
         isShort: false,
       })} into chat`;
       break;
-    case "change_avatar_chat":
+    case 'change_avatar_chat':
       result = `has change avatar chat`;
       break;
-      case "callVideo":
-      result = 'has made Video Call. '
-      if(value.isEnded) result += 'This Video call ended';
+    case 'callVideo':
+      result = 'has made Video Call. ';
+      if (value.isEnded) result += 'This Video call ended';
       else result += 'This Video Call  is happening...';
-    break;
+      break;
     default:
       break;
   }
@@ -339,7 +334,7 @@ function RenderNotificationMess({ notification }) {
 }
 function LastInteractMessageHeader({ el, state, slug_last }) {
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
       <span>
         {isMeSender({
           slug_me: state.account.slug_personal,
@@ -348,7 +343,7 @@ function LastInteractMessageHeader({ el, state, slug_last }) {
         })}
       </span>
       <i>{`Expressed feeling ${el.last_interact.value_interact}`}</i>
-      <span style={{ marginLeft: "20px" }}>
+      <span style={{ marginLeft: '20px' }}>
         {dateTo_textAgo(new Date(el.last_interact.time_interact))}
       </span>
     </div>
@@ -356,7 +351,7 @@ function LastInteractMessageHeader({ el, state, slug_last }) {
 }
 export function check_UnsentMessage(sessionMessage) {
   return !Object.entries(sessionMessage).some(
-    (el) => el[0] != "time_send" && el[1] && Object.keys(el[1]).length > 0
+    (el) => el[0] != 'time_send' && el[1] && Object.keys(el[1]).length > 0,
   );
 }
 export const req_getDetailChat = ({
@@ -373,12 +368,12 @@ export const req_getDetailChat = ({
   fetch(
     HOST_SERVER +
       `/chat/getDetailChat?_id=${JSON.stringify(
-        data_Chat_id
+        data_Chat_id,
       )}&isSeen=${data_Chat_isSeen}`,
     {
-      credentials: "include",
-      method: "GET",
-    }
+      credentials: 'include',
+      method: 'GET',
+    },
   )
     .then((res) => res.text())
     .then((dataJson) => {
@@ -393,8 +388,8 @@ export const req_getDetailChat = ({
             avatarChat={data.shortChat.avatarChat}
             nameChat={data.shortChat.nameChat}
             contentsPopUpMessenger={data.result.content_messages}
-          />
-        )
+          />,
+        ),
       );
     });
 };
@@ -407,22 +402,22 @@ function PopupCreateGroupChat({ initSuggestMembers }) {
   console.log(state_membersSelected);
   return (
     <PopUpReviews
-      titlePopUp={"Create Group Chat"}
+      titlePopUp={'Create Group Chat'}
       contentPopUp={
         <Fragment>
           <FormSearch
-            placeholder_text={"Search friend"}
+            placeholder_text={'Search friend'}
             handler_Search={(value) => {
               if (value.trim().length > 0) {
                 fetch(`${HOST_SERVER}/friends/search`, {
-                  method: "POST",
+                  method: 'POST',
                   body: JSON.stringify({
                     keyword: value,
                   }),
                   headers: {
-                    "Content-Type": "application/json",
+                    'Content-Type': 'application/json',
                   },
-                  credentials: "include",
+                  credentials: 'include',
                 })
                   .then((res) => res.text())
                   .then((dataJson) => {
@@ -444,7 +439,7 @@ function PopupCreateGroupChat({ initSuggestMembers }) {
           <div className="section-selectedMembersInNewGroup">
             {state_membersSelected.map((member) => {
               var shortName = `${member.user_fname} ${member.user_lname}`.split(
-                " "
+                ' ',
               );
               return (
                 <div className="item-selectedMembersInNewGroup">
@@ -473,19 +468,19 @@ function PopupCreateGroupChat({ initSuggestMembers }) {
             <ButtonNormal
               handleClick={() => {
                 fetch(`${HOST_SERVER}/chat/createChat`, {
-                  method: "POST",
+                  method: 'POST',
                   headers: {
-                    "Content-Type": "application/json",
+                    'Content-Type': 'application/json',
                   },
-                  credentials: "include",
+                  credentials: 'include',
                   body: JSON.stringify({
                     members: state_membersSelected.map(
-                      (member) => member.slug_personal
+                      (member) => member.slug_personal,
                     ),
                   }),
                 });
               }}
-              textBtn={"Create Chat"}
+              textBtn={'Create Chat'}
             />
           </div>
         </Fragment>
@@ -497,25 +492,28 @@ function PopupCreateGroupChat({ initSuggestMembers }) {
 function ItemSelectMember({ member, OBJ_useState_listSelectEd }) {
   const [state_selectEd, set_state_selectEd] = useState(
     OBJ_useState_listSelectEd.state_membersSelected.some(
-      (memberSelected) => memberSelected.slug_personal == member.slug_personal
-    )
+      (memberSelected) => memberSelected.slug_personal == member.slug_personal,
+    ),
   );
   useEffect(() => {
     if (state_selectEd) {
-      if(!OBJ_useState_listSelectEd.state_membersSelected.some(
-        (memberSelected) => memberSelected.slug_personal == member.slug_personal
-      ))
-      OBJ_useState_listSelectEd.set_state_membersSelected(
-        OBJ_useState_listSelectEd.state_membersSelected.concat([member])
-      );
+      if (
+        !OBJ_useState_listSelectEd.state_membersSelected.some(
+          (memberSelected) =>
+            memberSelected.slug_personal == member.slug_personal,
+        )
+      )
+        OBJ_useState_listSelectEd.set_state_membersSelected(
+          OBJ_useState_listSelectEd.state_membersSelected.concat([member]),
+        );
     } else {
       OBJ_useState_listSelectEd.set_state_membersSelected(
         [].concat(
           OBJ_useState_listSelectEd.state_membersSelected.filter(
             (memberSelected) =>
-              memberSelected.slug_personal != member.slug_personal
-          )
-        )
+              memberSelected.slug_personal != member.slug_personal,
+          ),
+        ),
       );
     }
   }, [state_selectEd]);
@@ -542,18 +540,19 @@ function ItemSelectMember({ member, OBJ_useState_listSelectEd }) {
     </div>
   );
 }
-export function Render_notification_callVideo({
-  data,
-  handleClick,
-}){
+export function Render_notification_callVideo({ data, handleClick }) {
   // console.log('Render_notification_callVideo',data);
   return (
     <div className="body-notification_callVideo">
-      {!data.isEnded &&  <ButtonNormal handleClick={()=>{
-        handleClick();
-      }} textBtn={'Join'} />}
+      {!data.isEnded && (
+        <ButtonNormal
+          handleClick={() => {
+            handleClick();
+          }}
+          textBtn={'Join'}
+        />
+      )}
     </div>
-    
-  )
+  );
 }
 export default PopupMessageHeader;

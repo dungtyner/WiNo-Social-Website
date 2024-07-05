@@ -1,5 +1,5 @@
-import "../formMessenger/FormMessenger.css";
-import * as IconFontAwesome from "../../../icons/fontAwesome/FontAwesome";
+import '../formMessenger/FormMessenger.css';
+import * as IconFontAwesome from '../../../icons/fontAwesome/FontAwesome';
 import {
   Fragment,
   StrictMode,
@@ -7,49 +7,49 @@ import {
   useEffect,
   useRef,
   useState,
-} from "react";
+} from 'react';
 import {
   beTyping_chat,
   Context_Message,
   noTyping_chat,
-} from "../../../../layouts/popups/popupMessenger/PopUpMessenger";
-import { contentPopUpMessenger } from "../../../../layouts/popups/popupMessenger/PopUpMessenger";
-import { content_sessionMessage } from "../../../../layouts/popups/popupMessenger/PopUpMessenger";
-import * as IconMUI from "../../../../parts/icons/iconMUI/IconMUI";
+} from '../../../../layouts/popups/popupMessenger/PopUpMessenger';
+import { contentPopUpMessenger } from '../../../../layouts/popups/popupMessenger/PopUpMessenger';
+import { content_sessionMessage } from '../../../../layouts/popups/popupMessenger/PopUpMessenger';
+import * as IconMUI from '../../../../parts/icons/iconMUI/IconMUI';
 import {
   Icon_Circle_Plus,
   Icon_Image,
   Icon_Sticker,
-} from "../../../icons/fontAwesome/FontAwesome";
-import LabelSquare from "../../../labels/labelSquare/LabelSquare";
-import LabelCircle from "../../../labels/labelCircle/LabelCircle";
+} from '../../../icons/fontAwesome/FontAwesome';
+import LabelSquare from '../../../labels/labelSquare/LabelSquare';
+import LabelCircle from '../../../labels/labelCircle/LabelCircle';
 import {
   FILE_AUDIO,
   FILE_DOCUMENT,
   FILE_IMAGE,
   FILE_VIDEO,
-} from "../../../../../store/constants";
-import { useStore } from "../../../../../store";
-import { HOST_SERVER } from "../../../../../config";
-import EmojiPicker from "emoji-picker-react";
-import PopUp_ from "../../../../layouts/popups/popup";
-import { color, padding } from "@mui/system";
-import { Grid } from "@giphy/react-components";
-import { GiphyFetch } from "@giphy/js-fetch-api";
-import PickerEmoji from "../../../pickers/pickerEmoji/PickerEmoji";
-import { Mic } from "@mui/icons-material";
+} from '../../../../../store/constants';
+import { useStore } from '../../../../../store';
+import { HOST_SERVER } from '../../../../../config';
+import EmojiPicker from 'emoji-picker-react';
+import PopUp_ from '../../../../layouts/popups/popup';
+import { color, padding } from '@mui/system';
+import { Grid } from '@giphy/react-components';
+import { GiphyFetch } from '@giphy/js-fetch-api';
+import PickerEmoji from '../../../pickers/pickerEmoji/PickerEmoji';
+import { Mic } from '@mui/icons-material';
 function FormMessenger({ idChat }) {
   var refIptFile = useRef(null);
   var refIpt_text = useRef(null);
   var refIptPicker_GIF = useRef(window);
 
   var value_Context_Message = useContext(Context_Message);
-  const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
+  const giphyFetch = new GiphyFetch('sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh');
   const fetchGifs = (offset) => giphyFetch.trending({ offset, limit: 10 });
   var [state, dispatch] = useStore();
   var [listFile, set_listFile] = useState([]);
-  const [stateTextMess, set_stateTextMess] = useState("");
-  const [state_IptPicker_GIF, set_state_IptPicker_GIF] = useState("");
+  const [stateTextMess, set_stateTextMess] = useState('');
+  const [state_IptPicker_GIF, set_state_IptPicker_GIF] = useState('');
   const [stateShowPickerEmoji, set_stateShowPickerEmoji] = useState(false);
   const [stateShowPickerGIF, set_stateShowPickerGIF] = useState(false);
   const [stateSending, set_stateSending] = useState(false);
@@ -66,7 +66,7 @@ function FormMessenger({ idChat }) {
       if (account.slug_personal != state.account.slug_personal) {
         if (
           !value_Context_Message.state_typingsPopUpMessenger.some(
-            (el) => el.props.slug_typing === account.slug_personal
+            (el) => el.props.slug_typing === account.slug_personal,
           )
         )
           value_Context_Message.setState_typingsPopUpMessenger([
@@ -96,10 +96,10 @@ function FormMessenger({ idChat }) {
           if (element.props.slug_typing == accountTyping.slug_personal) {
             value_Context_Message.state_typingsPopUpMessenger.splice(idx, 1);
           }
-        }
+        },
       );
       value_Context_Message.setState_typingsPopUpMessenger(
-        value_Context_Message.state_typingsPopUpMessenger.concat([])
+        value_Context_Message.state_typingsPopUpMessenger.concat([]),
       );
       set_stateAccountTyping(null);
     });
@@ -110,7 +110,7 @@ function FormMessenger({ idChat }) {
   };
 
   const handleSubmitMess = (event, isClick) => {
-    if (event.key === "Enter" || isClick) {
+    if (event.key === 'Enter' || isClick) {
       var value_content_sessionMessage = cast_inputs_to_valueContentMessNew({
         listFile: listFile,
         stateTextMess: stateTextMess,
@@ -179,7 +179,7 @@ function FormMessenger({ idChat }) {
       });
   }, [stateSending]);
   useEffect(() => {
-    console.log("stateTextMess changed:", stateTextMess);
+    console.log('stateTextMess changed:', stateTextMess);
     if (stateTextMess.length !== 0) {
       set_stateSending(true);
     } else if (stateTextMess.length === 0) {
@@ -187,7 +187,7 @@ function FormMessenger({ idChat }) {
     }
   }, [stateTextMess]);
   useEffect(() => {
-    console.log("listFile changed:", listFile);
+    console.log('listFile changed:', listFile);
     if (listFile.length !== 0) {
       set_stateSending(true);
     } else if (listFile.length === 0) {
@@ -195,7 +195,7 @@ function FormMessenger({ idChat }) {
     }
     refIpt_text.current.focus();
   }, [listFile]);
-  console.log("FormMessenger RENDER");
+  console.log('FormMessenger RENDER');
 
   return !stateShowMicRecorder ? (
     <div className="container-formMessenger">
@@ -210,49 +210,49 @@ function FormMessenger({ idChat }) {
               <div
                 className="container-pickerGif"
                 style={{
-                  position: "absolute",
-                  top: "-305px",
-                  width: "100%",
-                  height: "300px",
-                  left: "-50px",
-                  boxShadow: "1px 1px 25px 2px var(--greenColorHot)",
+                  position: 'absolute',
+                  top: '-305px',
+                  width: '100%',
+                  height: '300px',
+                  left: '-50px',
+                  boxShadow: '1px 1px 25px 2px var(--greenColorHot)',
                 }}
               >
                 <div
                   className="main-pickerGif"
                   style={{
-                    height: "100%",
+                    height: '100%',
                   }}
                 >
                   <div
                     className="body-pickerGif"
                     style={{
-                      width: "100%",
-                      height: "100%",
-                      background: "var(--greenColorEnd_Background)",
-                      padding: "10px",
-                      display: "flex",
-                      flexDirection: "column",
+                      width: '100%',
+                      height: '100%',
+                      background: 'var(--greenColorEnd_Background)',
+                      padding: '10px',
+                      display: 'flex',
+                      flexDirection: 'column',
                     }}
                   >
                     <input
-                      type={"text"}
-                      className={"ipt-searchGIF"}
+                      type={'text'}
+                      className={'ipt-searchGIF'}
                       onChange={(event) => {
                         set_state_IptPicker_GIF(event.currentTarget.value);
                         handleSearchGIF(event);
                       }}
                       ref={refIptPicker_GIF}
-                      placeholder={"Search GIFs"}
+                      placeholder={'Search GIFs'}
                       style={{
-                        width: "100%",
-                        height: "40px",
-                        borderRadius: "10px",
-                        outline: "none",
-                        border: "1px solid var(--greenColorHot)",
-                        padding: "5px 20px",
-                        color: "black",
-                        fontSize: "18px",
+                        width: '100%',
+                        height: '40px',
+                        borderRadius: '10px',
+                        outline: 'none',
+                        border: '1px solid var(--greenColorHot)',
+                        padding: '5px 20px',
+                        color: 'black',
+                        fontSize: '18px',
                       }}
                     />
                     <Grid
@@ -297,7 +297,7 @@ function FormMessenger({ idChat }) {
               </div>
             </PopUp_>
           ) : (
-            ""
+            ''
           )}
         </StrictMode>
         {stateShowPickerEmoji ? (
@@ -309,10 +309,10 @@ function FormMessenger({ idChat }) {
             <div>
               <PickerEmoji
                 styles={{
-                  top: "-305px",
-                  width: "100%",
-                  height: "300px",
-                  left: "-50px",
+                  top: '-305px',
+                  width: '100%',
+                  height: '300px',
+                  left: '-50px',
                 }}
                 handleClickPicker={(event, emojiData) => {
                   set_stateTextMess((pre_stateTextMess) => {
@@ -323,7 +323,7 @@ function FormMessenger({ idChat }) {
             </div>
           </PopUp_>
         ) : (
-          ""
+          ''
         )}
 
         <div className="body-formMessenger">
@@ -334,7 +334,7 @@ function FormMessenger({ idChat }) {
                   {
                     <span
                       onClick={() => {
-                        console.log("CLICK");
+                        console.log('CLICK');
                         refIptFile.current.click();
                       }}
                     >
@@ -359,7 +359,7 @@ function FormMessenger({ idChat }) {
                         tooltip={el.name}
                         elOverlay={
                           el.type
-                            .split("/")[0]
+                            .split('/')[0]
                             .trim()
                             .toUpperCase()
                             .indexOf(FILE_VIDEO) >= 0 ? (
@@ -378,7 +378,7 @@ function FormMessenger({ idChat }) {
                           >
                             <LabelCircle
                               styles={{
-                                background: "var(--greenColorEnd_Background)",
+                                background: 'var(--greenColorEnd_Background)',
                               }}
                               sizeLabel="TINY"
                               el_Icon={<IconFontAwesome.Icon_Close />}
@@ -387,7 +387,7 @@ function FormMessenger({ idChat }) {
                         }
                         urlImg={
                           el.type
-                            .split("/")[0]
+                            .split('/')[0]
                             .trim()
                             .toUpperCase()
                             .indexOf(FILE_IMAGE) >= 0
@@ -396,7 +396,7 @@ function FormMessenger({ idChat }) {
                         }
                         urlVideo={
                           el.type
-                            .split("/")[0]
+                            .split('/')[0]
                             .trim()
                             .toUpperCase()
                             .indexOf(FILE_VIDEO) >= 0
@@ -405,13 +405,13 @@ function FormMessenger({ idChat }) {
                         }
                         el_Icon={
                           el.type
-                            .split("/")[0]
+                            .split('/')[0]
                             .trim()
                             .toUpperCase()
                             .indexOf(FILE_AUDIO) >= 0 ? (
                             <IconFontAwesome.Icon_Audio />
                           ) : FILE_DOCUMENT.indexOf(
-                              el.type.split("/")[0].trim().toUpperCase()
+                              el.type.split('/')[0].trim().toUpperCase(),
                             ) >= 0 ? (
                             <IconFontAwesome.Icon_Document />
                           ) : null
@@ -433,9 +433,9 @@ function FormMessenger({ idChat }) {
                 <IconFontAwesome.Icon_MIC />
               </span>
               <input
-                type={"file"}
+                type={'file'}
                 multiple
-                style={{ display: "none" }}
+                style={{ display: 'none' }}
                 ref={refIptFile}
                 onChange={(event) => {
                   var files = event.currentTarget.files;
@@ -453,7 +453,7 @@ function FormMessenger({ idChat }) {
                       set_listFile(
                         Object.entries(files).map((el) => {
                           return el[1];
-                        })
+                        }),
                       );
                     }
                   }
@@ -489,7 +489,7 @@ function FormMessenger({ idChat }) {
                   onChange={(event) => {
                     set_stateTextMess(event.currentTarget.value);
                   }}
-                  type={"text"}
+                  type={'text'}
                   placeholder="Aa"
                   onKeyUp={(event) => {
                     handleSubmitMess(event);
@@ -541,7 +541,7 @@ function cast_inputs_to_valueContentMessNew({
   if (listFile.length > 0) {
     value_content_sessionMessage = listFile.map((file) => {
       var tmp_mess = new content_sessionMessage();
-      tmp_mess[file.type.split("/")[0]] = URL.createObjectURL(file);
+      tmp_mess[file.type.split('/')[0]] = URL.createObjectURL(file);
       return tmp_mess;
     });
   }
@@ -551,9 +551,8 @@ function cast_inputs_to_valueContentMessNew({
   if (stateTextMess.trim().length > 0) {
     value_content_sessionMessage.push(
       new content_sessionMessage({
-        
         text: stateTextMess.substring(0, stateTextMess.length - 1),
-      })
+      }),
     );
   }
   if (reply) {
@@ -571,25 +570,25 @@ function submitSaveMessage({
   idChat,
 }) {
   var form = new FormData();
-  form.append("idChat", idChat);
-  form.append("socket", JSON.stringify(state.socket.id));
+  form.append('idChat', idChat);
+  form.append('socket', JSON.stringify(state.socket.id));
 
   for (let i = 0; i < listFile.length; i++) {
-    form.append("listFile", listFile[i]);
+    form.append('listFile', listFile[i]);
   }
   form.append(
-    "value_content_sessionMessage",
+    'value_content_sessionMessage',
     JSON.stringify(
       new contentPopUpMessenger({
         slug_sender: state.account.slug_personal,
         session_messages: value_content_sessionMessage,
-      })
-    )
+      }),
+    ),
   );
   fetch(`${HOST_SERVER}/chat/saveMessage`, {
-    method: "POST",
+    method: 'POST',
     body: form,
-    credentials: "include",
+    credentials: 'include',
   });
 }
 function renderMyScreen({
@@ -614,12 +613,12 @@ function renderMyScreen({
 
   value_Context_Message.set_stateReplyMess(null);
 
-  set_stateTextMess("");
+  set_stateTextMess('');
   set_listFile([]);
 
   value_Context_Message.refContentPopUp.current.scrollTo(
     0,
-    value_Context_Message.refContentPopUp.current.scrollHeight
+    value_Context_Message.refContentPopUp.current.scrollHeight,
   );
 }
 function MicRecorderMess({
@@ -643,35 +642,30 @@ function MicRecorderMess({
     saveRecorder.current = (callback) => {
       if (!state_blob) {
         var tmp_blob;
-       
+
         ref_mediaAudio.current.onstop = (event) => {
           var dateCode = new Date()
-                .toJSON()
-                .replaceAll(" ", "")
-                .replaceAll(":", "")
-                .replaceAll("-", "")
-                .replaceAll(".", "")
-                .toLowerCase();
-            set_state_blob(()=>{
-            var blob = new Blob(ref_chunks.current, { type: "audio/mp3" })
-            blob.name=`${state.account.slug_personal}${dateCode}.mp3`
+            .toJSON()
+            .replaceAll(' ', '')
+            .replaceAll(':', '')
+            .replaceAll('-', '')
+            .replaceAll('.', '')
+            .toLowerCase();
+          set_state_blob(() => {
+            var blob = new Blob(ref_chunks.current, { type: 'audio/mp3' });
+            blob.name = `${state.account.slug_personal}${dateCode}.mp3`;
             blob.lastModified = new Date();
-            tmp_blob = blob
-            if(callback)
-            callback(blob)
-            return blob
-          }
-
-          );
+            tmp_blob = blob;
+            if (callback) callback(blob);
+            return blob;
+          });
         };
-         ref_mediaAudio.current.stop();
+        ref_mediaAudio.current.stop();
         clearInterval(ref_idTimeOut.current);
-        return tmp_blob
-      }
-      else
-      {
-        callback(state_blob)
-        return state_blob
+        return tmp_blob;
+      } else {
+        callback(state_blob);
+        return state_blob;
       }
     };
   }, [state_blob]);
@@ -704,7 +698,7 @@ function MicRecorderMess({
         <div
           className="btnClose-micRecorderMess"
           onClick={(event) => {
-            clearInterval(ref_idTimeOut.current)
+            clearInterval(ref_idTimeOut.current);
             handleClose();
           }}
         >
@@ -728,7 +722,7 @@ function MicRecorderMess({
             </div>
             <div className="numberTime-micRecorderMess">
               {`${parseInt(state_countTime / 60)}:${parseInt(
-                state_countTime / 10
+                state_countTime / 10,
               )}${state_countTime % 10}`}
             </div>
           </div>
@@ -743,28 +737,21 @@ function MicRecorderMess({
           <div
             className="btnSubmit-micRecorderMess"
             onClick={(event) => {
-            saveRecorder.current((blob)=>{
+              saveRecorder.current((blob) => {
                 var valueContentMessNew = cast_inputs_to_valueContentMessNew({
-                gif: null,
-                listFile: [
-                  new File([blob],blob.name, { type: blob.type }),
-                ],
-                reply: null,
-                stateTextMess: "",
+                  gif: null,
+                  listFile: [new File([blob], blob.name, { type: blob.type })],
+                  reply: null,
+                  stateTextMess: '',
+                });
+                submitSaveMessage({
+                  idChat,
+                  state,
+                  listFile: [new File([blob], blob.name, { type: blob.type })],
+                  value_content_sessionMessage: valueContentMessNew,
+                });
               });
-              submitSaveMessage({
-                idChat,
-                state,
-                listFile: [
-                  new File([blob],blob.name, { type: blob.type }),
-                ],
-                value_content_sessionMessage: valueContentMessNew,
-              });
-            })
-            handleClose();
-
-
-              
+              handleClose();
             }}
           >
             <IconFontAwesome.Icon_Send_Mess />
@@ -780,17 +767,17 @@ function AudioMess({ srcAudio }) {
   const ref_audio = useRef(null);
   useEffect(() => {
     if (ref_audio) {
-      ref_audio.current.addEventListener("ended", (event) => {
+      ref_audio.current.addEventListener('ended', (event) => {
         set_state_playAudio(false);
       });
-      ref_audio.current.addEventListener("play", (event) => {
+      ref_audio.current.addEventListener('play', (event) => {
         set_state_playAudio(true);
       });
     }
   }, [ref_audio]);
   return (
     <div className="timeline-micRecorderMess">
-      <audio style={{ display: "none" }} ref={ref_audio} src="srcAudio"></audio>
+      <audio style={{ display: 'none' }} ref={ref_audio} src="srcAudio"></audio>
       <div
         className="lineStatus-micRecorderMess"
         style={{

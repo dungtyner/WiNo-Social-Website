@@ -1,19 +1,22 @@
-import { Fragment, useEffect, useState } from "react";
-import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
-import { HOST_SERVER } from "../../../../config";
-import { useStore } from "../../../../store";
-import { set_url } from "../../../../store/actions";
-import {   req_acceptAddNewFriend, req_refuse_requestAddFriend } from "../../../../store/functions";
-import ButtonNormal from "../../buttons/buttonNormal/ButtonNormal";
+import { Fragment, useEffect, useState } from 'react';
+import { Link, Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { HOST_SERVER } from '../../../../config';
+import { useStore } from '../../../../store';
+import { set_url } from '../../../../store/actions';
+import {
+  req_acceptAddNewFriend,
+  req_refuse_requestAddFriend,
+} from '../../../../store/functions';
+import ButtonNormal from '../../buttons/buttonNormal/ButtonNormal';
 import {
   Icon_Arrow_Left,
   Icon_Friend,
   Icon_Send_Mess,
   Icon_Share,
-} from "../../icons/fontAwesome/FontAwesome";
-import ItemOpt from "../../item/itemOpt/ItemOpt";
-import LabelCircle from "../../labels/labelCircle/LabelCircle";
-import './PageFriend.css'
+} from '../../icons/fontAwesome/FontAwesome';
+import ItemOpt from '../../item/itemOpt/ItemOpt';
+import LabelCircle from '../../labels/labelCircle/LabelCircle';
+import './PageFriend.css';
 
 function PageFriend({}) {
   return (
@@ -21,7 +24,6 @@ function PageFriend({}) {
       <div className="main-pageFriend">
         <div className="body-pageFriend">
           <Outlet />
-          
         </div>
       </div>
     </div>
@@ -36,28 +38,35 @@ export function SidebarFriendMenuDefault() {
           <h1>Friends</h1>
         </div>
         <div className="listMenu-pageFriend">
-          <Link to={`request`}
-          onClick={()=>{
-          dispatch(set_url(`${window.location.href}/${'response'}`))
-          }}>
-
+          <Link
+            to={`request`}
+            onClick={() => {
+              dispatch(set_url(`${window.location.href}/${'response'}`));
+            }}
+          >
             <ItemOpt
               children_centerItemOpt={<b>Request friend</b>}
               component_Left={<LabelCircle el_Icon={<Icon_Send_Mess />} />}
             />
           </Link>
-          
-          <Link onClick={()=>{
-              dispatch(set_url(`${window.location.href}/${'response'}`))
-          }} to={`response`}>
+
+          <Link
+            onClick={() => {
+              dispatch(set_url(`${window.location.href}/${'response'}`));
+            }}
+            to={`response`}
+          >
             <ItemOpt
               children_centerItemOpt={<b>Response</b>}
               component_Left={<LabelCircle el_Icon={<Icon_Share />} />}
             />
           </Link>
-          <Link onClick={()=>{
-              dispatch(set_url(`${window.location.href}/${'list'}`))
-          }} to={`list`}>
+          <Link
+            onClick={() => {
+              dispatch(set_url(`${window.location.href}/${'list'}`));
+            }}
+            to={`list`}
+          >
             <ItemOpt
               children_centerItemOpt={<b>All friends</b>}
               component_Left={<LabelCircle el_Icon={<Icon_Friend />} />}
@@ -71,16 +80,16 @@ export function SidebarFriendMenuDefault() {
     </Fragment>
   );
 }
- 
+
 export function SidebarFriendRequest() {
   const [state_listFriend, set_state_listFriend] = useState(null);
   const [state, dispatch] = useStore();
-  var navigate = useNavigate()
+  var navigate = useNavigate();
   useEffect(() => {
     const fetchAPI = async () => {
       fetch(`${HOST_SERVER}/friend/getListRequestFriend`, {
-        method: "GET",
-        credentials: "include",
+        method: 'GET',
+        credentials: 'include',
       })
         .then((res) => res.text())
         .then((dataJson) => {
@@ -96,7 +105,7 @@ export function SidebarFriendRequest() {
         <div className="titleMenu-pageFriend">
           <ItemOpt
             component_Left={
-              <Link to={"/friends"}>
+              <Link to={'/friends'}>
                 <Icon_Arrow_Left />
               </Link>
             }
@@ -104,13 +113,17 @@ export function SidebarFriendRequest() {
           />
         </div>
         <div className="listMenu-pageFriend">
-        {state_listFriend
-            ? state_listFriend.map((friend,idx) => {
+          {state_listFriend
+            ? state_listFriend.map((friend, idx) => {
                 return (
-                  <Link key={idx} onClick={()=>{
-                    // navigate(`/${friend.slug_personal}`,{replace:true})
-                    // dispatch(set_url(new Date().toLocaleString()))
-                  }} to={`${friend.slug_personal}`}>
+                  <Link
+                    key={idx}
+                    onClick={() => {
+                      // navigate(`/${friend.slug_personal}`,{replace:true})
+                      // dispatch(set_url(new Date().toLocaleString()))
+                    }}
+                    to={`${friend.slug_personal}`}
+                  >
                     <ItemOpt
                       children_centerItemOpt={
                         <b>{`${friend.user_fname} ${friend.user_lname}`}</b>
@@ -122,7 +135,7 @@ export function SidebarFriendRequest() {
                   </Link>
                 );
               })
-            : ""}
+            : ''}
         </div>
       </div>
       <div className="sidebarRight-pageFriend">
@@ -134,12 +147,12 @@ export function SidebarFriendRequest() {
 export function SidebarFriendResponse() {
   const [state_listFriend, set_state_listFriend] = useState(null);
   const [state, dispatch] = useStore();
-  var navigate = useNavigate()
+  var navigate = useNavigate();
   useEffect(() => {
     const fetchAPI = async () => {
       fetch(`${HOST_SERVER}/friend/getListResponseFriend`, {
-        method: "GET",
-        credentials: "include",
+        method: 'GET',
+        credentials: 'include',
       })
         .then((res) => res.text())
         .then((dataJson) => {
@@ -155,7 +168,7 @@ export function SidebarFriendResponse() {
         <div className="titleMenu-pageFriend">
           <ItemOpt
             component_Left={
-              <Link to={"/friends"}>
+              <Link to={'/friends'}>
                 <Icon_Arrow_Left />
               </Link>
             }
@@ -163,13 +176,17 @@ export function SidebarFriendResponse() {
           />
         </div>
         <div className="listMenu-pageFriend">
-        {state_listFriend
-            ? state_listFriend.map((friend,idx) => {
+          {state_listFriend
+            ? state_listFriend.map((friend, idx) => {
                 return (
-                  <Link key={idx} onClick={()=>{
-                    // navigate(`/${friend.slug_personal}`,{replace:true})
-                    // dispatch(set_url(new Date().toLocaleString()))
-                  }} to={`${friend.slug_personal}`}>
+                  <Link
+                    key={idx}
+                    onClick={() => {
+                      // navigate(`/${friend.slug_personal}`,{replace:true})
+                      // dispatch(set_url(new Date().toLocaleString()))
+                    }}
+                    to={`${friend.slug_personal}`}
+                  >
                     <ItemOpt
                       children_centerItemOpt={
                         <b>{`${friend.user_fname} ${friend.user_lname}`}</b>
@@ -179,25 +196,29 @@ export function SidebarFriendResponse() {
                       }
                       component_Sub={
                         <>
-                          <div style={{
-                            display:'flex'
-                          }}>
-                          <ButtonNormal
-                          handleClick={()=>{
-                            req_acceptAddNewFriend(friend);
-                            // dataNotification.friend.response_new_friend.splice(idx,1);
-                            // set_state_dataNotification(dataNotification)
-                          }}
-                          isNo={false} textBtn={'Accept'} />
-                          <ButtonNormal isNo={true} textBtn={'Refuse'} handleClick={()=>
-                          {
-            
-                            req_refuse_requestAddFriend(friend);
-                            // dataNotification.friend.response_new_friend.splice(idx,1);
-                            // set_state_dataNotification(Object.assign({},dataNotification))
-                          }
-                          
-                          }/>
+                          <div
+                            style={{
+                              display: 'flex',
+                            }}
+                          >
+                            <ButtonNormal
+                              handleClick={() => {
+                                req_acceptAddNewFriend(friend);
+                                // dataNotification.friend.response_new_friend.splice(idx,1);
+                                // set_state_dataNotification(dataNotification)
+                              }}
+                              isNo={false}
+                              textBtn={'Accept'}
+                            />
+                            <ButtonNormal
+                              isNo={true}
+                              textBtn={'Refuse'}
+                              handleClick={() => {
+                                req_refuse_requestAddFriend(friend);
+                                // dataNotification.friend.response_new_friend.splice(idx,1);
+                                // set_state_dataNotification(Object.assign({},dataNotification))
+                              }}
+                            />
                           </div>
                         </>
                       }
@@ -205,7 +226,7 @@ export function SidebarFriendResponse() {
                   </Link>
                 );
               })
-            : ""}
+            : ''}
         </div>
       </div>
       <div className="sidebarRight-pageFriend">
@@ -217,12 +238,12 @@ export function SidebarFriendResponse() {
 export function SidebarFriendList() {
   const [state_listFriend, set_state_listFriend] = useState(null);
   const [state, dispatch] = useStore();
-  var navigate = useNavigate()
+  var navigate = useNavigate();
   useEffect(() => {
     const fetchAPI = async () => {
       fetch(`${HOST_SERVER}/friend/getListFriend`, {
-        method: "GET",
-        credentials: "include",
+        method: 'GET',
+        credentials: 'include',
       })
         .then((res) => res.text())
         .then((dataJson) => {
@@ -232,14 +253,14 @@ export function SidebarFriendList() {
     };
     fetchAPI();
   }, []);
- 
+
   return (
     <Fragment>
       <div className="sidebarLeft-pageFriend">
         <div className="titleMenu-pageFriend">
           <ItemOpt
             component_Left={
-              <Link to={"/friends"}>
+              <Link to={'/friends'}>
                 <Icon_Arrow_Left />
               </Link>
             }
@@ -248,14 +269,17 @@ export function SidebarFriendList() {
         </div>
         <div className="listMenu-pageFriend">
           {state_listFriend
-            ? state_listFriend.map((friend,idx) => {
+            ? state_listFriend.map((friend, idx) => {
                 return (
-                  <span key={idx} onClick={()=>{
-                    // console.log(friend.slug_personal);
-                    navigate(`${friend.slug_personal}`)
-                    // navigate(0);
-                    dispatch(set_url(`/${friend.slug_personal}`))
-                  }}>
+                  <span
+                    key={idx}
+                    onClick={() => {
+                      // console.log(friend.slug_personal);
+                      navigate(`${friend.slug_personal}`);
+                      // navigate(0);
+                      dispatch(set_url(`/${friend.slug_personal}`));
+                    }}
+                  >
                     {/* <Link key={idx}  to={`${friend.slug_personal}`}> */}
                     <ItemOpt
                       children_centerItemOpt={
@@ -264,13 +288,12 @@ export function SidebarFriendList() {
                       component_Left={
                         <LabelCircle urlImg={friend.avatar_account} />
                       }
-                      
                     />
-                  {/* </Link> */}
+                    {/* </Link> */}
                   </span>
                 );
               })
-            : ""}
+            : ''}
         </div>
       </div>
       <div className="sidebarRight-pageFriend">

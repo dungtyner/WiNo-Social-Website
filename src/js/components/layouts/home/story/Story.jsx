@@ -1,6 +1,6 @@
-import React from "react";
-import "./Story.css";
-import { Avatar } from "@mui/material";
+import React from 'react';
+import './Story.css';
+import { Avatar } from '@mui/material';
 
 export default function Story({ image, profileSrc, title }) {
   return (

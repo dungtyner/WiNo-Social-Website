@@ -1,13 +1,13 @@
-import Peer from "peerjs";
-import { Fragment, useEffect, useRef, useState } from "react";
-import { HOST_SERVER } from "../../../../config";
-import { useStore } from "../../../../store";
-import { delete_popup_call_video } from "../../../../store/actions";
-import ButtonNormal from "../../../parts/buttons/buttonNormal/ButtonNormal";
-import { Icon_Phone } from "../../../parts/icons/fontAwesome/FontAwesome";
-import ItemOpt from "../../../parts/item/itemOpt/ItemOpt";
-import LabelCircle from "../../../parts/labels/labelCircle/LabelCircle";
-import "./PopUpCallVideo.css";
+import Peer from 'peerjs';
+import { Fragment, useEffect, useRef, useState } from 'react';
+import { HOST_SERVER } from '../../../../config';
+import { useStore } from '../../../../store';
+import { delete_popup_call_video } from '../../../../store/actions';
+import ButtonNormal from '../../../parts/buttons/buttonNormal/ButtonNormal';
+import { Icon_Phone } from '../../../parts/icons/fontAwesome/FontAwesome';
+import ItemOpt from '../../../parts/item/itemOpt/ItemOpt';
+import LabelCircle from '../../../parts/labels/labelCircle/LabelCircle';
+import './PopUpCallVideo.css';
 function PopUpCallVideo({
   listJoiner = [],
   avatarCallVideo,
@@ -16,7 +16,7 @@ function PopUpCallVideo({
   peer = new Peer(),
   account_caller = null,
   membersChat = [],
-  idChat = "",
+  idChat = '',
 }) {
   const [state, dispatch] = useStore();
   const refVideo = useRef(null);
@@ -26,7 +26,7 @@ function PopUpCallVideo({
   const ref_state_list_accepter = useRef([]);
   const ref_StreamCameraYou = useRef(null);
   const refButtonTurnOffCallVideo = useRef(null);
-  
+
   const [state_isZoomIn, set_state_isZoomIn] = useState(false);
   const [state_stream, set_state_stream] = useState(null);
   const [state_isResponse, set_state_isResponse] = useState(isResponse);
@@ -34,65 +34,77 @@ function PopUpCallVideo({
   const [state_list_accepter, set_state_list_accepter] = useState([]);
   var who = (stream, call, state_stream) => {
     if (!state_stream) {
-      call.on("stream", (remoteStream) => {
+      call.on('stream', (remoteStream) => {
         refVideo.current.srcObject = remoteStream;
         refVideo.current.play();
         set_state_stream(remoteStream);
       });
     } else if (state_stream) {
       // console.log(state_subCameras);
-      call.on("stream", (remoteStream) => {
+      call.on('stream', (remoteStream) => {
         set_state_subCameras(
           state_subCameras.concat([
             <Fragment>
               <VideoCamera stream={remoteStream} />
               <ItemOpt children_centerItemOpt={<b>{`CCC`}</b>} />
             </Fragment>,
-          ])
+          ]),
         );
       });
     }
   };
-  useEffect(()=>{
-    if(state_isResponse && !refButtonTurnOffCallVideo.current)
-    {
-
+  useEffect(() => {
+    if (state_isResponse && !refButtonTurnOffCallVideo.current) {
     }
-  },[])
+  }, []);
   useEffect(() => {
     if (isResponse) {
       membersChat.forEach((member) => {
-        if(member.slug_member==account_caller.slug_personal)
-        {
-          account_caller.member=member
+        if (member.slug_member == account_caller.slug_personal) {
+          account_caller.member = member;
         }
         state.socketChat.once(
-          `${member.slug_member}_LEAVE_CALL_VIDEO`,data=>{
-            if(data.slug_leaver!=state.account.slug_personal)
-            {
-              console.log(`${member.slug_member}_LEAVE_CALL_VIDEO`,refStreamMainCamera.current,refStreamSubCamera.current);
-              if(refStreamSubCamera.current.some(item=>item.data.account_joiner&&item.data.account_joiner.slug_personal==data.slug_leaver))
-              {
-                refStreamSubCamera.current.forEach((item,idx)=>{
-                  console.log(`${member.slug_member}_LEAVE_CALL_VIDEO`,item);
-                  if(item.data.account_joiner&&item.data.account_joiner.slug_personal==data.slug_leaver)
-                  {
-                    refStreamSubCamera.current.splice(idx,1);
+          `${member.slug_member}_LEAVE_CALL_VIDEO`,
+          (data) => {
+            if (data.slug_leaver != state.account.slug_personal) {
+              console.log(
+                `${member.slug_member}_LEAVE_CALL_VIDEO`,
+                refStreamMainCamera.current,
+                refStreamSubCamera.current,
+              );
+              if (
+                refStreamSubCamera.current.some(
+                  (item) =>
+                    item.data.account_joiner &&
+                    item.data.account_joiner.slug_personal == data.slug_leaver,
+                )
+              ) {
+                refStreamSubCamera.current.forEach((item, idx) => {
+                  console.log(`${member.slug_member}_LEAVE_CALL_VIDEO`, item);
+                  if (
+                    item.data.account_joiner &&
+                    item.data.account_joiner.slug_personal == data.slug_leaver
+                  ) {
+                    refStreamSubCamera.current.splice(idx, 1);
                   }
-                })
-              }
-              else
-              {
-                if(refStreamMainCamera.current&&refStreamMainCamera.current.data.account_joiner.slug_personal==data.slug_leaver)
-                    {
-                      refStreamMainCamera.current=null;
-                      // set_state_stream(null);
-                      console.log(`${member.slug_member}_LEAVE_CALL_VIDEO`,refStreamMainCamera.current,refStreamSubCamera.current);
-                      if(refStreamSubCamera.current.length>=2)
-                      {
-                        refStreamMainCamera.current=refStreamSubCamera.current[1];
-                      }
-                    }
+                });
+              } else {
+                if (
+                  refStreamMainCamera.current &&
+                  refStreamMainCamera.current.data.account_joiner
+                    .slug_personal == data.slug_leaver
+                ) {
+                  refStreamMainCamera.current = null;
+                  // set_state_stream(null);
+                  console.log(
+                    `${member.slug_member}_LEAVE_CALL_VIDEO`,
+                    refStreamMainCamera.current,
+                    refStreamSubCamera.current,
+                  );
+                  if (refStreamSubCamera.current.length >= 2) {
+                    refStreamMainCamera.current = refStreamSubCamera.current[1];
+                  }
+                }
               }
 
               set_state_subCameras(
@@ -106,16 +118,16 @@ function PopUpCallVideo({
                         />
                       </Fragment>
                     );
-                  })
-                )
+                  }),
+                ),
               );
             }
-          });
-          
+          },
+        );
+
         state.socketChat.once(
           `${member.slug_member}_ACCEPT_JOIN_CALL_VIDEO`,
           (data) => {
-
             set_state_list_accepter(
               state_list_accepter.concat([
                 {
@@ -124,11 +136,11 @@ function PopUpCallVideo({
                   peerId: data.peerId,
                   stream_id: data.stream_id,
                 },
-              ])
+              ]),
             );
             if (
               !ref_state_list_accepter.current.some(
-                (accepter) => accepter.stream_id == data.stream_id
+                (accepter) => accepter.stream_id == data.stream_id,
               )
             ) {
               ref_state_list_accepter.current.push({
@@ -138,27 +150,29 @@ function PopUpCallVideo({
                 stream_id: data.stream_id,
               });
             }
-          }
+          },
         );
       });
       who = (stream, call, state_stream) => {
         if (!refStreamMainCamera.current) {
-          call.on("stream", (remoteStream) => {
+          call.on('stream', (remoteStream) => {
             // refVideo.current.srcObject = remoteStream;
             // refVideo.current.play();
             ref_StreamCameraYou.current = stream;
-            if(refButtonTurnOffCallVideo)
-            {
-              refButtonTurnOffCallVideo.current.addEventListener('click',()=>{
-                console.log('ccccc',stream);
-              })
+            if (refButtonTurnOffCallVideo) {
+              refButtonTurnOffCallVideo.current.addEventListener(
+                'click',
+                () => {
+                  console.log('ccccc', stream);
+                },
+              );
             }
             set_state_stream(remoteStream);
             refStreamSubCamera.current = [
               {
                 stream: stream,
                 data: {
-                  nameJoiner: "You",
+                  nameJoiner: 'You',
                 },
               },
             ];
@@ -173,36 +187,36 @@ function PopUpCallVideo({
                       />
                     </Fragment>
                   );
-                })
-              )
+                }),
+              ),
             );
-            console.log(`${''}_ACCEPT_JOIN_CALL_VIDEO`,ref_state_list_accepter.current);
+            console.log(
+              `${''}_ACCEPT_JOIN_CALL_VIDEO`,
+              ref_state_list_accepter.current,
+            );
             refStreamMainCamera.current = {
-              stream:remoteStream,
-              data:{
-                account_joiner:account_caller
-              }
+              stream: remoteStream,
+              data: {
+                account_joiner: account_caller,
+              },
             };
           });
         } else if (refStreamMainCamera.current) {
-          call.on("stream", (remoteStream) => {
+          call.on('stream', (remoteStream) => {
             // console.log();
             ref_state_list_accepter.current.forEach((accepter) => {
               // console.log(accepter);
               if (
                 accepter.stream_id === remoteStream.id &&
-                !refStreamSubCamera.current.some(
-                  (item) => {
-                    
-                    return item.stream.id === remoteStream.id
-                  }
-                )
+                !refStreamSubCamera.current.some((item) => {
+                  return item.stream.id === remoteStream.id;
+                })
               ) {
                 console.log('CCCC');
                 refStreamSubCamera.current.push({
                   stream: remoteStream,
                   data: {
-                    account_joiner:accepter.account_joiner,
+                    account_joiner: accepter.account_joiner,
                     nameJoiner: `${
                       accepter.member.nick_name
                         ? accepter.member.nick_name
@@ -223,8 +237,8 @@ function PopUpCallVideo({
                       />
                     </Fragment>
                   );
-                })
-              )
+                }),
+              ),
             );
           });
         }
@@ -235,22 +249,23 @@ function PopUpCallVideo({
           .getUserMedia({ video: true, audio: false })
           .then((stream) => {
             if (state_subCameras.length == 0) {
-
               ref_StreamCameraYou.current = stream;
-              if(refButtonTurnOffCallVideo)
-              {
-                refButtonTurnOffCallVideo.current.addEventListener('click',()=>{
-                  // console.log('ccccc',stream);
-                  stream.getTracks().forEach(track=>{
-                    track.stop();
-                  })
-                })
+              if (refButtonTurnOffCallVideo) {
+                refButtonTurnOffCallVideo.current.addEventListener(
+                  'click',
+                  () => {
+                    // console.log('ccccc',stream);
+                    stream.getTracks().forEach((track) => {
+                      track.stop();
+                    });
+                  },
+                );
               }
               refStreamSubCamera.current = [
                 {
                   stream: stream,
                   data: {
-                    nameJoiner: "You",
+                    nameJoiner: 'You',
                   },
                 },
               ];
@@ -266,155 +281,177 @@ function PopUpCallVideo({
                         />
                       </Fragment>
                     );
-                  })
-                )
+                  }),
+                ),
               );
             }
             membersChat.forEach((member) => {
               state.socketChat.once(
-                `${member.slug_member}_LEAVE_CALL_VIDEO`,data=>{
-                  ;
-                  if(refStreamMainCamera.current)
-                  {
-
-                    if(refStreamSubCamera.current.some((item,idx)=>
-                      (item.data.account_joiner && item.data.account_joiner
-                        .slug_personal==data.slug_leaver)))
-                    {
-                      refStreamSubCamera.current.forEach((item,idx)=>{
-                      if(item.data.account_joiner && item.data.account_joiner
-                        .slug_personal==data.slug_leaver)
-                        {
-                        refStreamSubCamera.current.splice(idx,1);
-                      }
-                    });
-                    set_state_subCameras(
-                      [].concat(
-                        refStreamSubCamera.current.map((item) => {
-                          return (
-                            <Fragment>
-                              <VideoCamera stream={item.stream} />
-                              <ItemOpt
-                                children_centerItemOpt={<b>{item.data.nameJoiner}</b>}
-                              />
-                            </Fragment>
-                          );
-                        })
+                `${member.slug_member}_LEAVE_CALL_VIDEO`,
+                (data) => {
+                  if (refStreamMainCamera.current) {
+                    if (
+                      refStreamSubCamera.current.some(
+                        (item, idx) =>
+                          item.data.account_joiner &&
+                          item.data.account_joiner.slug_personal ==
+                            data.slug_leaver,
                       )
-                    );
-                  }
-                  else
-                  {
-                    console.log(`${member.slug_member}_LEAVE_CALL_VIDEO`,refStreamSubCamera,refStreamMainCamera)
+                    ) {
+                      refStreamSubCamera.current.forEach((item, idx) => {
+                        if (
+                          item.data.account_joiner &&
+                          item.data.account_joiner.slug_personal ==
+                            data.slug_leaver
+                        ) {
+                          refStreamSubCamera.current.splice(idx, 1);
+                        }
+                      });
+                      set_state_subCameras(
+                        [].concat(
+                          refStreamSubCamera.current.map((item) => {
+                            return (
+                              <Fragment>
+                                <VideoCamera stream={item.stream} />
+                                <ItemOpt
+                                  children_centerItemOpt={
+                                    <b>{item.data.nameJoiner}</b>
+                                  }
+                                />
+                              </Fragment>
+                            );
+                          }),
+                        ),
+                      );
+                    } else {
+                      console.log(
+                        `${member.slug_member}_LEAVE_CALL_VIDEO`,
+                        refStreamSubCamera,
+                        refStreamMainCamera,
+                      );
 
-                    if(refStreamMainCamera.current.data.account_joiner.slug_personal==data.slug_leaver)
-                    {
-                      refStreamMainCamera.current=null;
-                      set_state_stream(null);
-                      if(refStreamSubCamera.current.length>=2)
-                      {
-                        refStreamMainCamera.current=refStreamSubCamera.current[1];
-                        refStreamSubCamera.current.splice(1,1);
-                        set_state_subCameras(
-                          [].concat(
-                            refStreamSubCamera.current.map((item) => {
-                              return (
-                                <Fragment>
-                                  <VideoCamera stream={item.stream} />
-                                  <ItemOpt
-                                    children_centerItemOpt={<b>{item.data.nameJoiner}</b>}
-                                  />
-                                </Fragment>
-                              );
-                            })
-                          )
-                        );
+                      if (
+                        refStreamMainCamera.current.data.account_joiner
+                          .slug_personal == data.slug_leaver
+                      ) {
+                        refStreamMainCamera.current = null;
+                        set_state_stream(null);
+                        if (refStreamSubCamera.current.length >= 2) {
+                          refStreamMainCamera.current =
+                            refStreamSubCamera.current[1];
+                          refStreamSubCamera.current.splice(1, 1);
+                          set_state_subCameras(
+                            [].concat(
+                              refStreamSubCamera.current.map((item) => {
+                                return (
+                                  <Fragment>
+                                    <VideoCamera stream={item.stream} />
+                                    <ItemOpt
+                                      children_centerItemOpt={
+                                        <b>{item.data.nameJoiner}</b>
+                                      }
+                                    />
+                                  </Fragment>
+                                );
+                              }),
+                            ),
+                          );
+                        }
                       }
                     }
                   }
-                  }
-                  
-                  
-                });
+                },
+              );
               state.socketChat.once(
                 `${member.slug_member}_ACCEPT_JOIN_CALL_VIDEO`,
                 (data) => {
-                  if(!ref_state_list_accepter.current.some(
-                    (accepter) => {
-                      
+                  if (
+                    !ref_state_list_accepter.current.some((accepter) => {
                       // console.log(`${member.slug_member}_ACCEPT_JOIN_CALL_VIDEO`,accepter.stream_id,data.stream_id)
-                      return accepter.stream_id == data.stream_id
-                    }
-                  ))
-                  {
+                      return accepter.stream_id == data.stream_id;
+                    })
+                  ) {
                     const call = peer.call(data.peerId, stream);
-                  call.on("stream", (remoteStream) => {
-                      
-                    if (!refStreamMainCamera.current) {
-                      console.log(remoteStream);
+                    call.on('stream', (remoteStream) => {
+                      if (!refStreamMainCamera.current) {
+                        console.log(remoteStream);
                         ref_state_list_accepter.current.push({
                           account_joiner: data.account_joiner,
                           member: member,
                           peerId: data.peerId,
                           stream_id: data.stream_id,
                         });
-                      
-                      refStreamMainCamera.current = {stream:remoteStream,data:{
-                        account_joiner: data.account_joiner,
-                        member: member,
-                        peerId: data.peerId,
-                        stream_id: data.stream_id,
-                      }};
-                      console.log(`_ACCEPT_JOIN_CALL_VIDEO`,data,refStreamMainCamera);
-                      set_state_stream(remoteStream);
-                    } else if (refStreamMainCamera.current) {
-                      // console.log(state_subCameras);
 
-                      if(remoteStream.id!=refStreamMainCamera.current.stream.id && !refStreamSubCamera.current.some(item=>item.stream.id===remoteStream.id))
-                      {
-                        refStreamSubCamera.current.push({
+                        refStreamMainCamera.current = {
                           stream: remoteStream,
                           data: {
-                            account_joiner:data.account_joiner,
-                            nameJoiner: `${
-                              member.nick_name
-                                ? member.nick_name
-                                : `${data.account_joiner.user_fname} ${data.account_joiner.user_lname}`
-                            }`,
+                            account_joiner: data.account_joiner,
+                            member: member,
+                            peerId: data.peerId,
+                            stream_id: data.stream_id,
                           },
-                        });
-                        set_state_subCameras(
-                          [].concat(
-                            refStreamSubCamera.current.map((item) => {
-                              return (
-                                <Fragment>
-                                  <VideoCamera stream={item.stream} />
-                                  <ItemOpt
-                                    children_centerItemOpt={<b>{item.data.nameJoiner}</b>}
-                                  />
-                                </Fragment>
-                              );
-                            })
-                          )
+                        };
+                        console.log(
+                          `_ACCEPT_JOIN_CALL_VIDEO`,
+                          data,
+                          refStreamMainCamera,
                         );
+                        set_state_stream(remoteStream);
+                      } else if (refStreamMainCamera.current) {
+                        // console.log(state_subCameras);
 
-                        // set_state_subCameras(
-                        //   state_subCameras.concat([
-                        //     <Fragment>
-                        //       <VideoCamera stream={} />
-                        //       <ItemOpt
-                        //         children_centerItemOpt={
-                        //           <b>{}</b>
-                        //         }
-                        //       />
-                        //     </Fragment>,
-                        //   ])
-                        // );
+                        if (
+                          remoteStream.id !=
+                            refStreamMainCamera.current.stream.id &&
+                          !refStreamSubCamera.current.some(
+                            (item) => item.stream.id === remoteStream.id,
+                          )
+                        ) {
+                          refStreamSubCamera.current.push({
+                            stream: remoteStream,
+                            data: {
+                              account_joiner: data.account_joiner,
+                              nameJoiner: `${
+                                member.nick_name
+                                  ? member.nick_name
+                                  : `${data.account_joiner.user_fname} ${data.account_joiner.user_lname}`
+                              }`,
+                            },
+                          });
+                          set_state_subCameras(
+                            [].concat(
+                              refStreamSubCamera.current.map((item) => {
+                                return (
+                                  <Fragment>
+                                    <VideoCamera stream={item.stream} />
+                                    <ItemOpt
+                                      children_centerItemOpt={
+                                        <b>{item.data.nameJoiner}</b>
+                                      }
+                                    />
+                                  </Fragment>
+                                );
+                              }),
+                            ),
+                          );
+
+                          // set_state_subCameras(
+                          //   state_subCameras.concat([
+                          //     <Fragment>
+                          //       <VideoCamera stream={} />
+                          //       <ItemOpt
+                          //         children_centerItemOpt={
+                          //           <b>{}</b>
+                          //         }
+                          //       />
+                          //     </Fragment>,
+                          //   ])
+                          // );
+                        }
                       }
-                    }
-                  });
+                    });
                   }
-                }
+                },
               );
             });
           });
@@ -425,33 +462,34 @@ function PopUpCallVideo({
     <div className="container-popupCallVideo" ref={refContainerCallVideo}>
       <div className="main-popupCallVideo">
         <div
-          className={`body-popupCallVideo ${state_isZoomIn ? "isZoomIn" : ""}`}
+          className={`body-popupCallVideo ${state_isZoomIn ? 'isZoomIn' : ''}`}
         >
           <div className="content-popupCallVideo">
             <div className="video-popupCallVideo">
               {refStreamMainCamera.current && isResponse && account_caller && (
                 <MainCameraCallVideo
                   data={{
-                    nameJoiner:
-                    account_caller.member.nick_name
-                        ? account_caller.member.nick_name
-                        :`${account_caller.user_fname} ${account_caller.user_lname}`,
+                    nameJoiner: account_caller.member.nick_name
+                      ? account_caller.member.nick_name
+                      : `${account_caller.user_fname} ${account_caller.user_lname}`,
                   }}
                   stream={refStreamMainCamera.current.stream}
                 />
               )}
-              {refStreamMainCamera.current && !isResponse && !account_caller && (
-                <MainCameraCallVideo
-                
-                  data={{
-                    nameJoiner:ref_state_list_accepter.current[0].member.nick_name
-                    ? ref_state_list_accepter.current[0].member.nick_name
-                    :`${ref_state_list_accepter.current[0].account_joiner.user_fname} ${ref_state_list_accepter.current[0].account_joiner.user_lname}`,
-                    // account_joiner
-                  }}
-                  stream={refStreamMainCamera.current.stream}
-                />
-              )}
+              {refStreamMainCamera.current &&
+                !isResponse &&
+                !account_caller && (
+                  <MainCameraCallVideo
+                    data={{
+                      nameJoiner: ref_state_list_accepter.current[0].member
+                        .nick_name
+                        ? ref_state_list_accepter.current[0].member.nick_name
+                        : `${ref_state_list_accepter.current[0].account_joiner.user_fname} ${ref_state_list_accepter.current[0].account_joiner.user_lname}`,
+                      // account_joiner
+                    }}
+                    stream={refStreamMainCamera.current.stream}
+                  />
+                )}
             </div>
 
             <div className="section-joiner">
@@ -488,19 +526,19 @@ function PopUpCallVideo({
                           .getUserMedia({ video: true, audio: true })
                           .then((stream) => {
                             fetch(`${HOST_SERVER}/chat/acceptJoinCallVideo`, {
-                              method: "POST",
+                              method: 'POST',
                               body: JSON.stringify({
                                 peerId: peer._id,
                                 account_caller: account_caller,
                                 idChat,
                                 stream_id: stream.id,
                               }),
-                              credentials: "include",
+                              credentials: 'include',
                               headers: {
-                                "Content-Type": "application/json",
+                                'Content-Type': 'application/json',
                               },
                             });
-                            peer.on("call", (call) => {
+                            peer.on('call', (call) => {
                               // set_state_subCameras(state_subCameras.concat([<VideoCamera stream={stream}/>]))
                               call.answer(stream);
                               // console.log(stream);
@@ -514,7 +552,7 @@ function PopUpCallVideo({
                               } else {
                                 state_list_accepter.forEach((data) => {
                                   const call = peer.call(data.peerId, stream);
-                                  call.on("stream", (remoteStream) => {
+                                  call.on('stream', (remoteStream) => {
                                     // console.log(state_subCameras);
                                     set_state_subCameras(
                                       state_subCameras.concat([
@@ -538,7 +576,7 @@ function PopUpCallVideo({
                                             }
                                           />
                                         </Fragment>,
-                                      ])
+                                      ]),
                                     );
                                   });
                                 });
@@ -551,7 +589,12 @@ function PopUpCallVideo({
                   elIcon={<Icon_Phone isHot={false} />}
                 />
               )}
-              <span ref={refButtonTurnOffCallVideo}><ButtonTurnOffCallVideo idChat={idChat} stream={ref_StreamCameraYou.current} /></span>
+              <span ref={refButtonTurnOffCallVideo}>
+                <ButtonTurnOffCallVideo
+                  idChat={idChat}
+                  stream={ref_StreamCameraYou.current}
+                />
+              </span>
             </div>
           </div>
           <div className="sidebarRight-popupCallVideo">
@@ -584,56 +627,50 @@ function PopUpCallVideo({
     </div>
   );
 }
-function ButtonTurnOffCallVideo({ stream,idChat }) {
+function ButtonTurnOffCallVideo({ stream, idChat }) {
   const [state, dispatch] = useStore();
   // console.log('ButtonTurnOffCallVideo',stream);
-if(stream)
-{
-  stream.oninactive=()=>
-  {
-    console.log('stream running');
-    stream.getTracks().forEach((track) => {
-      track.stop();
-      track.enabled=false;
-    });
+  if (stream) {
+    stream.oninactive = () => {
+      console.log('stream running');
+      stream.getTracks().forEach((track) => {
+        track.stop();
+        track.enabled = false;
+      });
+    };
   }
-}
   return (
     <div
       className="btn_turnoffCallVideo"
       onClick={() => {
         if (stream) {
-          
-          var videos =  document.querySelectorAll(`video`);
-          videos.forEach(video=>{
+          var videos = document.querySelectorAll(`video`);
+          videos.forEach((video) => {
             console.log(video.srcObject);
-            if(video.x && video.srcObject.id == stream.id)
-            {
+            if (video.x && video.srcObject.id == stream.id) {
               video.srcObject.getTracks().forEach((track) => {
-                track.stop()
+                track.stop();
               });
               video.pause();
-              video.src = ''
-              video.srcObject=null;
+              video.src = '';
+              video.srcObject = null;
               video.remove();
               // window.localStream
             }
           });
           // stream.stop();
-
         }
         // localMediaStream.stop();
-        fetch(`${HOST_SERVER}/chat/leaveCallVideo`,{
-          credentials:'include',
-          method:'POST',
-          body:JSON.stringify({
+        fetch(`${HOST_SERVER}/chat/leaveCallVideo`, {
+          credentials: 'include',
+          method: 'POST',
+          body: JSON.stringify({
             idChat,
           }),
-          headers:{
-            'Content-Type':'application/json'
-          }
-          
-        })
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
         dispatch(delete_popup_call_video(null));
       }}
     >
@@ -644,7 +681,7 @@ if(stream)
   );
 }
 function VideoCamera({ stream }) {
-  console.log('VideoCamera',stream);
+  console.log('VideoCamera', stream);
   var refVideo = useRef(null);
   useEffect(() => {
     if (refVideo) {
@@ -660,7 +697,7 @@ function MainCameraCallVideo({ stream, data }) {
   return (
     <Fragment>
       <VideoCamera stream={stream} />
-      <ItemOpt children_centerItemOpt={data.nameJoiner}/>
+      <ItemOpt children_centerItemOpt={data.nameJoiner} />
     </Fragment>
   );
 }

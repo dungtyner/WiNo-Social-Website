@@ -1,50 +1,62 @@
-import React, { useState, useEffect } from "react";
-import "./Home.css";
-import StoryReel from "./story/StoryReel";
+import React, { useState, useEffect } from 'react';
+import './Home.css';
+import StoryReel from './story/StoryReel';
 import {
   EmojiEmotions,
   Image,
   PersonAdd,
-  VideoCameraBack,Favorite,FavoriteBorder,
-} from "@mui/icons-material";
+  VideoCameraBack,
+  Favorite,
+  FavoriteBorder,
+} from '@mui/icons-material';
 import {
-  ButtonGroup,Chip,
-  Modal,IconButton,
-  Stack,Avatar, Button,
+  ButtonGroup,
+  Chip,
+  Modal,
+  IconButton,
+  Stack,
+  Avatar,
+  Button,
   TextField,
   Typography,
-  Input,Box,
-} from "@mui/material";
-import {Card,CardHeader,CardMedia,CardContent,CardActions} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+  Input,
+  Box,
+} from '@mui/material';
+import {
+  Card,
+  CardHeader,
+  CardMedia,
+  CardContent,
+  CardActions,
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SendIcon from '@mui/icons-material/Send';
-import styled from "@emotion/styled";
-import Picker from "emoji-picker-react";
-import queryString from 'query-string'
+import styled from '@emotion/styled';
+import Picker from 'emoji-picker-react';
+import queryString from 'query-string';
 import { Link } from 'react-router-dom';
-import { storage } from '../../../config/firebase'
-import { format } from "timeago.js";
-import { useStore } from "../../../store";
+import { storage } from '../../../config/firebase';
+import { format } from 'timeago.js';
+import { useStore } from '../../../store';
 import Users_Home from '../../../API/Users_Home';
 import Like from '../../../API/Like';
-import { HOST_SERVER } from "../../../config";
+import { HOST_SERVER } from '../../../config';
 
-export default function Home({ avatar_account,full_name,data_account }) {
+export default function Home({ avatar_account, full_name, data_account }) {
   const [open, setOpen] = useState(false);
   const UserBox = styled(Box)(({ theme }) => ({
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
-    marginBottom: "20px",
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    marginBottom: '20px',
   }));
 
   // Handle Button select moij
 
   const [showPicker, setShowPicker] = useState(false);
-  const [send, set_Send] = useState("");
+  const [send, set_Send] = useState('');
   const onEmojiClick = (event, emojiObject) => {
-    
     set_Send((prevInput) => {
       console.log(emojiObject);
 
@@ -52,271 +64,239 @@ export default function Home({ avatar_account,full_name,data_account }) {
     });
     // setShowPicker(false);
   };
-   // Hàm này dùng để nhận dữ liệu khi gõ phím
-   const handleSend = (e) => {
-    set_Send(e.target.value)
-}
-
+  // Hàm này dùng để nhận dữ liệu khi gõ phím
+  const handleSend = (e) => {
+    set_Send(e.target.value);
+  };
 
   // Handle file choose img
   const [image, setImage] = useState(null);
   const handler_Change_Image = (e) => {
     if (e.target.files && e.target.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            var show_image = document.getElementById('show_image_status')
-            show_image.setAttribute('src', e.target.result)
-        };
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var show_image = document.getElementById('show_image_status');
+        show_image.setAttribute('src', e.target.result);
+      };
 
-        reader.readAsDataURL(e.target.files[0]);
-        setImage(e.target.files[0])
-
+      reader.readAsDataURL(e.target.files[0]);
+      setImage(e.target.files[0]);
     }
-   // document.getElementById('group_get_image').setAttribute('style', 'display: block')
-}
+    // document.getElementById('group_get_image').setAttribute('style', 'display: block')
+  };
 
   // Hàm này dùng để hiện thị mở file vì input đã display none
   const show_upload = () => {
     document.getElementById('file_upload_id').click();
-  }
+  };
 
-   // Hàm này dùng để upload file lên google cloud
- const handler_post_status = () => { 
-  // Dòng này dùng để upload
-  document.body.style.overflow='auto';
-  const uploadTask = storage.ref(`social/${image.name}`).put(image)
-  uploadTask.on(
-    "state_changed",
-    snapshot => { },
-    error => { 
-        console.log(error)
-    },
-    async () => { // Phần này dùng để lấy url
+  // Hàm này dùng để upload file lên google cloud
+  const handler_post_status = () => {
+    // Dòng này dùng để upload
+    document.body.style.overflow = 'auto';
+    const uploadTask = storage.ref(`social/${image.name}`).put(image);
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {},
+      (error) => {
+        console.log(error);
+      },
+      async () => {
+        // Phần này dùng để lấy url
         await storage
-            .ref("social")
-            .child(image.name)
-            .getDownloadURL()
-            .then((url) => {
-                // Bắt đầu gọi API để xử lý dữ liệu dưới database
-                const post_status_data = async () => {
+          .ref('social')
+          .child(image.name)
+          .getDownloadURL()
+          .then((url) => {
+            // Bắt đầu gọi API để xử lý dữ liệu dưới database
+            const post_status_data = async () => {
+              const params = {
+                id_user: data_account._id,
+                title: send,
+                image_body: url,
+              };
 
-                    const params = {
-                        id_user: data_account._id,
-                        title: send,
-                        image_body: url
-                    }
-                
-                    const query = '?' + queryString.stringify(params)
+              const query = '?' + queryString.stringify(params);
 
-                    // console.log('Loaded');
-                    await Users_Home.post_Status_User(query);
-                    set_reload(true);
-                    
-                }
+              // console.log('Loaded');
+              await Users_Home.post_Status_User(query);
+              set_reload(true);
+            };
 
-                post_status_data();
+            post_status_data();
 
-                set_Send('')
+            set_Send('');
 
-                 // Thay đổi state để gọi là hàm useEffect
+            // Thay đổi state để gọi là hàm useEffect
+          });
+      },
+    );
+    alert('Story Upload');
 
-            })
-    }
-)  
-  alert("Story Upload")
+    document
+      .getElementById('card_post_parent')
+      .setAttribute('style', 'display: none');
+  };
 
-  document.getElementById('card_post_parent').setAttribute('style', 'display: none')
-}
+  // -----------------------PHAN HOME-----------------------------//
 
- // -----------------------PHAN HOME-----------------------------//
+  const [list_post_home, set_list_post_home] = useState([]);
+  const [state, dispatch] = useStore();
+  const [reload, set_reload] = useState(false);
 
- const [list_post_home, set_list_post_home] = useState([])
- const [state, dispatch] = useStore();
- const [reload, set_reload] = useState(false)
+  // Hàm này dùng để load bài viết ở trang home lan dau tien
+  useEffect(() => {
+    const fetchData = async () => {
+      const params = {
+        id_user: data_account._id,
+      };
 
- // Hàm này dùng để load bài viết ở trang home lan dau tien
- useEffect(() => {
+      const query = '?' + queryString.stringify(params);
 
-     const fetchData = async () => {
+      const response = await Users_Home.get_Users_Home(query);
 
-         const params = {
-             id_user: data_account._id 
-         }
-       
-         const query = '?' + queryString.stringify(params)
+      const reverse_data = response.reverse();
+      //  console.log(response.reverse());
+      const data = status_like(reverse_data);
+      // set_list_post_home(data);
+    };
+    fetchData();
 
-        const response = await Users_Home.get_Users_Home(query)
- 
-        const reverse_data = response.reverse() 
-        //  console.log(response.reverse());
-        const data = status_like(reverse_data)
-        // set_list_post_home(data);
-
-      }
-     fetchData();
-
-     const fetchAPI = ()=>
-     {
+    const fetchAPI = () => {
       // console.log(data_account.slug_friends);
       console.log(data_account);
-        fetch(`${HOST_SERVER}/friend/posts`,
-        {
-          method:'POST',
-          body:JSON.stringify({
-            slug_friends:data_account.list_slug_friend
-          }),
-          headers:{
-            'Content-Type':'application/json'
-          },
-          credentials:'include'
-        }).then(res=>res.text()).then(dataJSon=>{
+      fetch(`${HOST_SERVER}/friend/posts`, {
+        method: 'POST',
+        body: JSON.stringify({
+          slug_friends: data_account.list_slug_friend,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      })
+        .then((res) => res.text())
+        .then((dataJSon) => {
           var data = JSON.parse(dataJSon);
           // console.log(data.result.reverse());
-          data.result.map(postFriend=>{
+          data.result.map((postFriend) => {
             set_list_post_home(list_post_home.concat(postFriend.reverse()));
-          })
-        })
-     };
-     fetchAPI();
+          });
+        });
+    };
+    fetchAPI();
+  }, []);
 
- }, [])
- 
- // Hàm này dùng để load bài viết ở trang home phụ thuộc vào state reload
- useEffect(() => {
+  // Hàm này dùng để load bài viết ở trang home phụ thuộc vào state reload
+  useEffect(() => {
+    if (reload) {
+      const fetchData = async () => {
+        const params = {
+          id_user: data_account._id,
+        };
 
-     if (reload) {
+        const query = '?' + queryString.stringify(params);
 
-         const fetchData = async () => {
+        const response = await Users_Home.get_Users_Home(query);
 
-             const params = {
-              id_user: data_account._id
-             }
-
-             const query = '?' + queryString.stringify(params)
-
-             const response = await Users_Home.get_Users_Home(query)
-
-             const reverse_data = response.reverse() 
-             console.log(reverse_data);
-             set_list_post_home(reverse_data);
-             set_reload(false);
-         }
-         fetchData() 
-
-         
-         
-     } 
-
- }, [reload]) 
-
-
- function status_like(data) {
-
-  let array_new = []
-  for (let i = 0; i < data.length; i++) {
-    console.log(data);
-    if (!data[i].status_like) {
-          array_new.push(data[i])
-      }
-  }
-  return array_new
-}
-
-
-
-
-
-
-
-    //---- Phần này dùng để show modal khi user bấm kiểm tra số lượng người like ----//
-
-    const [id_image_post, set_id_image_post] = useState('')
-
-    const [load_modal, set_load_modal] = useState(false)
-
-    const [users_like, set_users_like] = useState([])
-
-    // Lấy id_image_post khi bấm vào xem like của bài viết
-    const GET_id_image_post = (value) => {
-
-        set_id_image_post(value)
-
-        set_load_modal(true) // khởi động load dữ liệu ra modal
-
+        const reverse_data = response.reverse();
+        console.log(reverse_data);
+        set_list_post_home(reverse_data);
+        set_reload(false);
+      };
+      fetchData();
     }
+  }, [reload]);
 
-    useEffect(() => {
+  function status_like(data) {
+    let array_new = [];
+    for (let i = 0; i < data.length; i++) {
+      console.log(data);
+      if (!data[i].status_like) {
+        array_new.push(data[i]);
+      }
+    }
+    return array_new;
+  }
 
-        if(load_modal){
+  //---- Phần này dùng để show modal khi user bấm kiểm tra số lượng người like ----//
 
-            const fetchData = async () => {
+  const [id_image_post, set_id_image_post] = useState('');
 
-                const params = {
-                    id_image_post: id_image_post
-                }
-    
-                const query = '?' + queryString.stringify(params)
+  const [load_modal, set_load_modal] = useState(false);
 
-                const response = await Like.count_like(query)
+  const [users_like, set_users_like] = useState([]);
 
-                set_users_like(response)
+  // Lấy id_image_post khi bấm vào xem like của bài viết
+  const GET_id_image_post = (value) => {
+    set_id_image_post(value);
 
-            }
+    set_load_modal(true); // khởi động load dữ liệu ra modal
+  };
 
-            fetchData()
+  useEffect(() => {
+    if (load_modal) {
+      const fetchData = async () => {
+        const params = {
+          id_image_post: id_image_post,
+        };
 
-        }
+        const query = '?' + queryString.stringify(params);
 
-    }, [load_modal])
+        const response = await Like.count_like(query);
 
-        // ------- Phần này dùng để lấy dữ liệu của chính user
-        const [user, set_user] = useState({})
+        set_users_like(response);
+      };
 
-        useEffect(() => {
-    
-            const fetchData = async () => {
-              const params = {
-                id_user: data_account._id
-               }
-  
-               const query = '?' + queryString.stringify(params)
-  
-                // const response = await AccountAPI.getId(query);
-                // console.log(response)
-    
-                // set_user(response)
-    
-            }
-    
-            fetchData()
-    
-        }, [])
-    
-    // // State data của comment
-    // const [comments, set_comments] = useState([])
+      fetchData();
+    }
+  }, [load_modal]);
 
-    // const [load_comment, set_load_comment] = useState(true)
+  // ------- Phần này dùng để lấy dữ liệu của chính user
+  const [user, set_user] = useState({});
 
-    // useEffect(() => {
+  useEffect(() => {
+    const fetchData = async () => {
+      const params = {
+        id_user: data_account._id,
+      };
 
-    //     if (load_comment) {
+      const query = '?' + queryString.stringify(params);
 
-    //         const fetchData = async () => {
+      // const response = await AccountAPI.getId(query);
+      // console.log(response)
 
-    //             const response = await Comment.get_all_comment(state.comments.id_image_post)
-    //             console.log(response)
+      // set_user(response)
+    };
 
-    //             set_comments(response)
+    fetchData();
+  }, []);
 
-    //         }
+  // // State data của comment
+  // const [comments, set_comments] = useState([])
 
-    //         fetchData()
+  // const [load_comment, set_load_comment] = useState(true)
 
-    //         set_load_comment(false)
+  // useEffect(() => {
 
-    //     }
+  //     if (load_comment) {
 
-    // }, [load_comment])
+  //         const fetchData = async () => {
+
+  //             const response = await Comment.get_all_comment(state.comments.id_image_post)
+  //             console.log(response)
+
+  //             set_comments(response)
+
+  //         }
+
+  //         fetchData()
+
+  //         set_load_comment(false)
+
+  //     }
+
+  // }, [load_comment])
 
   const [tagFriend, setTagFriend] = useState(false);
   const handleTagFriend = () => {
@@ -326,147 +306,189 @@ export default function Home({ avatar_account,full_name,data_account }) {
 
   return (
     <div className="home">
-        <Box flex={1} p={{ xs: 0, md: 2 }}>
-          {/* Show story */}
-          <div className="display_content_story">
-          <StoryReel src={avatar_account}/> 
-          </div>  
-           
-           {/* Show messengerSender */}
-         <div className="display_content_messengerSender">
-          <Card sx={{marginTop: "20px", display: "flex", paddingLeft: "20px", alignItems: "center", p : 3}}>
-            <Avatar sx = {{ border:"2px solid #4de739" }}
-              src={avatar_account}
-            />             
-            <Chip title={"ADD"} onClick={(event) => { setOpen(true); }}
-              sx={{marginLeft:'10px', width:'100%',height:'40px',fontSize:'18px'}}
-              label="What's on your mind?">
-              
-            </Chip>
-          </Card>
-         </div>
-         
-         {/* Show card post */}
-        <div className="card_create_post_details">
-        <Modal sx={{display: "flex", alignItems: "center", justifyContent: "center"}}
-          id="card_post_parent"
-          open={open}
-          onClose={() => setOpen(false)}
-          //id="group_get_image"
-        >
-          <Box width={500} bgcolor={"background.default"} color={"text.primary"}
-            p={6} borderRadius={9} >
-            <span onClick={(event) => {setOpen(false); }}>
-              <IconButton sx={{ position: "relative", float: "right", backgroundColor: "rgb(221, 221, 221)"}}>
-                <CloseIcon />
-              </IconButton>
-            </span>
-            <Typography 
-              sx={{ borderBottom: "1px solid green",paddingBottom: "20px", marginBottom: "10px", color:"green"}}
-              variant="h6" textAlign={"center"}
-            >
-              Create Post
-            </Typography>
-            <UserBox>
-              <Avatar
-                src={avatar_account}
-                sx={{border:"2px solid  #4de739"}}
-              />
-              <Typography fontWeight={700} variant="span">
-                {full_name}
-              </Typography>
-            </UserBox>
-            <TextField sx={{ width: "100%" }}
-              multiline
-              rows={2}
-              placeholder="What's on your mind?"
-              variant="standard"
-              value={send}
-              onChange={handleSend}
-              color="success"
-              focused
-            />
-            {/* Show img in frame create post */}
-            <Stack style={{ display: "none" }}>
-              <input type="file" name="myImage" id="file_upload_id" 
-              // ref={imageRef}  
-              onChange={handler_Change_Image}
-              />
-            </Stack>
-            {/* edit img and handle close img in frame */}
-            {image && (
-              <div className="previewImage">
-                <CloseIcon onClick={() => setImage(null)} />
-                <img id="show_image_status"
-              //   src={image.image} 
-                alt="" />
-              </div>
-            )}
-            <Stack direction={"row"} gap={1} mt={3} mb={2} sx={{}}>
-              <IconButton aria-label="emoji">
-                <EmojiEmotions color="primary" onClick={() => setShowPicker((val) => !val)}/>
-              </IconButton>
-              {showPicker && (
-                <div className="previewMoji">
-                  <Picker
-                    pickerStyle={{ width: "300px" }}
-                    onEmojiClick={onEmojiClick}
-                  />
-                  <CloseIcon onClick={() => setShowPicker(null)} />
-                </div>
-              )}
-              {/* <Picker onEmojiClick={onEmojiClick}/> */}
-              <IconButton aria-label="image">
-                <Image color="secondary" onClick={show_upload}/>
-              </IconButton>
-              <IconButton aria-label="videoCamera">
-                <VideoCameraBack color="success" />
-              </IconButton>
-              <div>
-                <IconButton aria-label="add">
-                  <PersonAdd color="error" onClick={handleTagFriend} />
-                </IconButton>
-              </div>
-            </Stack>
-            <ButtonGroup
-              fullWidth
-              disableElevation
-              variant="contained"
-              aria-label="Disabled elevation buttons"
-              color="success"
-            >
-              <Link to={''}>
-              <Button onClick={handler_post_status}>Post</Button>
-              </Link>
-            </ButtonGroup>
-          </Box>
-        </Modal>
+      <Box flex={1} p={{ xs: 0, md: 2 }}>
+        {/* Show story */}
+        <div className="display_content_story">
+          <StoryReel src={avatar_account} />
         </div>
 
-        <div className="display_poster">   
-        {
-          list_post_home && list_post_home.map(value => {
-            // console.log(value);
-            return (<ItemPostHome key={value._id} dataPost={value} />)
-          })}
+        {/* Show messengerSender */}
+        <div className="display_content_messengerSender">
+          <Card
+            sx={{
+              marginTop: '20px',
+              display: 'flex',
+              paddingLeft: '20px',
+              alignItems: 'center',
+              p: 3,
+            }}
+          >
+            <Avatar sx={{ border: '2px solid #4de739' }} src={avatar_account} />
+            <Chip
+              title={'ADD'}
+              onClick={(event) => {
+                setOpen(true);
+              }}
+              sx={{
+                marginLeft: '10px',
+                width: '100%',
+                height: '40px',
+                fontSize: '18px',
+              }}
+              label="What's on your mind?"
+            ></Chip>
+          </Card>
         </div>
-        
-      
+
+        {/* Show card post */}
+        <div className="card_create_post_details">
+          <Modal
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            id="card_post_parent"
+            open={open}
+            onClose={() => setOpen(false)}
+            //id="group_get_image"
+          >
+            <Box
+              width={500}
+              bgcolor={'background.default'}
+              color={'text.primary'}
+              p={6}
+              borderRadius={9}
+            >
+              <span
+                onClick={(event) => {
+                  setOpen(false);
+                }}
+              >
+                <IconButton
+                  sx={{
+                    position: 'relative',
+                    float: 'right',
+                    backgroundColor: 'rgb(221, 221, 221)',
+                  }}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </span>
+              <Typography
+                sx={{
+                  borderBottom: '1px solid green',
+                  paddingBottom: '20px',
+                  marginBottom: '10px',
+                  color: 'green',
+                }}
+                variant="h6"
+                textAlign={'center'}
+              >
+                Create Post
+              </Typography>
+              <UserBox>
+                <Avatar
+                  src={avatar_account}
+                  sx={{ border: '2px solid  #4de739' }}
+                />
+                <Typography fontWeight={700} variant="span">
+                  {full_name}
+                </Typography>
+              </UserBox>
+              <TextField
+                sx={{ width: '100%' }}
+                multiline
+                rows={2}
+                placeholder="What's on your mind?"
+                variant="standard"
+                value={send}
+                onChange={handleSend}
+                color="success"
+                focused
+              />
+              {/* Show img in frame create post */}
+              <Stack style={{ display: 'none' }}>
+                <input
+                  type="file"
+                  name="myImage"
+                  id="file_upload_id"
+                  // ref={imageRef}
+                  onChange={handler_Change_Image}
+                />
+              </Stack>
+              {/* edit img and handle close img in frame */}
+              {image && (
+                <div className="previewImage">
+                  <CloseIcon onClick={() => setImage(null)} />
+                  <img
+                    id="show_image_status"
+                    //   src={image.image}
+                    alt=""
+                  />
+                </div>
+              )}
+              <Stack direction={'row'} gap={1} mt={3} mb={2} sx={{}}>
+                <IconButton aria-label="emoji">
+                  <EmojiEmotions
+                    color="primary"
+                    onClick={() => setShowPicker((val) => !val)}
+                  />
+                </IconButton>
+                {showPicker && (
+                  <div className="previewMoji">
+                    <Picker
+                      pickerStyle={{ width: '300px' }}
+                      onEmojiClick={onEmojiClick}
+                    />
+                    <CloseIcon onClick={() => setShowPicker(null)} />
+                  </div>
+                )}
+                {/* <Picker onEmojiClick={onEmojiClick}/> */}
+                <IconButton aria-label="image">
+                  <Image color="secondary" onClick={show_upload} />
+                </IconButton>
+                <IconButton aria-label="videoCamera">
+                  <VideoCameraBack color="success" />
+                </IconButton>
+                <div>
+                  <IconButton aria-label="add">
+                    <PersonAdd color="error" onClick={handleTagFriend} />
+                  </IconButton>
+                </div>
+              </Stack>
+              <ButtonGroup
+                fullWidth
+                disableElevation
+                variant="contained"
+                aria-label="Disabled elevation buttons"
+                color="success"
+              >
+                <Link to={''}>
+                  <Button onClick={handler_post_status}>Post</Button>
+                </Link>
+              </ButtonGroup>
+            </Box>
+          </Modal>
+        </div>
+
+        <div className="display_poster">
+          {list_post_home &&
+            list_post_home.map((value) => {
+              // console.log(value);
+              return <ItemPostHome key={value._id} dataPost={value} />;
+            })}
+        </div>
       </Box>
-    
     </div>
   );
 }
-function ItemPostHome({
-dataPost
-})
-{
-  const [state,dispatch] = useStore();
-  const [send, set_Send] = useState("");
+function ItemPostHome({ dataPost }) {
+  const [state, dispatch] = useStore();
+  const [send, set_Send] = useState('');
   const [showPickerComment, setShowPickerComment] = useState(false);
-  const [state_status_like,set_status_like] =  useState(dataPost.status_like);
+  const [state_status_like, set_status_like] = useState(dataPost.status_like);
   const onEmojiClick = (event, emojiObject) => {
-    
     set_Send((prevInput) => {
       console.log(emojiObject);
 
@@ -476,149 +498,177 @@ dataPost
   };
   const handler_Click_Untym = (id_image_post, id_user_following) => {
     const fetchData = async () => {
-    
       // delete dữ liệu Database Like
       const params = {
-          // id_user: state.account._id,
-          id_image_post: id_image_post
-      }
-    
-      const query = '?' + queryString.stringify(params)
-    
-      const response = await Like.put_unlike(query)
-      console.log(response)
-    
-  }
+        // id_user: state.account._id,
+        id_image_post: id_image_post,
+      };
 
-  fetchData()
-   
-  let id_temp_following = id_user_following === '' ? state.account._id : id_user_following
+      const query = '?' + queryString.stringify(params);
 
-  console.log(id_temp_following)
+      const response = await Like.put_unlike(query);
+      console.log(response);
+    };
 
-  const deleteData = async () => {
+    fetchData();
 
+    let id_temp_following =
+      id_user_following === '' ? state.account._id : id_user_following;
+
+    console.log(id_temp_following);
+
+    const deleteData = async () => {
       const params = {
-          id_user: id_temp_following ,
-          id_user_another: state.account._id,
-      }
-    
-      console.log(params)
-    
-      const query = '?' + queryString.stringify(params)
-    
-      console.log(query)
-    
+        id_user: id_temp_following,
+        id_user_another: state.account._id,
+      };
+
+      console.log(params);
+
+      const query = '?' + queryString.stringify(params);
+
+      console.log(query);
+
       // const response = await Favorite.delete_Favorite(query)
       // console.log(response)
-    
-  }
+    };
 
+    deleteData();
+    set_status_like(false);
 
-  deleteData()
-  set_status_like(false);
-
-  // set_reload(true)
-
-}
+    // set_reload(true)
+  };
   const handler_Click_Tym = (id_image_post, id_user_following, image_body) => {
- 
     const fetchData = async () => {
-  
-    // Thêm dữ liệu vào Database Like
-    const params = {
-    id_user: state.account._id,
-    id_image_post: id_image_post
-    }
-  
-    const query = '?' + queryString.stringify(params)
-  
-    const response = await Like.post_like(query)
-  
-  
-          }
-    fetchData();
-    
-    set_status_like(true);
-  
-  }
+      // Thêm dữ liệu vào Database Like
+      const params = {
+        id_user: state.account._id,
+        id_image_post: id_image_post,
+      };
 
-  return (<div className="box_poster_details">
-  <Card sx={{ marginTop: '20px'}}>
-      <CardHeader
-            avatar={
-                <Avatar aria-label="recipe" sx={{ border: '2px solid #4de739' }}
-                  src={dataPost.avatar_account_following}  
-                />
-            }
-            action={
-                <IconButton aria-label="settings">
-                    <MoreVertIcon/>
-                </IconButton> 
-            }
-            //show fullname
-            title={dataPost.username_following}
-            subheader={format(dataPost.createdAt)}
-      />
+      const query = '?' + queryString.stringify(params);
+
+      const response = await Like.post_like(query);
+    };
+    fetchData();
+
+    set_status_like(true);
+  };
+
+  return (
+    <div className="box_poster_details">
+      <Card sx={{ marginTop: '20px' }}>
+        <CardHeader
+          avatar={
+            <Avatar
+              aria-label="recipe"
+              sx={{ border: '2px solid #4de739' }}
+              src={dataPost.avatar_account_following}
+            />
+          }
+          action={
+            <IconButton aria-label="settings">
+              <MoreVertIcon />
+            </IconButton>
+          }
+          //show fullname
+          title={dataPost.username_following}
+          subheader={format(dataPost.createdAt)}
+        />
         <CardContent>
-            <Typography variant="body2" color="text.secondary">
-                {dataPost.title}
-            </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {dataPost.title}
+          </Typography>
         </CardContent>
-      {/* <CardMedia
+        {/* <CardMedia
           component="img"
           height="100%"
           image={dataPost.image_body}
       /> */}
-       
-      <Link to={dataPost.id_user_following === '' ? 
-          `/post/${dataPost.id_image_post}_${state.account._id}` : 
-          `/post/${dataPost.id_image_post}_${dataPost.id_user_following}`}>
-          <CardMedia component="img" image={dataPost.image_body} />
-      </Link>
 
-      <CardActions disableSpacing sx={{ borderBottom:"1px solid rgb(221, 221, 221)"}}>
-      <div className="action_Tym_post_body">
-      {
-          state_status_like ? <IconButton> <Favorite onClick={() => handler_Click_Untym(dataPost.id_image_post, dataPost.id_user_following)} style={{ fontSize: '30px', cursor: 'pointer', color: 'red' }}/></IconButton> :
+        <Link
+          to={
+            dataPost.id_user_following === ''
+              ? `/post/${dataPost.id_image_post}_${state.account._id}`
+              : `/post/${dataPost.id_image_post}_${dataPost.id_user_following}`
+          }
+        >
+          <CardMedia component="img" image={dataPost.image_body} />
+        </Link>
+
+        <CardActions
+          disableSpacing
+          sx={{ borderBottom: '1px solid rgb(221, 221, 221)' }}
+        >
+          <div className="action_Tym_post_body">
+            {state_status_like ? (
               <IconButton>
-                <FavoriteBorder 
-                  onClick={() => handler_Click_Tym(dataPost.id_image_post, dataPost.id_user_following, dataPost.image_body)} 
-                  style={{ fontSize: '30px', cursor: 'pointer', }}/>
+                {' '}
+                <Favorite
+                  onClick={() =>
+                    handler_Click_Untym(
+                      dataPost.id_image_post,
+                      dataPost.id_user_following,
+                    )
+                  }
+                  style={{ fontSize: '30px', cursor: 'pointer', color: 'red' }}
+                />
               </IconButton>
-      
-      } 
-      </div>
-      {/* <IconButton aria-label="share">
+            ) : (
+              <IconButton>
+                <FavoriteBorder
+                  onClick={() =>
+                    handler_Click_Tym(
+                      dataPost.id_image_post,
+                      dataPost.id_user_following,
+                      dataPost.image_body,
+                    )
+                  }
+                  style={{ fontSize: '30px', cursor: 'pointer' }}
+                />
+              </IconButton>
+            )}
+          </div>
+          {/* <IconButton aria-label="share">
               <ShareIcon/>
           </IconButton>  */}
-      
-      <span className="display_like_user" style={{ fontWeight: '600', fontSize: '1rem', }}>
-        Liked by 
-        <i style={{ cursor: 'pointer' }}
-        data-toggle="modal" 
-        data-target={`#${dataPost.id_image_post}`} 
-        onClick={() => {
-          // GET_id_image_post(dataPost.id_image_post)
-        }}> {dataPost.like} others</i>
-      </span>     
+
+          <span
+            className="display_like_user"
+            style={{ fontWeight: '600', fontSize: '1rem' }}
+          >
+            Liked by
+            <i
+              style={{ cursor: 'pointer' }}
+              data-toggle="modal"
+              data-target={`#${dataPost.id_image_post}`}
+              onClick={() => {
+                // GET_id_image_post(dataPost.id_image_post)
+              }}
+            >
+              {' '}
+              {dataPost.like} others
+            </i>
+          </span>
           {/* <IconButton aria-label="add to favorites">
               <Checkbox icon={<FavoriteBorder/>} checkedIcon={<Favorite onClick={()=>handler_Click_Tym()} sx={{color: "green"}}/> }/>
           </IconButton> */}
-                
-          
-      </CardActions>
-   <div className="action_comment_post">
-      <Box sx={{ padding:'20px' }} 
-      >        
-        <Link
-        to={ dataPost.id_user_following === '' ? 
-            `/post/${dataPost.id_image_post}_${state.account._id}` : 
-            `/post/${dataPost.id_image_post}_${dataPost.id_user_following}`
-        }> 
-          <span style={{ cursor: 'pointer'}}> View all {dataPost.comment} comment</span>
-        </Link>
-        {/* <div className="body_detail_post">
+        </CardActions>
+        <div className="action_comment_post">
+          <Box sx={{ padding: '20px' }}>
+            <Link
+              to={
+                dataPost.id_user_following === ''
+                  ? `/post/${dataPost.id_image_post}_${state.account._id}`
+                  : `/post/${dataPost.id_image_post}_${dataPost.id_user_following}`
+              }
+            >
+              <span style={{ cursor: 'pointer' }}>
+                {' '}
+                View all {dataPost.comment} comment
+              </span>
+            </Link>
+            {/* <div className="body_detail_post">
             {
             comments && comments.map(value => (
                 <div className="Detail_comment" key={dataPost._id}>                  
@@ -642,62 +692,50 @@ dataPost
             ))
             }
         </div> */}
-          <ButtonGroup sx={{ width:"100%", marginTop:"20px" }}>
-              <Input 
-                  sx={{ width: "100%", 
-                      // bgcolor:'white',
-                      borderRadius:"50px", 
-                      paddingLeft:"20px",
-                      position:"relative"
-                  }}         
-                  placeholder="Write comment..."   
-                  variant="standard"                          
-                  disableUnderline
-                  value={send}
-                  onChange={(e) => set_Send(e.target.value)}   
+            <ButtonGroup sx={{ width: '100%', marginTop: '20px' }}>
+              <Input
+                sx={{
+                  width: '100%',
+                  // bgcolor:'white',
+                  borderRadius: '50px',
+                  paddingLeft: '20px',
+                  position: 'relative',
+                }}
+                placeholder="Write comment..."
+                variant="standard"
+                disableUnderline
+                value={send}
+                onChange={(e) => set_Send(e.target.value)}
               />
               <ButtonGroup>
-                  <IconButton aria-label="emoji">
-                      <EmojiEmotions
-                          color="warning"
-                          onClick={() =>setShowPickerComment(val => !val)}
-                      />
-                  </IconButton> 
-                    { showPickerComment && (
-                      <div className="previewMojiComment">
-                        <Picker 
-                      pickerStyle={{ width: "300px" }}
-                      onEmojiClick={onEmojiClick} />
-                      <CloseIcon onClick={() => setShowPickerComment(null)}/>
-                      </div>
-                    )}
-                  <IconButton >
-                      <SendIcon color='success' />
-                  </IconButton>    
-              </ButtonGroup>    
-          </ButtonGroup>
-        
-      </Box>
+                <IconButton aria-label="emoji">
+                  <EmojiEmotions
+                    color="warning"
+                    onClick={() => setShowPickerComment((val) => !val)}
+                  />
+                </IconButton>
+                {showPickerComment && (
+                  <div className="previewMojiComment">
+                    <Picker
+                      pickerStyle={{ width: '300px' }}
+                      onEmojiClick={onEmojiClick}
+                    />
+                    <CloseIcon onClick={() => setShowPickerComment(null)} />
+                  </div>
+                )}
+                <IconButton>
+                  <SendIcon color="success" />
+                </IconButton>
+              </ButtonGroup>
+            </ButtonGroup>
+          </Box>
 
-
-
-
-
-
-
-
-
-
-      
           {/* Đây là phần Modal khi mà user muốn bấm xem có bao nhiêu người like */}
           <div className="" id={`${dataPost.id_image_post}`}>
-              <div className="modal-dialog" role="document">
-                  
-               
-              </div>
+            <div className="modal-dialog" role="document"></div>
           </div>
-
-   </div>
-  </Card>
-</div>)
+        </div>
+      </Card>
+    </div>
+  );
 }

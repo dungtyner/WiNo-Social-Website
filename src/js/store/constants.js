@@ -13,7 +13,7 @@ export const ADD_POPUP_CALL_VIDEO = "add_popup_call_video";
 export const DELETE_POPUP_CALL_VIDEO = "delete_popup_call_video";
 
 export const SET_IO = "set_io";
-export const SET_URL = 'set_url'
+export const SET_URL = "set_url";
 export const SIZE_TINY = "TINY";
 export const SIZE_SMALL = "SMALL";
 export const SIZE_LARGE = "LARGE";
@@ -22,18 +22,11 @@ export const FILE_AUDIO = "AUDIO";
 export const FILE_VIDEO = "VIDEO";
 export const FILE_IMAGE = "IMAGE";
 export const FILE_DOCUMENT = "DOCUMENT/APPLICATION";
-export const LIST_INTERACT_MESS_DEFAULT =['❤️','😆','👍','😭','😡']
-export const LIST_TAB_HEADER_PERSONAL_DEFAULT =[
+export const LIST_INTERACT_MESS_DEFAULT = ["❤️", "😆", "👍", "😭", "😡"];
+export const LIST_TAB_HEADER_PERSONAL_DEFAULT = [
     "Post",
     "Introduction",
     "Friends",
     "Picture",
     "More",
-  ]
-
-
-
-
-
-
-
+];

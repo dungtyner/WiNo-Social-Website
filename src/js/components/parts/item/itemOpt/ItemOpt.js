@@ -1,20 +1,21 @@
 import { useStore } from '../../../../store/hooks';
 import ItemOptStyles from '../itemOpt/ItemOpt.module.css';
+import PropTypes from 'prop-types';
+
 export const constant_ItemOpt = {
   TYPE_ITEM_OPT: {
     NORMAL: 'NORMAL',
     CONFIRM: 'CONFIRM',
   },
 };
+/* eslint-disable no-unused-vars */
 function ItemOpt({
   TYPE_ITEM_OPT = constant_ItemOpt.TYPE_ITEM_OPT.NORMAL,
   component_Left,
   children_centerItemOpt,
   component_Right,
   component_Sub,
-  handleClick = () => {
-    console.log('CLICK!!!');
-  },
+  handleClick = () => {},
 }) {
   const [state, dispatch] = useStore();
   return (
@@ -62,4 +63,15 @@ function ItemOpt({
     </div>
   );
 }
+
+ItemOpt.propTypes = {
+  TYPE_ITEM_OPT: PropTypes.string,
+  component_Left: PropTypes.node.isRequired,
+  children_centerItemOpt: PropTypes.node.isRequired,
+  component_Right: PropTypes.node.isRequired,
+  component_Sub: PropTypes.node.isRequired,
+  handleClick: PropTypes.func,
+};
+
 export default ItemOpt;
+/* eslint-disable no-unused-vars */

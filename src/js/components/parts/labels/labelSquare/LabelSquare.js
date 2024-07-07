@@ -1,5 +1,7 @@
 import OverLay from '../../overlays/OverLay';
 import './LabelSquare.css';
+import PropTypes from 'prop-types';
+
 function LabelSquare({
   el_Icon,
   urlImg,
@@ -40,4 +42,15 @@ function LabelSquare({
     </div>
   );
 }
+LabelSquare.propTypes = {
+  el_Icon: PropTypes.node.isRequired,
+  urlImg: PropTypes.string.isRequired,
+  urlVideo: PropTypes.string.isRequired,
+  elOverlay: PropTypes.node.isRequired,
+  sizeLabel: PropTypes.string,
+  elSub: PropTypes.node.isRequired,
+  isBorderRadius: PropTypes.bool,
+  tooltip: PropTypes.node.isRequired,
+};
+
 export default LabelSquare;

@@ -1,13 +1,5 @@
-import {
-  MemoryRouter,
-  Navigate,
-  Outlet,
-  Route,
-  Routes,
-  useNavigate,
-} from 'react-router';
-import { BrowserRouter, Link } from 'react-router-dom';
-import SubContentPersonal from '../../subContents/subContentPersonal/SubContentPersonal';
+import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 import PagePersonalStyles from '../pagePersonal/PagePersonal.module.css';
 import { Fragment, useEffect, useState } from 'react';
 import PagePersonalHeader from '../../subHeaders/pagePersonalHeader/PagePersonalHeader';
@@ -18,13 +10,14 @@ import { NoResult } from '../../inputs/forms/formSearch/FormSearch';
 import AccountAPI from '../../../../API/AccountAPI';
 import Users_Activity from '../../../../API/Users_Activity';
 import { useStore } from '../../../../store/';
+import PropTypes from 'prop-types';
+
 export const Context_PagePersonal = createContext();
-function PagePersonal({ elContent, slugs }) {
+function PagePersonal({ slugs }) {
   const [stateAccount, set_stateAccount] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
     var fetchAPI = async () => {
-      // console.log(slugs);
       if (slugs) {
         fetch(`${HOST_SERVER}/${slugs.map((slug) => slug).join('/')}`, {
           method: 'GET',
@@ -55,12 +48,13 @@ function PagePersonal({ elContent, slugs }) {
 
     fetchAPI();
   }, []);
+  /* eslint-disable no-unused-vars */
   const [user, set_user] = useState({});
   const [state, dispatch] = useStore();
   const [user_activity, set_user_activity] = useState({});
 
   const [check_list_image, set_check_list_image] = useState(false);
-
+  /* eslint-disable no-unused-vars */
   useEffect(() => {
     const fetchData = async () => {
       const response = await AccountAPI.getId(state.account._id);
@@ -99,7 +93,6 @@ function PagePersonal({ elContent, slugs }) {
             stateAccount,
             set_stateAccount,
             slugs,
-            stateAccount: stateAccount,
           }}
         >
           <div className={PagePersonalStyles['container-pagePersonal']}>
@@ -149,4 +142,9 @@ function PagePersonal({ elContent, slugs }) {
     // </BrowserRouter >
   );
 }
+
+PagePersonal.propTypes = {
+  slugs: PropTypes.object.isRequired,
+};
+
 export default PagePersonal;

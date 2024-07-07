@@ -1,23 +1,13 @@
 import React, { useState } from 'react';
-
-// import ReactDOM from 'react-dom/client';
 import LabelCircleStyles from '../labelCircle/LabelCircle.module.css';
 import { createContext } from 'react';
 import { Icon_Close } from '../../icons/fontAwesome/FontAwesome';
 import { SIZE_TINY } from '../../../../store/constants';
+import PropTypes from 'prop-types';
 
 export const CreateContext = createContext();
 function Tmp_add_popup_content(component_PopUp) {
-  // const [isShow, set_isShow] = useState(true);
-
-  return (
-    <CreateContext.Provider
-    //   value={[isShow, set_isShow]}
-    //   value={''}
-    >
-      {component_PopUp}
-    </CreateContext.Provider>
-  );
+  return <CreateContext.Provider>{component_PopUp}</CreateContext.Provider>;
 }
 function LabelCircle({
   urlImg,
@@ -114,9 +104,11 @@ function LabelCircle({
                 right: '5px',
                 background: 'var(--blackColorTextDefault)',
               }}
+              /* eslint-disable no-unused-vars */
               onClick={(event) => {
                 handleRemove();
               }}
+              /* eslint-disable no-unused-vars */
             >
               <Icon_Close sizeIcon={SIZE_TINY} />
             </span>
@@ -144,4 +136,17 @@ function LabelCircle({
     </div>
   );
 }
+
+LabelCircle.propTypes = {
+  urlImg: PropTypes.string.isRequired,
+  el_Icon: PropTypes.node.isRequired,
+  numCount: PropTypes.number.isRequired,
+  objDetail: PropTypes.object.isRequired,
+  typeLabelCircle: PropTypes.string,
+  sizeLabel: PropTypes.string,
+  styles: PropTypes.object,
+  handleRemove: PropTypes.func.isRequired,
+  handleClick: PropTypes.func,
+};
+
 export default LabelCircle;

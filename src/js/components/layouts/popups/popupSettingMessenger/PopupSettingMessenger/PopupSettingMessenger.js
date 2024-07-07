@@ -1,4 +1,3 @@
-import { click } from '@testing-library/user-event/dist/click';
 import { Fragment, useContext, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { HOST_SERVER } from '../../../../../config';
@@ -39,9 +38,11 @@ import {
   notification_modify_nick_name_Mess,
 } from '../../popupMessenger/PopUpMessenger';
 import PopUpReviews from '../../popupReview/PopUpReviews';
-
 import './PopupSettingMessenger.css';
-function PopupSettingMessenger({}) {
+import PropTypes from 'prop-types';
+
+/* eslint-disable no-unused-vars */
+function PopupSettingMessenger() {
   var value_Context_Message = useContext(Context_Message);
   var [state, dispatch] = useStore();
   return (
@@ -238,6 +239,7 @@ function PopupSettingMessenger({}) {
     </PopUp_>
   );
 }
+
 function PopUpAddMember({ data_new_Member, value_Context_Message }) {
   const [state_listSelectedSlug_Member, set_state_listSelectedSlug_Member] =
     useState([]);
@@ -253,10 +255,10 @@ function PopUpAddMember({ data_new_Member, value_Context_Message }) {
       contentPopUp={
         <div>
           <div className="section_selectedAddMembers">
-            {state_listSelectedSlug_Member.map((new_mb) => {
+            {state_listSelectedSlug_Member.map((new_mb, idx) => {
               var name_new_mb = `${new_mb.user_fname} ${new_mb.user_lname}`;
               return (
-                <div className="item-NameSelectedNewMember">
+                <div key={idx} className="item-NameSelectedNewMember">
                   <LabelCircle urlImg={new_mb.avatar_account} />
                   <div className="shortNameSelectedNewMember">{`${name_new_mb
                     .split(' ')
@@ -355,6 +357,7 @@ function PopUpAddMember({ data_new_Member, value_Context_Message }) {
     />
   );
 }
+
 function ItemAddMember({
   data_new_Member,
   value_Context_Message,
@@ -417,6 +420,7 @@ function ItemAddMember({
     </div>
   );
 }
+
 function PopUpEditNickNameMember({ dataMembers, value_Context_Message }) {
   return (
     <PopUpReviews
@@ -535,6 +539,7 @@ function ItemEditNickNameMember({ dataMember, value_Context_Message }) {
     </div>
   );
 }
+
 function PopUpEditNameChat({ nameChat, idChat }) {
   const [state_textarea, set_state_textarea] = useState(nameChat);
   const [state_acceptSubmit, set_state_acceptSubmit] = useState(true);
@@ -613,6 +618,7 @@ function PopUpEditNameChat({ nameChat, idChat }) {
     />
   );
 }
+
 function PopUpChangeAvatarChat({ avatar_chat, idChat }) {
   const ref_iptFile = useRef(null);
   const [state_avatar_chat, set_state_avatar_chat] = useState(avatar_chat);
@@ -621,9 +627,7 @@ function PopUpChangeAvatarChat({ avatar_chat, idChat }) {
   useEffect(() => {
     set_state_acceptSubmit(state_avatar_chat != avatar_chat);
   }, [state_avatar_chat]);
-  useEffect(() => {
-    // console.log('state_acceptSubmit',state_acceptSubmit);
-  }, [state_acceptSubmit]);
+
   return (
     <PopUpReviews
       titlePopUp={'Change avatar Chat'}
@@ -699,4 +703,37 @@ function PopUpChangeAvatarChat({ avatar_chat, idChat }) {
     />
   );
 }
+
+PopUpAddMember.propTypes = {
+  data_new_Member: PropTypes.object.isRequired,
+  value_Context_Message: PropTypes.object.isRequired,
+};
+
+ItemAddMember.propTypes = {
+  data_new_Member: PropTypes.object.isRequired,
+  value_Context_Message: PropTypes.object.isRequired,
+  state_listSelectedSlug_Member: PropTypes.object.isRequired,
+  set_state_listSelectedSlug_Member: PropTypes.object.isRequired,
+};
+
+PopUpChangeAvatarChat.propTypes = {
+  avatar_chat: PropTypes.string.isRequired,
+  idChat: PropTypes.string.isRequired,
+};
+PopUpEditNameChat.propTypes = {
+  nameChat: PropTypes.string.isRequired,
+  idChat: PropTypes.string.isRequired,
+};
+
+PopUpEditNickNameMember.propTypes = {
+  dataMembers: PropTypes.object.isRequired,
+  value_Context_Message: PropTypes.object.isRequired,
+};
+
+ItemEditNickNameMember.propTypes = {
+  dataMember: PropTypes.object.isRequired,
+  value_Context_Message: PropTypes.object.isRequired,
+};
+
 export default PopupSettingMessenger;
+/* eslint-disable no-unused-vars */

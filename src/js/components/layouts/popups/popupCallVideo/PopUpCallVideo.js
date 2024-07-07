@@ -8,6 +8,9 @@ import { Icon_Phone } from '../../../parts/icons/fontAwesome/FontAwesome';
 import ItemOpt from '../../../parts/item/itemOpt/ItemOpt';
 import LabelCircle from '../../../parts/labels/labelCircle/LabelCircle';
 import './PopUpCallVideo.css';
+import PropTypes from 'prop-types';
+
+/* eslint-disable no-unused-vars */
 function PopUpCallVideo({
   listJoiner = [],
   avatarCallVideo,
@@ -44,7 +47,7 @@ function PopUpCallVideo({
       call.on('stream', (remoteStream) => {
         set_state_subCameras(
           state_subCameras.concat([
-            <Fragment>
+            <Fragment key={state_subCameras.length}>
               <VideoCamera stream={remoteStream} />
               <ItemOpt children_centerItemOpt={<b>{`CCC`}</b>} />
             </Fragment>,
@@ -53,10 +56,6 @@ function PopUpCallVideo({
       });
     }
   };
-  useEffect(() => {
-    if (state_isResponse && !refButtonTurnOffCallVideo.current) {
-    }
-  }, []);
   useEffect(() => {
     if (isResponse) {
       membersChat.forEach((member) => {
@@ -109,9 +108,9 @@ function PopUpCallVideo({
 
               set_state_subCameras(
                 [].concat(
-                  refStreamSubCamera.current.map((item) => {
+                  refStreamSubCamera.current.map((item, idx) => {
                     return (
-                      <Fragment>
+                      <Fragment key={idx}>
                         <VideoCamera stream={item.stream} />
                         <ItemOpt
                           children_centerItemOpt={<b>{item.data.nameJoiner}</b>}
@@ -178,9 +177,9 @@ function PopUpCallVideo({
             ];
             set_state_subCameras(
               [].concat(
-                refStreamSubCamera.current.map((item) => {
+                refStreamSubCamera.current.map((item, idx) => {
                   return (
-                    <Fragment>
+                    <Fragment key={idx}>
                       <VideoCamera stream={item.stream} />
                       <ItemOpt
                         children_centerItemOpt={<b>{item.data.nameJoiner}</b>}
@@ -228,9 +227,9 @@ function PopUpCallVideo({
             });
             set_state_subCameras(
               [].concat(
-                refStreamSubCamera.current.map((item) => {
+                refStreamSubCamera.current.map((item, idx) => {
                   return (
-                    <Fragment>
+                    <Fragment key={idx}>
                       <VideoCamera stream={item.stream} />
                       <ItemOpt
                         children_centerItemOpt={<b>{item.data.nameJoiner}</b>}
@@ -272,9 +271,9 @@ function PopUpCallVideo({
 
               set_state_subCameras(
                 [].concat(
-                  refStreamSubCamera.current.map((item) => {
+                  refStreamSubCamera.current.map((item, idx) => {
                     return (
-                      <Fragment>
+                      <Fragment key={idx}>
                         <VideoCamera stream={item.stream} />
                         <ItemOpt
                           children_centerItemOpt={<b>{item.data.nameJoiner}</b>}
@@ -292,7 +291,7 @@ function PopUpCallVideo({
                   if (refStreamMainCamera.current) {
                     if (
                       refStreamSubCamera.current.some(
-                        (item, idx) =>
+                        (item) =>
                           item.data.account_joiner &&
                           item.data.account_joiner.slug_personal ==
                             data.slug_leaver,
@@ -309,9 +308,9 @@ function PopUpCallVideo({
                       });
                       set_state_subCameras(
                         [].concat(
-                          refStreamSubCamera.current.map((item) => {
+                          refStreamSubCamera.current.map((item, idx) => {
                             return (
-                              <Fragment>
+                              <Fragment key={idx}>
                                 <VideoCamera stream={item.stream} />
                                 <ItemOpt
                                   children_centerItemOpt={
@@ -342,9 +341,9 @@ function PopUpCallVideo({
                           refStreamSubCamera.current.splice(1, 1);
                           set_state_subCameras(
                             [].concat(
-                              refStreamSubCamera.current.map((item) => {
+                              refStreamSubCamera.current.map((item, idx) => {
                                 return (
-                                  <Fragment>
+                                  <Fragment key={idx}>
                                     <VideoCamera stream={item.stream} />
                                     <ItemOpt
                                       children_centerItemOpt={
@@ -420,9 +419,9 @@ function PopUpCallVideo({
                           });
                           set_state_subCameras(
                             [].concat(
-                              refStreamSubCamera.current.map((item) => {
+                              refStreamSubCamera.current.map((item, idx) => {
                                 return (
-                                  <Fragment>
+                                  <Fragment key={idx}>
                                     <VideoCamera stream={item.stream} />
                                     <ItemOpt
                                       children_centerItemOpt={
@@ -497,6 +496,7 @@ function PopUpCallVideo({
                 return (
                   <div className="item-joinerCallVideo" key={idx}>
                     <LabelCircle urlImg={joiner.avatar_account} />
+                    {/* eslint-disable-next-line react/no-unescaped-entities */}
                     <b>"{joiner.name_chat}" be calling...</b>
                   </div>
                 );
@@ -506,6 +506,7 @@ function PopUpCallVideo({
               {
                 <div className="body-infoShortCallVideo">
                   <LabelCircle urlImg={avatarCallVideo} />
+                  {/* eslint-disable-next-line react/no-unescaped-entities */}
                   <b>"{nameCallVideo}" be calling...</b>
                 </div>
               }
@@ -556,7 +557,7 @@ function PopUpCallVideo({
                                     // console.log(state_subCameras);
                                     set_state_subCameras(
                                       state_subCameras.concat([
-                                        <Fragment>
+                                        <Fragment key={state_subCameras.length}>
                                           <VideoCamera stream={remoteStream} />
                                           <ItemOpt
                                             children_centerItemOpt={
@@ -568,7 +569,9 @@ function PopUpCallVideo({
                                             }
                                           />
                                         </Fragment>,
-                                        <Fragment>
+                                        <Fragment
+                                          key={state_subCameras.length + 1}
+                                        >
                                           <VideoCamera stream={stream} />
                                           <ItemOpt
                                             children_centerItemOpt={
@@ -629,7 +632,6 @@ function PopUpCallVideo({
 }
 function ButtonTurnOffCallVideo({ stream, idChat }) {
   const [state, dispatch] = useStore();
-  // console.log('ButtonTurnOffCallVideo',stream);
   if (stream) {
     stream.oninactive = () => {
       console.log('stream running');
@@ -704,4 +706,36 @@ function MainCameraCallVideo({ stream, data }) {
 function SubCameraCallVideo({ subCamera }) {
   return <div className="item-SubCameraCallVideo">{subCamera}</div>;
 }
+
+PopUpCallVideo.propTypes = {
+  listJoiner: PropTypes.object,
+  avatarCallVideo: PropTypes.string.isRequired,
+  nameCallVideo: PropTypes.string.isRequired,
+  isResponse: PropTypes.bool,
+  peer: PropTypes.object,
+  account_caller: PropTypes.object,
+  membersChat: PropTypes.object,
+  idChat: PropTypes.string,
+};
+
+ButtonTurnOffCallVideo.propTypes = {
+  stream: PropTypes.object,
+  idChat: PropTypes.string.isRequired,
+};
+
+VideoCamera.propTypes = {
+  stream: PropTypes.object,
+};
+
+MainCameraCallVideo.propTypes = {
+  stream: PropTypes.object,
+  data: PropTypes.shape({
+    nameJoiner: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+SubCameraCallVideo.propTypes = {
+  subCamera: PropTypes.node.isRequired,
+};
 export default PopUpCallVideo;
+/* eslint-disable no-unused-vars */

@@ -2,7 +2,7 @@ import React from 'react';
 import './StoryReel.css';
 import Story from './Story';
 
-export default function StoryReel(props) {
+export default function StoryReel() {
   return (
     <div className="storyReel">
       <Story

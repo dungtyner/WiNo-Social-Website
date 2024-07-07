@@ -1,7 +1,8 @@
-import { useEffect, useState, useRef, useContext } from 'react';
-import { ContextPopUp } from '../../../../store/Context';
 import { default as PopUp } from '../popup';
 import '../popupHeader/PopUpHeader.css';
+import PropTypes from 'prop-types';
+
+/* eslint-disable no-unused-vars */
 function PopUpHeader({
   isActive,
   header = '',
@@ -11,12 +12,6 @@ function PopUpHeader({
   workMount = () => {},
   workUnMount = () => {},
 }) {
-  console.group('PopUpHeader');
-  // const ref = useRef(null);
-  console.log('PopUpHeader() render');
-  // console.log(ContextPopUp);
-  // console.log(useContext(ContextPopUp));
-  console.groupEnd('PopUpHeader');
   return (
     <PopUp>
       <div className="container-PopUpHeader">
@@ -29,4 +24,15 @@ function PopUpHeader({
     </PopUp>
   );
 }
+PopUpHeader.propTypes = {
+  isActive: PropTypes.bool.isRequired,
+  header: PropTypes.node.isRequired,
+  body: PropTypes.node.isRequired,
+  footer: PropTypes.node.isRequired,
+  codeLabelPopUP: PropTypes.string,
+  workMount: PropTypes.func,
+  workUnMount: PropTypes.func,
+};
+
 export default PopUpHeader;
+/* eslint-disable no-unused-vars */

@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
-import { Link, Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { HOST_SERVER } from '../../../../config';
 import { useStore } from '../../../../store';
 import { set_url } from '../../../../store/actions';
@@ -18,7 +18,7 @@ import ItemOpt from '../../item/itemOpt/ItemOpt';
 import LabelCircle from '../../labels/labelCircle/LabelCircle';
 import './PageFriend.css';
 
-function PageFriend({}) {
+function PageFriend() {
   return (
     <div className="container-pageFriend">
       <div className="main-pageFriend">
@@ -29,6 +29,7 @@ function PageFriend({}) {
     </div>
   );
 }
+/* eslint-disable no-unused-vars */
 export function SidebarFriendMenuDefault() {
   const [state, dispatch] = useStore();
   return (
@@ -83,8 +84,6 @@ export function SidebarFriendMenuDefault() {
 
 export function SidebarFriendRequest() {
   const [state_listFriend, set_state_listFriend] = useState(null);
-  const [state, dispatch] = useStore();
-  var navigate = useNavigate();
   useEffect(() => {
     const fetchAPI = async () => {
       fetch(`${HOST_SERVER}/friend/getListRequestFriend`, {
@@ -146,8 +145,6 @@ export function SidebarFriendRequest() {
 }
 export function SidebarFriendResponse() {
   const [state_listFriend, set_state_listFriend] = useState(null);
-  const [state, dispatch] = useStore();
-  var navigate = useNavigate();
   useEffect(() => {
     const fetchAPI = async () => {
       fetch(`${HOST_SERVER}/friend/getListResponseFriend`, {
@@ -303,3 +300,4 @@ export function SidebarFriendList() {
   );
 }
 export default PageFriend;
+/* eslint-disable no-unused-vars */

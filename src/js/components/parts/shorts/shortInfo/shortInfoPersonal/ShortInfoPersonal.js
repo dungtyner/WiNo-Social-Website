@@ -1,4 +1,5 @@
 import ShortInfoPersonalStyles from '../shortInfoPersonal/ShortInfoPersonal.module.css';
+import PropTypes from 'prop-types';
 
 function ShortInfoPersonal({ textInfo = '', type = '' }) {
   return (
@@ -18,4 +19,10 @@ function ShortInfoPersonal({ textInfo = '', type = '' }) {
     </div>
   );
 }
+
+ShortInfoPersonal.propTypes = {
+  textInfo: PropTypes.string,
+  type: PropTypes.string,
+};
+
 export default ShortInfoPersonal;

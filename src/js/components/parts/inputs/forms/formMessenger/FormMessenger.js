@@ -1,13 +1,6 @@
 import '../formMessenger/FormMessenger.css';
 import * as IconFontAwesome from '../../../icons/fontAwesome/FontAwesome';
-import {
-  Fragment,
-  StrictMode,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { StrictMode, useContext, useEffect, useRef, useState } from 'react';
 import {
   beTyping_chat,
   Context_Message,
@@ -16,11 +9,7 @@ import {
 import { contentPopUpMessenger } from '../../../../layouts/popups/popupMessenger/PopUpMessenger';
 import { content_sessionMessage } from '../../../../layouts/popups/popupMessenger/PopUpMessenger';
 import * as IconMUI from '../../../../parts/icons/iconMUI/IconMUI';
-import {
-  Icon_Circle_Plus,
-  Icon_Image,
-  Icon_Sticker,
-} from '../../../icons/fontAwesome/FontAwesome';
+import { Icon_Image } from '../../../icons/fontAwesome/FontAwesome';
 import LabelSquare from '../../../labels/labelSquare/LabelSquare';
 import LabelCircle from '../../../labels/labelCircle/LabelCircle';
 import {
@@ -31,13 +20,13 @@ import {
 } from '../../../../../store/constants';
 import { useStore } from '../../../../../store';
 import { HOST_SERVER } from '../../../../../config';
-import EmojiPicker from 'emoji-picker-react';
 import PopUp_ from '../../../../layouts/popups/popup';
-import { color, padding } from '@mui/system';
 import { Grid } from '@giphy/react-components';
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import PickerEmoji from '../../../pickers/pickerEmoji/PickerEmoji';
-import { Mic } from '@mui/icons-material';
+import PropTypes from 'prop-types';
+
+/* eslint-disable no-unused-vars */
 function FormMessenger({ idChat }) {
   var refIptFile = useRef(null);
   var refIpt_text = useRef(null);
@@ -66,7 +55,7 @@ function FormMessenger({ idChat }) {
       if (account.slug_personal != state.account.slug_personal) {
         if (
           !value_Context_Message.state_typingsPopUpMessenger.some(
-            (el) => el.props.slug_typing === account.slug_personal,
+            (el) => el.props['data-slug-typing'] === account.slug_personal,
           )
         )
           value_Context_Message.setState_typingsPopUpMessenger([
@@ -74,7 +63,7 @@ function FormMessenger({ idChat }) {
             account && (
               <div
                 className="mess_be_typing"
-                slug_typing={account.slug_personal}
+                data-slug-typing={account.slug_personal}
               >
                 <LabelCircle urlImg={account.avatar_account} />
                 <img
@@ -93,7 +82,10 @@ function FormMessenger({ idChat }) {
     state.socketChat.on(`IN_${idChat}_NO_TYPING`, (accountTyping) => {
       value_Context_Message.state_typingsPopUpMessenger.forEach(
         (element, idx) => {
-          if (element.props.slug_typing == accountTyping.slug_personal) {
+          if (
+            element.props.props['data-slug-typing'] ===
+            accountTyping.slug_personal
+          ) {
             value_Context_Message.state_typingsPopUpMessenger.splice(idx, 1);
           }
         },
@@ -812,4 +804,22 @@ function AudioMess({ srcAudio }) {
     </div>
   );
 }
+
+FormMessenger.propTypes = {
+  idChat: PropTypes.string.isRequired,
+};
+
+AudioMess.propTypes = {
+  srcAudio: PropTypes.object.isRequired,
+};
+
+MicRecorderMess.propTypes = {
+  idChat: PropTypes.string.isRequired,
+  state: PropTypes.object.isRequired,
+  handleClose: PropTypes.func,
+  handlePause: PropTypes.func,
+  handleSubmit: PropTypes.func,
+};
+
 export default FormMessenger;
+/* eslint-disable no-unused-vars */

@@ -1,4 +1,6 @@
 import SubContentPersonalStyles from '../subContentPersonal/SubContentPersonal.module.css';
+import PropTypes from 'prop-types';
+
 function SubContentPersonal({ slug_personal, optTab }) {
   if (optTab === 'Friends') {
     console.log(slug_personal);
@@ -10,4 +12,10 @@ function SubContentPersonal({ slug_personal, optTab }) {
     </div>
   );
 }
+
+SubContentPersonal.propTypes = {
+  slug_personal: PropTypes.string.isRequired,
+  optTab: PropTypes.string.isRequired,
+};
+
 export default SubContentPersonal;

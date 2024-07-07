@@ -1,4 +1,6 @@
 import '../../images/overImage/OverImage.css';
+import PropTypes from 'prop-types';
+
 function OverImage({ urlImage = '' }) {
   return (
     <div className="container-overImage">
@@ -6,4 +8,8 @@ function OverImage({ urlImage = '' }) {
     </div>
   );
 }
+
+OverImage.propTypes = {
+  urlImage: PropTypes.string,
+};
 export default OverImage;

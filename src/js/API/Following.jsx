@@ -1,4 +1,3 @@
-import axiosClient from './axiosClient';
 import { HOST_SERVER } from '../config';
 const Following = {
   get_following: async (id) => {

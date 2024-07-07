@@ -4,25 +4,21 @@ import { Avatar } from '@mui/material';
 import queryString from 'query-string';
 import FormSearch from '../../parts/inputs/forms/formSearch/FormSearch.js';
 import PopupAccountHeader from '../popups/popupHeader/popupAccountHeader/PopupAccountHeader';
-
 import LabelCircle from '../../parts/labels/labelCircle/LabelCircle.js';
-
 import '../header/Header.css';
-
 import LogoWebsite from '../../logo/logoWebsite/LogoWebsite.js';
 import { useStore } from '../../../store';
 import { actions } from '../../../store';
 import AccountAPI from '../../../API/AccountAPI';
 import { Icon_Mess } from '../../parts/icons/fontAwesome/FontAwesome';
 import PopupMessageHeader from '../popups/popupHeader/popupMessageHeader/PopupMessageHeader';
-import PopupNotificationHeader, {
-  Notification,
-  ResponseNewFriend,
-} from '../popups/popupHeader/popupNotificationHeader/PopupNotificationHeader';
+import PopupNotificationHeader from '../popups/popupHeader/popupNotificationHeader/PopupNotificationHeader';
 import { HOST_SERVER } from '../../../config.js';
 import { set_url } from '../../../store/actions.js';
 import PopUp_ from '../popups/popup.js';
+import PropTypes from 'prop-types';
 
+/* eslint-disable no-unused-vars */
 function Header({ avatar_account, slug_personal, account }) {
   const [state, dispatch] = useStore();
   const [stateCountMess, set_stateCountMess] = useState(
@@ -69,14 +65,8 @@ function Header({ avatar_account, slug_personal, account }) {
     if (!document.querySelector('.container-popupAccountHeader')) {
       // document.querySelector('.LogoWebsite_body-logo_website__ZeBTa').addEventListener('click',Tmp_add_popup_content(<div>OhAlo</div>))
       dispatch(actions.add_popup_content(component_PopUp));
-    } else {
     }
   };
-
-  //----------------- Phần này dùng để tìm kiếm--------------------//
-
-  // Hàm này dùng để hiện menu search
-
   const handler_Search = (value) => {
     show_menu_search(value);
     set_keyword(value);
@@ -129,6 +119,7 @@ function Header({ avatar_account, slug_personal, account }) {
                 {list_search.length > 0 &&
                   list_search.map((value, idx) => (
                     <span
+                      key={idx}
                       className="result-SearchHeader"
                       onClick={(event) => {
                         set_show_search(false);
@@ -277,4 +268,14 @@ function Header({ avatar_account, slug_personal, account }) {
     </header>
   );
 }
+
+Header.propTypes = {
+  avatar_account: PropTypes.string.isRequired,
+  slug_personal: PropTypes.string.isRequired,
+  account: PropTypes.object.isRequired,
+  state: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
+};
+
 export default Header;
+/* eslint-disable no-unused-vars */

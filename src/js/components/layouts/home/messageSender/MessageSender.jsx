@@ -23,7 +23,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import styled from '@emotion/styled';
 import Picker from 'emoji-picker-react';
 
-export default function MessageSender(props) {
+/* eslint-disable no-unused-vars */
+export default function MessageSender() {
   const [open, setOpen] = useState(false);
   const UserBox = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -90,6 +91,7 @@ export default function MessageSender(props) {
             variant="string"
             aria-label="error button "
           >
+            {/* eslint-disable-next-line react/no-unescaped-entities */}
             <Button>What's on your mind?</Button>
           </ButtonGroup>
           <Modal
@@ -295,3 +297,4 @@ export default function MessageSender(props) {
     </div>
   );
 }
+/* eslint-disable no-unused-vars */

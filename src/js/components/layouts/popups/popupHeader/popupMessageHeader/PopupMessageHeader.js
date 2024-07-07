@@ -6,7 +6,6 @@ import FormSearch, {
 } from '../../../../parts/inputs/forms/formSearch/FormSearch';
 import {
   Icon_Circle,
-  Icon_Ellipsis,
   Icon_Pen_Square,
   Icon_Plus,
   Icon_Square,
@@ -16,27 +15,20 @@ import ItemOpt from '../../../../parts/item/itemOpt/ItemOpt';
 import LabelCircle from '../../../../parts/labels/labelCircle/LabelCircle';
 import { useStore } from '../../../../../store';
 import { actions } from '../../../../../store';
-import PopUpMessenger, { member } from '../../popupMessenger/PopUpMessenger';
-import {
-  content_sessionMessage,
-  contentPopUpMessenger,
-} from '../../popupMessenger/PopUpMessenger';
-import { useEffect, useContext, useRef, Fragment, useState } from 'react';
+import PopUpMessenger from '../../popupMessenger/PopUpMessenger';
+import { useEffect, Fragment, useState } from 'react';
 import { dateTo_textAgo } from '../../../../../store/functions';
-import {
-  Context_Account,
-  ContextPopUp,
-  Context_PopUpMessengers,
-} from '../../../../../store/Context';
 import { HOST_SERVER } from '../../../../../config';
 import {
   add_popup_review,
   delete_pop_content,
 } from '../../../../../store/actions';
 import PopUpReviews from '../../popupReview/PopUpReviews';
-
 import './PopupMessageHeader.css';
 import ButtonNormal from '../../../../parts/buttons/buttonNormal/ButtonNormal';
+import PropTypes from 'prop-types';
+/* eslint-disable no-unused-vars */
+
 function PopupMessageHeader({ listChat = [] }) {
   const [state_listChat, set_state_listChat] = useState(listChat);
   const [state_showResult, set_state_showResult] = useState(false);
@@ -57,7 +49,10 @@ function PopupMessageHeader({ listChat = [] }) {
         <>
           <HeaderSpaceBetween
             bodyLeft={<h1>Chat</h1>}
-            bodyRight={[<Icon_Plus />, <Icon_Pen_Square />].map((el, idx) => {
+            bodyRight={[
+              <Icon_Plus key={'Icon_Plus'} />,
+              <Icon_Pen_Square key={'Icon_Pen_Square'} />,
+            ].map((el, idx) => {
               return (
                 <ItemOpt
                   key={idx}
@@ -437,12 +432,12 @@ function PopupCreateGroupChat({ initSuggestMembers }) {
           />
 
           <div className="section-selectedMembersInNewGroup">
-            {state_membersSelected.map((member) => {
+            {state_membersSelected.map((member, idx) => {
               var shortName = `${member.user_fname} ${member.user_lname}`.split(
                 ' ',
               );
               return (
-                <div className="item-selectedMembersInNewGroup">
+                <div key={idx} className="item-selectedMembersInNewGroup">
                   <LabelCircle urlImg={member.avatar_account} />
                   <div>
                     {shortName.splice(shortName.length - 2, shortName.length)}
@@ -555,4 +550,43 @@ export function Render_notification_callVideo({ data, handleClick }) {
     </div>
   );
 }
+
+PopupMessageHeader.propTypes = {
+  listChat: PropTypes.object.isRequired,
+};
+
+PopupMessageHeader.propTypes = {
+  listChat: PropTypes.object.isRequired,
+  OBJ_useState_listSelectEd: PropTypes.object.isRequired,
+};
+
+ItemSelectMember.propTypes = {
+  member: PropTypes.object.isRequired,
+  OBJ_useState_listSelectEd: PropTypes.object.isRequired,
+};
+Render_notification_callVideo.propTypes = {
+  data: PropTypes.object.isRequired,
+  handleClick: PropTypes.func.isRequired,
+};
+
+PopupCreateGroupChat.propTypes = {
+  initSuggestMembers: PropTypes.object.isRequired,
+};
+
+PopupCreateGroupChat.propTypes = {
+  notification: PropTypes.object.isRequired,
+};
+
+LastSessionMessageHeader.propTypes = {
+  el: PropTypes.object.isRequired,
+  state: PropTypes.object.isRequired,
+  slug_last: PropTypes.string.isRequired,
+};
+LastInteractMessageHeader.propTypes = {
+  el: PropTypes.object.isRequired,
+  state: PropTypes.object.isRequired,
+  slug_last: PropTypes.string.isRequired,
+};
+
 export default PopupMessageHeader;
+/* eslint-disable no-unused-vars */

@@ -52,11 +52,11 @@ var listItemOptAccountHeader = [
     isSummary: false,
   },
 ];
-function PopupAccountHeader({}) {
+function PopupAccountHeader() {
   console.log('PopupAccountHeader() render');
   var [state, dispatch] = useStore();
   var account = state.account;
-
+  /* eslint-disable no-unused-vars */
   return (
     <PopUpHeader
       isActive={true}
@@ -93,5 +93,6 @@ function PopupAccountHeader({}) {
       }
     />
   );
+  /* eslint-disable no-unused-vars */
 }
 export default PopupAccountHeader;

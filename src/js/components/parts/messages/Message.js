@@ -1,5 +1,5 @@
 import { Gif } from '@giphy/react-components';
-import { Fragment, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   Icon_Document,
   Icon_Ellipsis,
@@ -31,14 +31,15 @@ import { HOST_SERVER } from '../../../config';
 import PickerEmoji from '../pickers/pickerEmoji/PickerEmoji';
 import { add_popup_call_video, add_popup_review } from '../../../store/actions';
 import PopUpReviews from '../../layouts/popups/popupReview/PopUpReviews';
-import { Tab } from '@mui/material';
 import TabReactions, {
   OBJ_TabReactions,
 } from '../tabs/tabReactions/TabReactions';
 import ItemOpt from '../item/itemOpt/ItemOpt';
 import ButtonNormal from '../buttons/buttonNormal/ButtonNormal';
 import PopUpCallVideo from '../../layouts/popups/popupCallVideo/PopUpCallVideo';
+import PropTypes from 'prop-types';
 
+/* eslint-disable no-unused-vars */
 function Message({
   idxMessage,
   isMe,
@@ -51,9 +52,6 @@ function Message({
   const [state, dispatch] = useStore();
   const [state_component_contentCenter, set_state_component_contentCenter] =
     useState(component_contentCenter);
-  // useState
-  // console.log();
-  // console.log(component_contentCenter);
   useEffect(() => {
     state.socketChat.on(
       `${value_Context_Message.idChat}_SHUTDOWN_CALL_VIDEO`,
@@ -141,9 +139,10 @@ function ListOptMoreSessionMessage({
                   add_popup_review(
                     <PopUpReviews
                       titlePopUp={'Share Message'}
-                      contentPopUp={data.map((chat) => {
+                      contentPopUp={data.map((chat, idx) => {
                         return (
                           <ItemOpt
+                            key={idx}
                             component_Left={
                               <LabelCircle urlImg={chat.avatarChat} />
                             }
@@ -395,9 +394,10 @@ function MainSessionMessage({
             {sessionMessage.interact.length > 1 &&
               sessionMessage.interact.length}
             {sessionMessage.interact.length > 0 &&
-              list_valueInteractUnique.map((el) => {
+              list_valueInteractUnique.map((el, idx) => {
                 return (
                   <span
+                    key={idx}
                     style={{
                       cursor: 'pointer',
                     }}
@@ -464,6 +464,7 @@ function MainSessionMessage({
                 {LIST_INTERACT_MESS_DEFAULT.map((interactMess, idx) => {
                   return (
                     <div
+                      key={idx}
                       className={`interactMess ${
                         sessionMessage.interact.some((el) => {
                           return (
@@ -531,6 +532,7 @@ function MainSessionMessage({
                     set_stateShowPickerEmoji([
                       ...stateShowPickerEmoji,
                       <PopUp_
+                        key={stateShowPickerEmoji.length}
                         work_case_unmount={() => {
                           set_stateShowPickerEmoji([]);
                         }}
@@ -660,7 +662,6 @@ function MainSessionMessage({
   );
 }
 export function SessionMessageNotification({ sessionMessage, obj_IsMeSender }) {
-  // console.log('cccccc');
   const [state, dispatch] = useStore();
   const value_Context_Message = useContext(Context_Message);
   return (
@@ -706,4 +707,47 @@ export function SessionMessageNotification({ sessionMessage, obj_IsMeSender }) {
     </div>
   );
 }
+
+Message.propTypes = {
+  idxMessage: PropTypes.number.isRequired,
+  isMe: PropTypes.bool.isRequired,
+  avatarSender: PropTypes.string.isRequired,
+  name_sender: PropTypes.string.isRequired,
+  slug_sender: PropTypes.string.isRequired,
+  component_contentCenter: PropTypes.object,
+};
+
+SessionMessage.propTypes = {
+  obj_sessionMessage: PropTypes.object.isRequired,
+  isReply: PropTypes.bool,
+};
+
+SessionMessageNotification.propTypes = {
+  sessionMessage: PropTypes.object.isRequired,
+  obj_IsMeSender: PropTypes.object.isRequired,
+};
+
+MainSessionMessage.propTypes = {
+  sessionMessage: PropTypes.object.isRequired,
+  idx_sessionMessage: PropTypes.string.isRequired,
+  propsParent: PropTypes.object.isRequired,
+  name_sender: PropTypes.string.isRequired,
+  slug_sender: PropTypes.string.isRequired,
+};
+
+DocumentMessage.propTypes = {
+  nameFile: PropTypes.string.isRequired,
+  sizeFile: PropTypes.number.isRequired,
+};
+
+ListOptMoreSessionMessage.propTypes = {
+  idx_sessionMessage: PropTypes.number.isRequired,
+  slug_sender: PropTypes.string.isRequired,
+  idChat: PropTypes.string.isRequired,
+  obj_stateShowMoreOpt: PropTypes.object.isRequired,
+  state: PropTypes.object.isRequired,
+  dispatch: PropTypes.object.isRequired,
+};
+
 export default Message;
+/* eslint-disable no-unused-vars */

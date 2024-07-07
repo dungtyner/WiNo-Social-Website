@@ -10,10 +10,7 @@ FormSearch.propTypes = {
 FormSearch.defaultProps = {
   handler_Search: null,
 };
-function FormSearch(props) {
-  const { placeholder_text } = props;
-  const { handler_Search } = props;
-
+function FormSearch({ placeholder_text, handler_Search }) {
   const [search, set_search] = useState('');
 
   const delaySearchTextTimeOut = useRef(null);
@@ -53,7 +50,7 @@ function FormSearch(props) {
     </div>
   );
 }
-export function NoResult({}) {
+export function NoResult() {
   return (
     <div
       className="no_result"
@@ -74,4 +71,11 @@ export function NoResult({}) {
     </div>
   );
 }
+
+FormSearch.propTypes = {
+  search: PropTypes.string.isRequired,
+  handler_Search: PropTypes.func.isRequired,
+  placeholder_text: PropTypes.string.isRequired,
+};
+
 export default FormSearch;

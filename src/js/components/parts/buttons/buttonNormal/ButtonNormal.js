@@ -2,6 +2,8 @@ import '../../buttons/buttonNormal/ButtonNormal.css';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import PopUp_ from '../../../layouts/popups/popup';
+import PropTypes from 'prop-types';
+
 function ButtonNormal({
   elIcon = '',
   textBtn,
@@ -32,8 +34,8 @@ function ButtonNormal({
               // set_stateShowPopUp(false)
 
               handleClick(event);
-            } else {
             }
+
             if (isRadio) {
               set_stateEnable(false);
             }
@@ -65,9 +67,10 @@ function ButtonNormal({
                 minWidth: '200px',
               }}
             >
-              {componentPopUP.map((el) => {
+              {componentPopUP.map((el, idx) => {
                 return (
                   <span
+                    key={idx}
                     onClick={() => {
                       set_stateShowPopUp(false);
                     }}
@@ -83,4 +86,26 @@ function ButtonNormal({
     </div>
   );
 }
+
+ButtonNormal.defaultProps = {
+  elIcon: '',
+  isNo: false,
+  styles: {},
+  handleClick: () => {},
+  isEnable: true,
+  componentPopUP: [],
+  isRadio: false,
+};
+
+ButtonNormal.propTypes = {
+  elIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  textBtn: PropTypes.string.isRequired,
+  isNo: PropTypes.bool,
+  styles: PropTypes.object,
+  handleClick: PropTypes.func,
+  isEnable: PropTypes.bool,
+  componentPopUP: PropTypes.arrayOf(PropTypes.element),
+  isRadio: PropTypes.bool,
+};
+
 export default ButtonNormal;

@@ -3,6 +3,9 @@ import { delete_popup_review } from '../../../../store/actions';
 import { Icon_Close } from '../../../parts/icons/fontAwesome/FontAwesome';
 import PopUp_ from '../popup';
 import './PopUpReviews.css';
+import PropTypes from 'prop-types';
+
+/* eslint-disable no-unused-vars */
 function PopUpReviews({ titlePopUp, contentPopUp }) {
   const [state, dispatch] = useStore();
   return (
@@ -32,4 +35,11 @@ function PopUpReviews({ titlePopUp, contentPopUp }) {
     </PopUp_>
   );
 }
+
+PopUpReviews.propTypes = {
+  titlePopUp: PropTypes.string.isRequired,
+  contentPopUp: PropTypes.node.isRequired,
+};
+
 export default PopUpReviews;
+/* eslint-disable no-unused-vars */

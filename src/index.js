@@ -20,7 +20,9 @@ async function run() {
 
   async function isLoginEd() {
     const get_isLoginEd = async () => {
-      return await fetch(config.HOST_SERVER + '/account/check-is-active');
+      return await fetch(config.HOST_SERVER + '/account/check-is-active', {
+        credentials: 'include',
+      });
     };
     const result = await (await get_isLoginEd()).text();
 

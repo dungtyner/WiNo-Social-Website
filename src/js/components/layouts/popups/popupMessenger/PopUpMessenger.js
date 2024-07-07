@@ -9,13 +9,8 @@ import {
   Icon_Arrow_Down,
   Icon_CallVideo,
   Icon_Close,
-  Icon_Like,
-  Icon_Phone,
-  Icon_Video,
   Icon_Window_MiniSize,
 } from '../../../parts/icons/fontAwesome/FontAwesome';
-
-import { singleObj_constructor_toList } from '../../../../store/functions';
 import Message from '../../../parts/messages/Message';
 
 import { createContext, useRef, useState, useEffect } from 'react';
@@ -24,7 +19,6 @@ import PopUp_ from '../popup';
 import { useStore } from '../../../../store';
 import {
   add_popup_call_video,
-  delete_popup_call_video,
   delete_popup_messenger,
 } from '../../../../store/actions';
 import {
@@ -35,6 +29,9 @@ import PopUpCallVideo from '../popupCallVideo/PopUpCallVideo';
 import { HOST_SERVER } from '../../../../config';
 import Peer from 'peerjs';
 export const Context_Message = createContext();
+import PropTypes from 'prop-types';
+
+/* eslint-disable no-unused-vars */
 function PopUpMessenger({
   idChat,
   nameChat,
@@ -47,8 +44,6 @@ function PopUpMessenger({
     useState(contentsPopUpMessenger);
   const [state_typingsPopUpMessenger, setState_typingsPopUpMessenger] =
     useState([]);
-  console.log(state_contentsPopUpMessenger);
-  const refPopUpMess = useRef(null);
   const [state, dispatch] = useStore();
   const [isZoomOut, setIs_zoomOut] = useState(false);
   const [isHoverZoomOut, setIs_Hover_zoomOut] = useState(false);
@@ -64,8 +59,6 @@ function PopUpMessenger({
   const [statePopupContentMess, set_statePopupContentMess] = useState([]);
   const [stateReplyMess, set_stateReplyMess] = useState(null);
   useEffect(() => {
-    // console.log(`PEOPLE_${idChat}_UPDATE_BOX_CHAT`);
-
     state.socketChat.on(
       `${state.account.slug_personal}_SHUTDOWN_CALL_VIDEO`,
       (data) => {
@@ -291,11 +284,8 @@ function PopUpMessenger({
             idChat == dataIDchat.id_Chat &&
             state.account.slug_personal != dataIDchat.slug_sender
           ) {
-            var tmpState = stateCountMess.filter((el) => {
-              return el == idChat;
-            });
             set_stateCountMess((stateCountMess) => {
-              return tmpState.concat([dataIDchat]);
+              return [dataIDchat];
             });
           }
         }
@@ -791,8 +781,6 @@ export function beTyping_chat({ idChat, socket, accountTyping }) {
   socket.emit(`IN_${idChat}_PEOPLE_TYPING`, accountTyping);
 }
 export function contentPopUpMessenger({
-  // time= new Date().toLocaleDateString()
-  // ,
   isMe,
   name_sender,
   avatar_account,
@@ -807,4 +795,14 @@ export function contentPopUpMessenger({
   this.session_messages = session_messages;
 }
 
+PopUpMessenger.propTypes = {
+  idChat: PropTypes.string.isRequired,
+  nameChat: PropTypes.string.isRequired,
+  avatarChat: PropTypes.string.isRequired,
+  last_interact: PropTypes.object.isRequired,
+  membersChat: PropTypes.object,
+  contentsPopUpMessenger: PropTypes.object,
+};
+
 export default PopUpMessenger;
+/* eslint-disable no-unused-vars */

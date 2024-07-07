@@ -4,48 +4,32 @@ import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string';
 import Users_Activity from '../../../../../API/Users_Activity';
-import AccountAPI from '../../../../../API/AccountAPI';
 import Like from '../../../../../API/Like';
 import Comment from '../../../../../API/Comment';
-import Favorites from '../../../../../API/Favorite';
 import {
   ButtonGroup,
-  Chip,
   Modal,
   IconButton,
-  Stack,
   Avatar,
   Button,
-  TextField,
   Typography,
   Input,
   Box,
 } from '@mui/material';
 import { Navigate } from 'react-router-dom';
 import { useStore } from '../../../../../store';
-import {
-  Card,
-  CardHeader,
-  CardMedia,
-  CardContent,
-  CardActions,
-} from '@mui/material';
-import {
-  EmojiEmotions,
-  Image,
-  Favorite,
-  FavoriteBorder,
-} from '@mui/icons-material';
+import { Card, CardHeader, CardMedia } from '@mui/material';
+import { EmojiEmotions, Favorite, FavoriteBorder } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SendIcon from '@mui/icons-material/Send';
-import ShareIcon from '@mui/icons-material/Share';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Picker from 'emoji-picker-react';
 // import io from "socket.io-client";
 // const socket = io("http://localhost:5001");
 
-function DetailPost(props) {
+/* eslint-disable no-unused-vars */
+function DetailPost() {
   const [open, setOpen] = useState(false);
   const [openLiker, setOpenLiker] = useState(false);
   const { id } = useParams();
@@ -642,3 +626,5 @@ function DetailPost(props) {
 }
 
 export default DetailPost;
+
+/* eslint-disable no-unused-vars */

@@ -9,19 +9,11 @@ import {
   ListItemIcon,
   Switch,
 } from '@mui/material';
-import {
-  AccountBox,
-  Article,
-  Group,
-  ModeNight,
-  Person,
-  Settings,
-  Storefront,
-} from '@mui/icons-material';
+import { AccountBox, ModeNight, Person, Settings } from '@mui/icons-material';
 import { useStore } from '../../../../store';
-
+import PropTypes from 'prop-types';
+/* eslint-disable no-unused-vars */
 export default function Sidebar({ mode, setMode, isShowTittle }) {
-  console.log(isShowTittle);
   const [state, dispatch] = useStore();
   return (
     <div className="sidebar">
@@ -85,3 +77,10 @@ export default function Sidebar({ mode, setMode, isShowTittle }) {
     </div>
   );
 }
+
+Sidebar.propTypes = {
+  mode: PropTypes.string.isRequired,
+  setMode: PropTypes.func.isRequired,
+  isShowTittle: PropTypes.bool.isRequired,
+};
+/* eslint-disable no-unused-vars */

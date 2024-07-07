@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { ContextPopUp } from '../../../store/Context';
 import './Popup_.css';
+import PropTypes from 'prop-types';
+
 function PopUp_({
   children,
   isClickOutside = true,
@@ -44,4 +46,12 @@ function PopUp_({
     ''
   );
 }
+
+PopUp_.propTypes = {
+  children: PropTypes.node.isRequired,
+  isClickOutside: PropTypes.bool,
+  work_case_unmount: PropTypes.func,
+  showContainerOutside: PropTypes.bool,
+};
+
 export default PopUp_;

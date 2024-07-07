@@ -2,6 +2,7 @@ import React from 'react';
 import './SidebarRight.css';
 import SidebarRow from '../sidebarLeft/SidebarRow';
 import { List, ListItem, ListItemButton } from '@mui/material';
+import PropTypes from 'prop-types';
 
 export default function Widgets({ friendsOnline = [] }) {
   console.log(friendsOnline);
@@ -24,3 +25,7 @@ export default function Widgets({ friendsOnline = [] }) {
     </div>
   );
 }
+
+Widgets.propTypes = {
+  friendsOnline: PropTypes.object,
+};

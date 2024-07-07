@@ -4,6 +4,7 @@ import { Button } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import { Box, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import PropTypes from 'prop-types';
 
 function FormTagFriend({ modalOpened, setTagFriend }) {
   return (
@@ -71,5 +72,10 @@ function FormTagFriend({ modalOpened, setTagFriend }) {
     </Modal>
   );
 }
+
+FormTagFriend.propTypes = {
+  modalOpened: PropTypes.bool.isRequired,
+  setTagFriend: PropTypes.func.isRequired,
+};
 
 export default FormTagFriend;

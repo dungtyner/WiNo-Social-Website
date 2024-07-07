@@ -18,10 +18,7 @@ import {
   Icon_Square_Check,
   Icon_Unfriend,
 } from '../../icons/fontAwesome/FontAwesome';
-import { Fragment, useContext, useEffect, useState } from 'react';
-import { Context_Account } from '../../../../store/Context';
-import { HOST_SERVER } from '../../../../config';
-import { json } from 'react-router';
+import { Fragment, useEffect } from 'react';
 import ItemOpt from '../../item/itemOpt/ItemOpt';
 import {
   req_acceptAddNewFriend,
@@ -32,18 +29,16 @@ import {
 } from '../../../../store/functions';
 import { set_data_account } from '../../../../store/actions';
 import { req_getDetailChat } from '../../../layouts/popups/popupHeader/popupMessageHeader/PopupMessageHeader';
-
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 function PagePersonalHeader({ stateAccount }) {
   var [state, dispatch] = useStore();
   var account = stateAccount;
   useEffect(() => {
-    console.log(`${state.account.slug_personal}_UPDATE_REQUEST_ADD_NEW_FRIEND`);
     state.socket.on(
       `${state.account.slug_personal}_UPDATE_REQUEST_ADD_NEW_FRIEND`,
       (dataAccount) => {
-        console.log(dataAccount);
         dispatch(set_data_account(dataAccount));
         state.socket.off(
           `${state.account.slug_personal}_UPDATE_REQUEST_ADD_NEW_FRIEND`,
@@ -119,7 +114,6 @@ function PagePersonalHeader({ stateAccount }) {
 }
 
 function ButtonHeaderWithSlugPersonal({ account, state, dispatch }) {
-  const [stateShowPopUpBtn, set_stateShowPopUpBtn] = useState([]);
   var isMe = account.slug_personal == state.account.slug_personal;
   var isFriend = state.account.list_slug_friend.some(
     (slug_friend) => account.slug_personal == slug_friend,
@@ -155,6 +149,7 @@ function ButtonHeaderWithSlugPersonal({ account, state, dispatch }) {
           isNo={false}
           componentPopUP={[
             <div
+              key={'Unfriend'}
               className={PagePersonalHeaderStyles['itemPopUp']}
               onClick={() => {
                 req_unfriend(account);
@@ -173,7 +168,10 @@ function ButtonHeaderWithSlugPersonal({ account, state, dispatch }) {
                 children_centerItemOpt={'Unfriend'}
               />
             </div>,
-            <div className={PagePersonalHeaderStyles['itemPopUp']}>
+            <div
+              key={'Following'}
+              className={PagePersonalHeaderStyles['itemPopUp']}
+            >
               <ItemOpt
                 component_Left={<Icon_Follow />}
                 children_centerItemOpt={'Following'}
@@ -187,7 +185,10 @@ function ButtonHeaderWithSlugPersonal({ account, state, dispatch }) {
           elIcon={<Icon_Question isHot={false} />}
           isNo={false}
           componentPopUP={[
-            <div className={PagePersonalHeaderStyles['itemPopUp']}>
+            <div
+              key={'Accept'}
+              className={PagePersonalHeaderStyles['itemPopUp']}
+            >
               <ItemOpt
                 component_Left={<Icon_Square_Check />}
                 children_centerItemOpt={'Accept'}
@@ -196,7 +197,10 @@ function ButtonHeaderWithSlugPersonal({ account, state, dispatch }) {
                 }}
               />
             </div>,
-            <div className={PagePersonalHeaderStyles['itemPopUp']}>
+            <div
+              key={'Refuse'}
+              className={PagePersonalHeaderStyles['itemPopUp']}
+            >
               <ItemOpt
                 component_Left={<Icon_Close />}
                 children_centerItemOpt={'Refuse'}
@@ -241,4 +245,15 @@ function ButtonHeaderWithSlugPersonal({ account, state, dispatch }) {
     </Fragment>
   );
 }
+
+PagePersonalHeader.propTypes = {
+  stateAccount: PropTypes.object.isRequired,
+};
+
+ButtonHeaderWithSlugPersonal.propTypes = {
+  account: PropTypes.object.isRequired,
+  state: PropTypes.object.isRequired,
+  dispatch: PropTypes.object.isRequired,
+};
+
 export default PagePersonalHeader;

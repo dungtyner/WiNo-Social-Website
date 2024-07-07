@@ -28,7 +28,6 @@ function Login() {
     if (token !== '') {
       fetch(HOST_SERVER + '/account/signin', {
         method: 'POST',
-        mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
         },

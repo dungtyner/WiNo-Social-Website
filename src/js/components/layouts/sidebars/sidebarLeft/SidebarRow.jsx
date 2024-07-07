@@ -4,6 +4,7 @@ import { Avatar } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../../../../store';
 import { set_url } from '../../../../store/actions';
+import PropTypes from 'prop-types';
 
 export default function SidebarRow({
   src,
@@ -13,7 +14,10 @@ export default function SidebarRow({
   isShowTittle = true,
 } = {}) {
   var navigate = useNavigate();
+  /* eslint-disable no-unused-vars */
   const [state, dispatch] = useStore();
+  /* eslint-disable no-unused-vars */
+
   return (
     <Link
       onClick={() => {
@@ -31,3 +35,11 @@ export default function SidebarRow({
     </Link>
   );
 }
+
+SidebarRow.propTypes = {
+  src: PropTypes.string,
+  Icon: PropTypes.elementType,
+  title: PropTypes.string.isRequired,
+  href: PropTypes.string.isRequired,
+  isShowTittle: PropTypes.bool,
+};

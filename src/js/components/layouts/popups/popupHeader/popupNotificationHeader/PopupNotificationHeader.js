@@ -1,24 +1,22 @@
-import { useEffect, useState, useRef, Fragment } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 import './PopupNotificationHeader.css';
 import PopUpHeader from '../PopUpHeader';
 import ItemOpt from '../../../../parts/item/itemOpt/ItemOpt';
 import LabelCircle from '../../../../parts/labels/labelCircle/LabelCircle';
 import HeaderSpaceBetween from '../../../../parts/subHeaders/headerSpaceBetween/HeaderSpaceBetween';
 import ButtonNormal from '../../../../parts/buttons/buttonNormal/ButtonNormal';
-import {
-  Icon_Circle,
-  Icon_No_Bell,
-} from '../../../../parts/icons/fontAwesome/FontAwesome';
+import { Icon_Circle } from '../../../../parts/icons/fontAwesome/FontAwesome';
 import { Link } from 'react-router-dom';
-import { HOST_SERVER } from '../../../../../config';
 import { useStore } from '../../../../../store';
 import { set_url } from '../../../../../store/actions';
 import {
   dateTo_textAgo,
   req_acceptAddNewFriend,
   req_refuse_requestAddFriend,
-  req_remove_requestAddFriend,
 } from '../../../../../store/functions';
+import PropTypes from 'prop-types';
+
+/* eslint-disable no-unused-vars */
 function PopupNotificationHeader({ dataNotification }) {
   console.log('PopupNotificationHeader() render');
   const [state, dispatch] = useStore();
@@ -34,7 +32,7 @@ function PopupNotificationHeader({ dataNotification }) {
       },
     );
   }, [state_dataNotification]);
-  console.groupEnd('PopupNotificationHeader');
+
   return (
     <PopUpHeader
       isActive={true}
@@ -42,9 +40,9 @@ function PopupNotificationHeader({ dataNotification }) {
         <>
           <HeaderSpaceBetween
             bodyLeft={<h1>Notification</h1>}
-            bodyRight={[, <i className="fa-solid fa-ellipsis"></i>].map(
-              (el) => {
-                return <LabelCircle el_Icon={el} />;
+            bodyRight={[<i key={1} className="fa-solid fa-ellipsis"></i>].map(
+              (el, idx) => {
+                return <LabelCircle key={idx} el_Icon={el} />;
               },
             )}
           />
@@ -210,4 +208,85 @@ function NotificationAcceptFriend({ dataNotification, state, dispatch }) {
     </>
   );
 }
+
+PopupNotificationHeader.propTypes = {
+  dataNotification: PropTypes.shape({
+    friend: PropTypes.shape({
+      response_new_friend: PropTypes.arrayOf(
+        PropTypes.shape({
+          data_requester: PropTypes.shape({
+            slug_personal: PropTypes.string.isRequired,
+            avatar_account: PropTypes.string.isRequired,
+            user_fname: PropTypes.string.isRequired,
+            user_lname: PropTypes.string.isRequired,
+          }).isRequired,
+          time_request: PropTypes.string.isRequired,
+          isSeen: PropTypes.bool.isRequired,
+        }),
+      ).isRequired,
+      accept_friend: PropTypes.arrayOf(
+        PropTypes.shape({
+          data_accepter: PropTypes.shape({
+            slug_personal: PropTypes.string.isRequired,
+            avatar_account: PropTypes.string.isRequired,
+            user_fname: PropTypes.string.isRequired,
+            user_lname: PropTypes.string.isRequired,
+          }).isRequired,
+          time_accept: PropTypes.string.isRequired,
+          isSeen: PropTypes.bool.isRequired,
+        }),
+      ).isRequired,
+    }).isRequired,
+  }).isRequired,
+};
+
+NotificationResponseNewFriend.propTypes = {
+  dataNotification: PropTypes.shape({
+    friend: PropTypes.shape({
+      response_new_friend: PropTypes.arrayOf(
+        PropTypes.shape({
+          data_requester: PropTypes.shape({
+            slug_personal: PropTypes.string.isRequired,
+            avatar_account: PropTypes.string.isRequired,
+            user_fname: PropTypes.string.isRequired,
+            user_lname: PropTypes.string.isRequired,
+          }).isRequired,
+          time_request: PropTypes.string.isRequired,
+          isSeen: PropTypes.bool.isRequired,
+        }),
+      ).isRequired,
+    }).isRequired,
+  }).isRequired,
+  setStateDataNotification: PropTypes.func.isRequired,
+};
+
+NotificationResponseNewFriend.propTypes = {
+  dataNotification: PropTypes.object.isRequired,
+  state: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  set_state_dataNotification: PropTypes.func.isRequired,
+};
+
+NotificationAcceptFriend.propTypes = {
+  dataNotification: PropTypes.shape({
+    friend: PropTypes.shape({
+      accept_friend: PropTypes.arrayOf(
+        PropTypes.shape({
+          data_accepter: PropTypes.shape({
+            slug_personal: PropTypes.string.isRequired,
+            avatar_account: PropTypes.string.isRequired,
+            user_fname: PropTypes.string.isRequired,
+            user_lname: PropTypes.string.isRequired,
+          }).isRequired,
+          isSeen: PropTypes.bool.isRequired,
+          time_accept: PropTypes.instanceOf(Date).isRequired,
+        }),
+      ).isRequired,
+    }).isRequired,
+  }).isRequired,
+  state: PropTypes.object.isRequired, // adjust the shape as per your actual state object
+  dispatch: PropTypes.func.isRequired,
+};
+
 export default PopupNotificationHeader;
+/* eslint-disable no-unused-vars */

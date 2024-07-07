@@ -1,8 +1,12 @@
 import { useStore } from '../../../store';
 import { Icon_Plus } from '../../parts/icons/fontAwesome/FontAwesome';
 import LabelCircle from '../../parts/labels/labelCircle/LabelCircle';
+import PropTypes from 'prop-types';
+
 function Content({ bodyContent = '' }) {
+  /* eslint-disable no-unused-vars */
   var [state, dispatch] = useStore();
+  /* eslint-disable no-unused-vars */
   return (
     <div className="content">
       <div className="container-popup_Content">
@@ -34,4 +38,9 @@ function Content({ bodyContent = '' }) {
     </div>
   );
 }
+
+Content.propTypes = {
+  bodyContent: PropTypes.node,
+};
+
 export default Content;

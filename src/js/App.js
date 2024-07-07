@@ -38,6 +38,9 @@ import PageFriend, {
 } from './components/parts/pages/pageFriend/PageFriend.js';
 import { LIST_TAB_HEADER_PERSONAL_DEFAULT } from './store/constants.js';
 import PopUpCallVideo from './components/layouts/popups/popupCallVideo/PopUpCallVideo.js';
+import PropTypes from 'prop-types';
+
+/* eslint-disable no-unused-vars */
 function App({ result }) {
   var [state, dispatch] = useStore();
 
@@ -494,4 +497,8 @@ function App({ result }) {
   );
 }
 
+App.propTypes = {
+  result: PropTypes.object.isRequired,
+};
 export default App;
+/* eslint-disable no-unused-vars */

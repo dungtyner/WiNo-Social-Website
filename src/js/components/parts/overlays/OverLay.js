@@ -1,4 +1,6 @@
 import '../overlays/OverLay.css';
+import PropTypes from 'prop-types';
+
 function OverLay({ children }) {
   return (
     <div className="container-overLay">
@@ -6,4 +8,8 @@ function OverLay({ children }) {
     </div>
   );
 }
+OverLay.propTypes = {
+  children: PropTypes.string.isRequired,
+};
+
 export default OverLay;

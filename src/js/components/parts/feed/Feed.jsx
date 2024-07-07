@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import './Feed.css';
 import StoryReel from '../storyReel/StoryReel';
 import MessageSender from '../messageSender/MessageSender';
@@ -6,11 +5,6 @@ import PostStatus from '../postStatus/PostStatus';
 import { Box } from '@mui/material';
 
 export default function Feed() {
-  // const [posts, setPosts] = useState([]);
-
-  // useEffect(() => {
-  // }, []);
-
   return (
     <div className="feed">
       <Box flex={4} p={{ xs: 0, md: 2 }}>

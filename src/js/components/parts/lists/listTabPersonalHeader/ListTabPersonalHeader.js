@@ -4,15 +4,11 @@ import { useContext } from 'react';
 import { Context_PagePersonal } from '../../pages/pagePersonal/PagePersonal';
 import { useStore } from '../../../../store';
 import { set_url } from '../../../../store/actions';
-import { useNavigate } from 'react-router';
-import {
-  LIST_INTERACT_MESS_DEFAULT,
-  LIST_TAB_HEADER_PERSONAL_DEFAULT,
-} from '../../../../store/constants';
-function ListTabPersonalHeader({}) {
+import { LIST_TAB_HEADER_PERSONAL_DEFAULT } from '../../../../store/constants';
+/* eslint-disable no-unused-vars */
+function ListTabPersonalHeader() {
   const value_Context_PagePersonal = useContext(Context_PagePersonal);
   const [state, dispatch] = useStore();
-  const navigate = useNavigate();
   const [tabActive, setTabActive] = useState(
     LIST_TAB_HEADER_PERSONAL_DEFAULT.indexOf(
       value_Context_PagePersonal.slugs[2],
@@ -39,3 +35,4 @@ function ListTabPersonalHeader({}) {
   });
 }
 export default ListTabPersonalHeader;
+/* eslint-disable no-unused-vars */

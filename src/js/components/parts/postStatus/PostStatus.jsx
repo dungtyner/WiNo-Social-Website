@@ -15,6 +15,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import CloseIcon from '@mui/icons-material/Close';
 import SendIcon from '@mui/icons-material/Send';
 import Picker from 'emoji-picker-react';
+import PropTypes from 'prop-types';
 
 function PostStatus({ avatar, title, descr, date, link }) {
   const [setInputStr] = useState('');
@@ -117,5 +118,13 @@ function PostStatus({ avatar, title, descr, date, link }) {
     </Card>
   );
 }
+
+PostStatus.propTypes = {
+  avatar: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  descr: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired,
+};
 
 export default PostStatus;

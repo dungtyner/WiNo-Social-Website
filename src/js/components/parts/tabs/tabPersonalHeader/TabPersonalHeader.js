@@ -3,7 +3,9 @@ import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Context_PagePersonal } from '../../pages/pagePersonal/PagePersonal';
 import TabPersonalHeaderStyles from '../tabPersonalHeader/TabPersonalHeader.module.css';
+import PropTypes from 'prop-types';
 
+/* eslint-disable no-unused-vars */
 function TabPersonalHeader({
   idx = -1,
   textTab = '',
@@ -16,8 +18,6 @@ function TabPersonalHeader({
   return (
     <Link
       onClick={(event) => {
-        console.log(value_Context_PagePersonal);
-        // event.preventDefault();
         if (value_Context_PagePersonal.slugs[0] === 'friends') {
           event.preventDefault();
           navigate(
@@ -26,7 +26,6 @@ function TabPersonalHeader({
           );
         } else {
           event.preventDefault();
-          // console.log(value_Context_PagePersonal);
           navigate(
             `/account/personal/${value_Context_PagePersonal.stateAccount.slug_personal}/${textTab}`,
             { replace: true },
@@ -52,4 +51,14 @@ function TabPersonalHeader({
     </Link>
   );
 }
+
+TabPersonalHeader.propTypes = {
+  idx: PropTypes.number,
+  textTab: PropTypes.string,
+  para_isActing: PropTypes.string,
+  handleClick: PropTypes.func,
+  slug_personal: PropTypes.string.isRequired,
+};
+
 export default TabPersonalHeader;
+/* eslint-disable no-unused-vars */

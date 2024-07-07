@@ -38,7 +38,7 @@ export function bytesToSize(bytes) {
   return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
 }
 export function get_slug(url) {
-  return new URL(url).pathname.match(/[^\/]+/g);
+  return new URL(url).pathname.match(/[^/]+/g);
 }
 export function req_requestAddFriend(account) {
   fetch(`${HOST_SERVER}/friend/requestAddFriend`, {

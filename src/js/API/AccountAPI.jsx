@@ -1,12 +1,13 @@
 import { HOST_SERVER } from '../config';
 import axios from 'axios';
 const AccountAPI = {
+  /* eslint-disable no-unused-vars */
   getAll: async (query) => {
     const url = `${HOST_SERVER}/account`;
     var data = await fetch(url, { method: 'GET' }).then((res) => res.json());
     return data;
   },
-
+  /* eslint-disable no-unused-vars */
   getId: async (query) => {
     const url = `${HOST_SERVER}/account/${query}`;
     var data = await fetch(url, { method: 'GET' }).then((res) => res.json());

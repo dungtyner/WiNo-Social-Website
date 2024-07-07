@@ -1,6 +1,7 @@
 import EmojiPicker from 'emoji-picker-react';
 import './PickerEmoji.css';
-
+import PropTypes from 'prop-types';
+/* eslint-disable no-unused-vars */
 function PickerEmoji({
   handleClickPicker = (event, emojiData) => {},
   styles = {},
@@ -28,4 +29,10 @@ function PickerEmoji({
   );
 }
 
+PickerEmoji.propTypes = {
+  handleClickPicker: PropTypes.func,
+  styles: PropTypes.object,
+};
+
 export default PickerEmoji;
+/* eslint-disable no-unused-vars */

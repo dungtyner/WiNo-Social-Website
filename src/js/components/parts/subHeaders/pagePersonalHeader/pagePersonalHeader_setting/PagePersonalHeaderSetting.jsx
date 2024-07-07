@@ -3,7 +3,7 @@ import './PagePersonalHeaderSetting.css';
 import AccountAPI from '../../../../../API/AccountAPI';
 import queryString from 'query-string';
 import { storage } from '../../../../../config/firebase';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import {
   Modal,
@@ -20,21 +20,20 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import 'flatpickr/dist/themes/dark.css';
 import Flatpickr from 'react-flatpickr';
 import { set_data_account, set_url } from '../../../../../store/actions';
-function SettingUser(props) {
+function SettingUser() {
   const [state, dispatch] = useStore();
 
   const [open, setOpen] = useState(false);
 
   const [reload, set_reload] = useState(true);
 
-  // Hàm để thay đổi ảnh đại diện (change profile photo)
   const handler_Upload_Image = (e) => {
     const uploadTask = storage
       .ref(`social/${e.target.files[0].name}`)
       .put(e.target.files[0]);
     uploadTask.on(
       'state_changed',
-      (snapshot) => {},
+      () => {},
       (error) => {
         console.log(error);
       },
@@ -74,9 +73,9 @@ function SettingUser(props) {
   const show_upload = () => {
     document.getElementById('file_upload_user').click();
   };
-
+  /* eslint-disable no-unused-vars */
   const [user, set_user] = useState({});
-
+  /* eslint-disable no-unused-vars */
   useEffect(() => {
     if (reload) {
       const fetchData = async () => {
@@ -97,7 +96,6 @@ function SettingUser(props) {
     }
   }, [reload]);
 
-  const navigate = useNavigate();
   const [username, set_username] = useState('');
   const [password, set_password] = useState('');
   const [user_fname, set_user_fname] = useState('');
@@ -117,7 +115,7 @@ function SettingUser(props) {
 
       const query = '?' + queryString.stringify(params);
 
-      const response = await AccountAPI.update_info(query);
+      await AccountAPI.update_info(query);
       state.account.user_fname = user_fname;
       state.account.user_lname = user_lname;
       set_username(`${user_fname} ${user_lname}`);
@@ -127,7 +125,6 @@ function SettingUser(props) {
 
     fetchData();
   };
-  const [date, setDate] = useState(new Date());
 
   return (
     <div className="container_edit_info_user">
@@ -176,7 +173,7 @@ function SettingUser(props) {
               <div className="btn_form_edit_info_user">
                 <Button
                   variant="contained"
-                  onClick={(event) => {
+                  onClick={() => {
                     setOpen(true);
                   }}
                 >
@@ -201,7 +198,7 @@ function SettingUser(props) {
                   borderRadius={9}
                 >
                   <span
-                    onClick={(event) => {
+                    onClick={() => {
                       setOpen(false);
                     }}
                   >
@@ -238,7 +235,7 @@ function SettingUser(props) {
                     <Button
                       variant="contained"
                       color="error"
-                      onClick={(event) => {
+                      onClick={() => {
                         setOpen(false);
                       }}
                     >

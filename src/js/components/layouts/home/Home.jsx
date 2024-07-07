@@ -42,7 +42,9 @@ import { useStore } from '../../../store';
 import Users_Home from '../../../API/Users_Home';
 import Like from '../../../API/Like';
 import { HOST_SERVER } from '../../../config';
+import PropTypes from 'prop-types';
 
+/* eslint-disable no-unused-vars */
 export default function Home({ avatar_account, full_name, data_account }) {
   const [open, setOpen] = useState(false);
   const UserBox = styled(Box)(({ theme }) => ({
@@ -164,7 +166,7 @@ export default function Home({ avatar_account, full_name, data_account }) {
 
     const fetchAPI = () => {
       // console.log(data_account.slug_friends);
-      console.log(data_account);
+      // console.log(data_account);
       fetch(`${HOST_SERVER}/friend/posts`, {
         method: 'POST',
         body: JSON.stringify({
@@ -739,3 +741,15 @@ function ItemPostHome({ dataPost }) {
     </div>
   );
 }
+
+Home.propTypes = {
+  avatar_account: PropTypes.string.isRequired,
+  full_name: PropTypes.string.isRequired,
+  data_account: PropTypes.object.isRequired,
+};
+
+ItemPostHome.propTypes = {
+  dataPost: PropTypes.object.isRequired,
+};
+
+/* eslint-disable no-unused-vars */

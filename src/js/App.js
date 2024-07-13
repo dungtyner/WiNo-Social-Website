@@ -1,24 +1,24 @@
 // import React, { createContext, useEffect, useReducer, useState } from "react";
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
-import { Box, createTheme, ThemeProvider } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Routes, Route, BrowserRouter } from 'react-router-dom'
+import { Box, createTheme, ThemeProvider } from '@mui/material'
+import { useEffect, useState } from 'react'
 
-import Register from './components/parts/inputs/forms/formAccount/formRegisterForm.js';
-import RestorePass from './components/parts/inputs/forms/formAccount/formForgetPassword.js';
-import Login from './components/parts/inputs/forms/formAccount/formLogin.js';
-import CheckCodeEmail from './components/parts/inputs/forms/formAccount/formCheckCodeEmail';
+import Register from './components/parts/inputs/forms/formAccount/formRegisterForm.js'
+import RestorePass from './components/parts/inputs/forms/formAccount/formForgetPassword.js'
+import Login from './components/parts/inputs/forms/formAccount/formLogin.js'
+import CheckCodeEmail from './components/parts/inputs/forms/formAccount/formCheckCodeEmail'
 
-import PagePersonal from './components/parts/pages/pagePersonal/PagePersonal';
-import SubContentPersonal from './components/parts/subContents/subContentPersonal/SubContentPersonal';
+import PagePersonal from './components/parts/pages/pagePersonal/PagePersonal'
+import SubContentPersonal from './components/parts/subContents/subContentPersonal/SubContentPersonal'
 
-import Content from './components/layouts/content/Content';
-import Header from './components/layouts/header/Header.js';
-import SidebarLeft from './components/layouts/sidebars/sidebarLeft/Sidebar';
-import Widgets from './components/layouts/sidebars/sidebarRight/SidebarRight.jsx';
+import Content from './components/layouts/content/Content'
+import Header from './components/layouts/header/Header.js'
+import SidebarLeft from './components/layouts/sidebars/sidebarLeft/Sidebar'
+import Widgets from './components/layouts/sidebars/sidebarRight/SidebarRight.jsx'
 
-import Home from './components/layouts/home/Home';
-import DetailPost from './components/layouts/home/postStatus/detailPost/DetailPost';
-import PagePersonalHeaderSetting from './components/parts/subHeaders/pagePersonalHeader/pagePersonalHeader_setting/PagePersonalHeaderSetting.jsx';
+import Home from './components/layouts/home/Home'
+import DetailPost from './components/layouts/home/postStatus/detailPost/DetailPost'
+import PagePersonalHeaderSetting from './components/parts/subHeaders/pagePersonalHeader/pagePersonalHeader_setting/PagePersonalHeaderSetting.jsx'
 
 import {
   add_friend_online,
@@ -27,42 +27,41 @@ import {
   delete_popup_call_video,
   set_data_account,
   set_url,
-} from './store/actions.js';
-import { useStore } from './store/hooks.js';
-import { get_slug } from './store/functions.js';
+} from './store/actions.js'
+import { useStore } from './store/hooks.js'
+import { get_slug } from './store/functions.js'
 import PageFriend, {
   SidebarFriendList,
   SidebarFriendMenuDefault,
   SidebarFriendRequest,
   SidebarFriendResponse,
-} from './components/parts/pages/pageFriend/PageFriend.js';
-import { LIST_TAB_HEADER_PERSONAL_DEFAULT } from './store/constants.js';
-import PopUpCallVideo from './components/layouts/popups/popupCallVideo/PopUpCallVideo.js';
-import PropTypes from 'prop-types';
+} from './components/parts/pages/pageFriend/PageFriend.js'
+import { LIST_TAB_HEADER_PERSONAL_DEFAULT } from './store/constants.js'
+import PopUpCallVideo from './components/layouts/popups/popupCallVideo/PopUpCallVideo.js'
+import PropTypes from 'prop-types'
 
 /* eslint-disable no-unused-vars */
 function App({ result }) {
-  var [state, dispatch] = useStore();
+  var [state, dispatch] = useStore()
 
-  const [state_slugs, set_state_slugs] = useState([]);
-  const [mode, setMode] = useState('light');
+  const [state_slugs, set_state_slugs] = useState([])
+  const [mode, setMode] = useState('light')
 
-  result = JSON.parse(result);
-  const isLoginEd = result.status;
+  const isLoginEd = result?.status ?? false
   const darkTheme = createTheme({
     palette: {
       mode: mode,
     },
-  });
+  })
   // console.log(state_slugs[0],'friends');
   useEffect(() => {
     if (isLoginEd === 200) {
       state.socket.on(
         `ACCOUNT_${result.account.slug_personal}_UPDATE`,
         (dataAccount_own) => {
-          dispatch(set_data_account(dataAccount_own));
+          dispatch(set_data_account(dataAccount_own))
         },
-      );
+      )
       // console.log(`${result.account.slug_personal}_HAS_CALL_VIDEO`);
       state.socketChat.on(
         `${result.account.slug_personal}_HAS_CALL_VIDEO`,
@@ -81,121 +80,121 @@ function App({ result }) {
                   nameCallVideo={data.box_chat.name_chat}
                 />,
               ),
-            );
+            )
           }
 
           state.socketChat.on(
             `${data.box_chat._id}_SHUTDOWN_CALL_VIDEO`,
             (data) => {
-              dispatch(delete_popup_call_video(null));
+              dispatch(delete_popup_call_video(null))
             },
-          );
+          )
         },
-      );
+      )
 
       window.addEventListener('popstate', () => {
-        dispatch(set_url(new Date().toISOString()));
-      });
+        dispatch(set_url(new Date().toISOString()))
+      })
       if (JSON.parse(sessionStorage.getItem('noReload')) == 2) {
-        sessionStorage.setItem('oldURL', window.location.href);
+        sessionStorage.setItem('oldURL', window.location.href)
       }
       sessionStorage.setItem(
         'noReload',
         JSON.parse(sessionStorage.getItem('noReload')) - 1,
-      );
+      )
 
       if (JSON.parse(sessionStorage.getItem('noReload')) > 0) {
-        window.location.reload();
+        window.location.reload()
       } else if (JSON.parse(sessionStorage.getItem('noReload')) == 0) {
-        var slugs = get_slug(window.location.href);
+        var slugs = get_slug(window.location.href)
 
-        if (!slugs) slugs = [];
+        if (!slugs) slugs = []
         if (slugs.length >= 2 && slugs[0] === 'account') {
-          console.log(slugs);
-          set_state_slugs(slugs);
+          console.log(slugs)
+          set_state_slugs(slugs)
         }
       } else if (JSON.parse(sessionStorage.getItem('noReload')) < 0) {
-        sessionStorage.setItem('noReload', 2);
-        window.location.reload();
+        sessionStorage.setItem('noReload', 2)
+        window.location.reload()
       }
-      dispatch(set_data_account(result.account));
+      dispatch(set_data_account(result.account))
     } else {
       if (JSON.parse(sessionStorage.getItem('noReload')) > 2) {
-        window.location.reload();
+        window.location.reload()
         sessionStorage.setItem(
           'noReload',
           JSON.parse(sessionStorage.getItem('noReload')) - 1,
-        );
+        )
       }
     }
-  }, []);
+  }, [])
   useEffect(() => {
     if (state.account.list_slug_friend) {
       state.account.list_slug_friend.forEach((slug_friend) => {
-        state.socket.emit(`I_AM_ONLINE`, result.account);
+        state.socket.emit(`I_AM_ONLINE`, result.account)
         state.socket.once(`FRIEND_${slug_friend}_ONLINE`, (my_friend) => {
-          dispatch(add_friend_online(my_friend));
-        });
+          dispatch(add_friend_online(my_friend))
+        })
         state.socket.once(`FRIEND_${slug_friend}_OFFLINE`, (my_friend) => {
-          dispatch(delete_friend_online(my_friend));
-          state.socket.off(`FRIEND_${slug_friend}_ONLINE`);
-        });
-      });
+          dispatch(delete_friend_online(my_friend))
+          state.socket.off(`FRIEND_${slug_friend}_ONLINE`)
+        })
+      })
       state.socket.on(
         `LIST_FRIEND_ONLINE_OF_${state.account.slug_personal}`,
         (list_friend_online) => {
           list_friend_online.forEach((my_friend) => {
-            dispatch(add_friend_online(my_friend));
-          });
+            dispatch(add_friend_online(my_friend))
+          })
           state.socket.off(
             `LIST_FRIEND_ONLINE_OF_${state.account.slug_personal}`,
-          );
+          )
         },
-      );
+      )
     }
-  }, [state.account.list_slug_friend]);
+  }, [state.account.list_slug_friend])
 
   useEffect(() => {
     if (state.account) {
       state.socket.on(
         `${state.account.slug_personal}_UPDATE_LIST_SLUG_FRIEND`,
         (dataAccount) => {
-          dispatch(set_data_account(dataAccount));
+          dispatch(set_data_account(dataAccount))
           // state.socket.off(`${state.account.slug_personal}_UPDATE_LIST_SLUG_FRIEND`);
         },
-      );
+      )
     }
-  }, [state.account]);
+  }, [state.account])
   useEffect(() => {
     if (isLoginEd === 200) {
       result.account.list_slug_friend.forEach((slug_friend) => {
-        state.socket.emit(`I_AM_ONLINE`, result.account);
+        state.socket.emit(`I_AM_ONLINE`, result.account)
         state.socket.once(`FRIEND_${slug_friend}_ONLINE`, (my_friend) => {
-          dispatch(add_friend_online(my_friend));
-        });
+          dispatch(add_friend_online(my_friend))
+        })
         state.socket.on(`FRIEND_${slug_friend}_OFFLINE`, (my_friend) => {
-          dispatch(delete_friend_online(my_friend));
-          state.socket.off(`FRIEND_${slug_friend}_ONLINE`);
-        });
-      });
+          dispatch(delete_friend_online(my_friend))
+          state.socket.off(`FRIEND_${slug_friend}_ONLINE`)
+        })
+      })
       state.socket.on(
         `LIST_FRIEND_ONLINE_OF_${result.account.slug_personal}`,
         (list_friend_online) => {
           list_friend_online.forEach((my_friend) => {
-            dispatch(add_friend_online(my_friend));
-          });
+            dispatch(add_friend_online(my_friend))
+          })
           state.socket.off(
             `LIST_FRIEND_ONLINE_OF_${result.account.slug_personal}`,
-          );
+          )
         },
-      );
+      )
     }
-  }, [state.friendsOnline]);
+  }, [state.friendsOnline])
   useEffect(() => {
-    var slugs = get_slug(window.location.href);
+    var slugs = get_slug(window.location.href)
 
-    if (!slugs) slugs = [];
-    console.log('stateURL', slugs);
+    if (!slugs) slugs = []
+    console.log('stateURL', slugs)
     if (
       slugs.length >= 2 &&
       slugs[0] === 'account' &&
@@ -204,15 +203,15 @@ function App({ result }) {
       console.log(
         `/${slugs
           .map((slug) => {
-            return slug;
+            return slug
           })
           .join('/')}`,
-      );
-      set_state_slugs(slugs);
+      )
+      set_state_slugs(slugs)
     } else if (slugs.length >= 1 && slugs[0] === 'friends') {
-      set_state_slugs(slugs);
+      set_state_slugs(slugs)
     }
-  }, [state.url]);
+  }, [state.url])
 
   return (
     <div id="app">
@@ -316,7 +315,7 @@ function App({ result }) {
                                         />
                                       }
                                     ></Route>
-                                  );
+                                  )
                                 },
                               )}
                           </Route>
@@ -387,11 +386,11 @@ function App({ result }) {
                                                 />
                                               }
                                             ></Route>
-                                          );
+                                          )
                                         },
                                       )}
                                   </Route>
-                                );
+                                )
                               } else if (el.url === 'response') {
                                 return (
                                   <Route
@@ -431,11 +430,11 @@ function App({ result }) {
                                                 />
                                               }
                                             ></Route>
-                                          );
+                                          )
                                         },
                                       )}
                                   </Route>
-                                );
+                                )
                               } else {
                                 return (
                                   <Route
@@ -474,11 +473,11 @@ function App({ result }) {
                                                 />
                                               }
                                             ></Route>
-                                          );
+                                          )
                                         },
                                       )}
                                   </Route>
-                                );
+                                )
                               }
                             })}
                           </Route>
@@ -494,11 +493,11 @@ function App({ result }) {
         </BrowserRouter>
       </ThemeProvider>
     </div>
-  );
+  )
 }
 
 App.propTypes = {
   result: PropTypes.object.isRequired,
-};
-export default App;
+}
+export default App
 /* eslint-disable no-unused-vars */

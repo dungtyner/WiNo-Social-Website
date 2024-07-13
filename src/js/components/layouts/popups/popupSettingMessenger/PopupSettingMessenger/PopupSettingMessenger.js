@@ -1,15 +1,14 @@
-import { Fragment, useContext, useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { HOST_SERVER } from '../../../../../config';
-import { useStore } from '../../../../../store';
+import { Fragment, useContext, useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useStore } from '../../../../../store'
 import {
   add_popup_review,
   delete_popup_messenger,
   delete_popup_review,
   set_url,
-} from '../../../../../store/actions';
-import { SIZE_LARGE } from '../../../../../store/constants';
-import ButtonNormal from '../../../../parts/buttons/buttonNormal/ButtonNormal';
+} from '../../../../../store/actions'
+import { SIZE_LARGE } from '../../../../../store/constants'
+import ButtonNormal from '../../../../parts/buttons/buttonNormal/ButtonNormal'
 import {
   Icon_AddPerson,
   Icon_Image,
@@ -19,13 +18,13 @@ import {
   Icon_Square,
   Icon_Square_Check,
   Icon_Trash,
-} from '../../../../parts/icons/fontAwesome/FontAwesome';
+} from '../../../../parts/icons/fontAwesome/FontAwesome'
 import FormSearch, {
   NoResult,
-} from '../../../../parts/inputs/forms/formSearch/FormSearch';
-import ItemOpt from '../../../../parts/item/itemOpt/ItemOpt';
-import LabelCircle from '../../../../parts/labels/labelCircle/LabelCircle';
-import PopUp_ from '../../popup';
+} from '../../../../parts/inputs/forms/formSearch/FormSearch'
+import ItemOpt from '../../../../parts/item/itemOpt/ItemOpt'
+import LabelCircle from '../../../../parts/labels/labelCircle/LabelCircle'
+import PopUp_ from '../../popup'
 import {
   contentPopUpMessenger,
   content_sessionMessage,
@@ -36,19 +35,20 @@ import {
   notification_leave_chat_Mess,
   notification_modify_name_chat_Mess,
   notification_modify_nick_name_Mess,
-} from '../../popupMessenger/PopUpMessenger';
-import PopUpReviews from '../../popupReview/PopUpReviews';
-import './PopupSettingMessenger.css';
-import PropTypes from 'prop-types';
+} from '../../popupMessenger/PopUpMessenger'
+import PopUpReviews from '../../popupReview/PopUpReviews'
+import './PopupSettingMessenger.css'
+import PropTypes from 'prop-types'
+import { createRequest } from '../../../../../utilities/requests'
 
 /* eslint-disable no-unused-vars */
 function PopupSettingMessenger() {
-  var value_Context_Message = useContext(Context_Message);
-  var [state, dispatch] = useStore();
+  var value_Context_Message = useContext(Context_Message)
+  var [state, dispatch] = useStore()
   return (
     <PopUp_
       work_case_unmount={() => {
-        value_Context_Message.setIsShowSettingMess(false);
+        value_Context_Message.setIsShowSettingMess(false)
       }}
     >
       <div className="container-popupSettingMessenger">
@@ -62,7 +62,7 @@ function PopupSettingMessenger() {
                   <Fragment>
                     <Link
                       onClick={() => {
-                        dispatch(set_url(new Date().toLocaleString()));
+                        dispatch(set_url(new Date().toLocaleString()))
                       }}
                       to={`account/${
                         value_Context_Message.membersChat.filter(
@@ -84,30 +84,23 @@ function PopupSettingMessenger() {
                       children_centerItemOpt={'Members'}
                     />
                     <ItemOpt
-                      handleClick={() => {
-                        fetch(`${HOST_SERVER}/chat/getListFriend?limit=10`, {
-                          method: 'POST',
-                          body: JSON.stringify({
-                            idChat: value_Context_Message.idChat,
-                          }),
-                          headers: {
-                            'Content-Type': 'application/json',
+                      handleClick={async () => {
+                        const data = await createRequest(
+                          'POST',
+                          '/chat/getListFriend',
+                          {
+                            query: { limit: 10 },
+                            body: { idChat: value_Context_Message.idChat },
                           },
-                          credentials: 'include',
-                        })
-                          .then((res) => res.text())
-                          .then((dataJson) => {
-                            var data = JSON.parse(dataJson);
-                            // console.log(data);
-                            dispatch(
-                              add_popup_review(
-                                <PopUpAddMember
-                                  data_new_Member={data.result}
-                                  value_Context_Message={value_Context_Message}
-                                />,
-                              ),
-                            );
-                          });
+                        )
+                        dispatch(
+                          add_popup_review(
+                            <PopUpAddMember
+                              data_new_Member={data.result}
+                              value_Context_Message={value_Context_Message}
+                            />,
+                          ),
+                        )
                       }}
                       component_Left={<Icon_AddPerson />}
                       children_centerItemOpt={'Add member'}
@@ -121,7 +114,7 @@ function PopupSettingMessenger() {
                               idChat={value_Context_Message.idChat}
                             />,
                           ),
-                        );
+                        )
                       }}
                       component_Left={<Icon_Image />}
                       children_centerItemOpt={`Change image chat`}
@@ -135,17 +128,15 @@ function PopupSettingMessenger() {
                               idChat={value_Context_Message.idChat}
                             />,
                           ),
-                        );
+                        )
                       }}
                       component_Left={<Icon_Pen_Square />}
                       children_centerItemOpt={'Modify name chat'}
                     />
                     <ItemOpt
                       handleClick={() => {
-                        fetch(`${HOST_SERVER}/chat/leaveChat`, {
-                          method: 'POST',
-                          credentials: 'include',
-                          body: JSON.stringify({
+                        createRequest('POST', '/chat/leaveChat', {
+                          body: {
                             idChat: value_Context_Message.idChat,
                             slug_leavers: state.account.slug_personal,
                             content_message: new contentPopUpMessenger({
@@ -162,16 +153,13 @@ function PopupSettingMessenger() {
                                 }),
                               ],
                             }),
-                          }),
-                          headers: {
-                            'Content-Type': 'application/json',
                           },
-                        });
+                        })
                         dispatch(
                           delete_popup_messenger({
                             idChat: value_Context_Message.idChat,
                           }),
-                        );
+                        )
                       }}
                       component_Left={<Icon_Sign_Out />}
                       children_centerItemOpt={'Leave chat'}
@@ -180,29 +168,20 @@ function PopupSettingMessenger() {
                 )}
                 <ItemOpt
                   handleClick={() => {
-                    fetch(`${HOST_SERVER}/chat/getMembers`, {
-                      method: 'POST',
-                      credentials: 'include',
-                      body: JSON.stringify({
+                    createRequest('POST', '/chat/getMembers', {
+                      body: {
                         idChat: value_Context_Message.idChat,
-                      }),
-                      headers: {
-                        'Content-Type': 'application/json',
                       },
+                    }).then((data) => {
+                      dispatch(
+                        add_popup_review(
+                          <PopUpEditNickNameMember
+                            dataMembers={data.result}
+                            value_Context_Message={value_Context_Message}
+                          />,
+                        ),
+                      )
                     })
-                      .then((res) => res.text())
-                      .then((dataJson) => {
-                        var data = JSON.parse(dataJson);
-
-                        dispatch(
-                          add_popup_review(
-                            <PopUpEditNickNameMember
-                              dataMembers={data.result}
-                              value_Context_Message={value_Context_Message}
-                            />,
-                          ),
-                        );
-                      });
                   }}
                   component_Left={<Icon_Pen_Square />}
                   children_centerItemOpt={'Modify Nickname'}
@@ -210,21 +189,16 @@ function PopupSettingMessenger() {
 
                 <ItemOpt
                   handleClick={() => {
-                    fetch(`${HOST_SERVER}/chat/removeChat`, {
-                      method: 'POST',
-                      credentials: 'include',
-                      body: JSON.stringify({
+                    createRequest('POST', '/chat/removeChat', {
+                      body: {
                         idChat: value_Context_Message.idChat,
-                      }),
-                      headers: {
-                        'Content-Type': 'application/json',
                       },
-                    });
+                    })
                     dispatch(
                       delete_popup_messenger({
                         idChat: value_Context_Message.idChat,
                       }),
-                    );
+                    )
                   }}
                   component_Left={<Icon_Trash />}
                   children_centerItemOpt={'Delete Chat'}
@@ -237,17 +211,17 @@ function PopupSettingMessenger() {
         </div>
       </div>
     </PopUp_>
-  );
+  )
 }
 
 function PopUpAddMember({ data_new_Member, value_Context_Message }) {
   const [state_listSelectedSlug_Member, set_state_listSelectedSlug_Member] =
-    useState([]);
+    useState([])
   const [state_searchNewMember, set_state_searchNewMember] =
-    useState(data_new_Member);
-  const [state_showNoResult, set_state_showNoResult] = useState(false);
+    useState(data_new_Member)
+  const [state_showNoResult, set_state_showNoResult] = useState(false)
 
-  const [state, dispatch] = useStore();
+  const [state, dispatch] = useStore()
   // console.log(state_listSelectedSlug_Member);
   return (
     <PopUpReviews
@@ -256,7 +230,7 @@ function PopUpAddMember({ data_new_Member, value_Context_Message }) {
         <div>
           <div className="section_selectedAddMembers">
             {state_listSelectedSlug_Member.map((new_mb, idx) => {
-              var name_new_mb = `${new_mb.user_fname} ${new_mb.user_lname}`;
+              var name_new_mb = `${new_mb.user_fname} ${new_mb.user_lname}`
               return (
                 <div key={idx} className="item-NameSelectedNewMember">
                   <LabelCircle urlImg={new_mb.avatar_account} />
@@ -268,37 +242,29 @@ function PopUpAddMember({ data_new_Member, value_Context_Message }) {
                     )
                     .join(' ')}`}</div>
                 </div>
-              );
+              )
             })}
           </div>
           <FormSearch
             placeholder_text={'Search new member'}
             handler_Search={(value) => {
               if (value.trim().length > 0) {
-                fetch(`${HOST_SERVER}/chat/searchNewMember`, {
-                  method: 'POST',
-                  body: JSON.stringify({
+                createRequest('POST', '/chat/searchNewMember', {
+                  body: {
                     keyword: value,
                     idChat: value_Context_Message.idChat,
-                  }),
-                  headers: {
-                    'Content-Type': 'application/json',
                   },
-                  credentials: 'include',
+                }).then((data) => {
+                  if (data.result.length > 0) {
+                    set_state_showNoResult(false)
+                  } else {
+                    set_state_showNoResult(true)
+                  }
+                  set_state_searchNewMember([].concat(data.result))
                 })
-                  .then((res) => res.text())
-                  .then((dataJson) => {
-                    var data = JSON.parse(dataJson);
-                    if (data.result.length > 0) {
-                      set_state_showNoResult(false);
-                    } else {
-                      set_state_showNoResult(true);
-                    }
-                    set_state_searchNewMember([].concat(data.result));
-                  });
               } else {
-                set_state_showNoResult(false);
-                set_state_searchNewMember(data_new_Member);
+                set_state_showNoResult(false)
+                set_state_searchNewMember(data_new_Member)
               }
             }}
           />
@@ -313,19 +279,14 @@ function PopUpAddMember({ data_new_Member, value_Context_Message }) {
                 data_new_Member={member}
                 value_Context_Message={value_Context_Message}
               />
-            );
+            )
           })}
           {state_showNoResult && <NoResult />}
           <div className="section_btnAddMembers">
             <ButtonNormal
               handleClick={() => {
-                fetch(`${HOST_SERVER}/chat/addMembers`, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  credentials: 'include',
-                  body: JSON.stringify({
+                createRequest('POST', '/chat/addMembers', {
+                  body: {
                     list_slug_new_member: state_listSelectedSlug_Member.map(
                       (new_mb) => new_mb.slug_personal,
                     ),
@@ -342,12 +303,12 @@ function PopUpAddMember({ data_new_Member, value_Context_Message }) {
                                 slug_affecter: new_mb.slug_personal,
                               }),
                             }),
-                          });
+                          })
                         },
                       ),
                     }),
-                  }),
-                });
+                  },
+                })
               }}
               textBtn={'Add members'}
             />
@@ -355,7 +316,7 @@ function PopUpAddMember({ data_new_Member, value_Context_Message }) {
         </div>
       }
     />
-  );
+  )
 }
 
 function ItemAddMember({
@@ -369,8 +330,8 @@ function ItemAddMember({
       state_listSelectedSlug_Member.some(
         (new_mb) => new_mb.slug_personal === data_new_Member.slug_personal,
       ),
-    );
-  const [state, dispatch] = useStore();
+    )
+  const [state, dispatch] = useStore()
 
   return (
     <div>
@@ -394,11 +355,11 @@ function ItemAddMember({
                     state_listSelectedSlug_Member.splice(
                       state_listSelectedSlug_Member.indexOf(data_new_Member),
                       1,
-                    );
-                    return [].concat(state_listSelectedSlug_Member);
+                    )
+                    return [].concat(state_listSelectedSlug_Member)
                   },
-                );
-                set_state_selected_AddSlug_Member(false);
+                )
+                set_state_selected_AddSlug_Member(false)
               }}
             >
               <Icon_Square_Check />
@@ -408,8 +369,8 @@ function ItemAddMember({
               onClick={() => {
                 set_state_listSelectedSlug_Member(
                   state_listSelectedSlug_Member.concat([data_new_Member]),
-                );
-                set_state_selected_AddSlug_Member(true);
+                )
+                set_state_selected_AddSlug_Member(true)
               }}
             >
               <Icon_Square />
@@ -418,7 +379,7 @@ function ItemAddMember({
         }
       />
     </div>
-  );
+  )
 }
 
 function PopUpEditNickNameMember({ dataMembers, value_Context_Message }) {
@@ -434,27 +395,27 @@ function PopUpEditNickNameMember({ dataMembers, value_Context_Message }) {
                 dataMember={member}
                 value_Context_Message={value_Context_Message}
               />
-            );
+            )
           })}
         </div>
       }
     />
-  );
+  )
 }
 
 function ItemEditNickNameMember({ dataMember, value_Context_Message }) {
   var tmp_nameMember = dataMember.nick_name
     ? dataMember.nick_name
-    : `${dataMember.detail.user_fname} ${dataMember.detail.user_lname}`;
-  const [state_EditNickName, set_state_EditNickName] = useState(false);
-  const ref_item_textNickName = useRef(null);
-  const [state_textNickName, set_state_textNickName] = useState(tmp_nameMember);
-  const [state, dispatch] = useStore();
+    : `${dataMember.detail.user_fname} ${dataMember.detail.user_lname}`
+  const [state_EditNickName, set_state_EditNickName] = useState(false)
+  const ref_item_textNickName = useRef(null)
+  const [state_textNickName, set_state_textNickName] = useState(tmp_nameMember)
+  const [state, dispatch] = useStore()
   useEffect(() => {
     if (state_EditNickName) {
-      ref_item_textNickName.current.querySelector('input').focus();
+      ref_item_textNickName.current.querySelector('input').focus()
     }
-  }, [state_EditNickName]);
+  }, [state_EditNickName])
   return (
     <div ref={ref_item_textNickName}>
       <ItemOpt
@@ -467,12 +428,12 @@ function ItemEditNickNameMember({ dataMember, value_Context_Message }) {
               <input
                 value={state_textNickName}
                 onChange={(event) => {
-                  set_state_textNickName(event.currentTarget.value);
+                  set_state_textNickName(event.currentTarget.value)
                 }}
                 onBlur={(event) => {
                   set_state_EditNickName(
                     ref_item_textNickName.current.contains(event.currentTarget),
-                  );
+                  )
                 }}
                 style={{
                   fontSize: 'inherit',
@@ -492,11 +453,9 @@ function ItemEditNickNameMember({ dataMember, value_Context_Message }) {
             <span
               onClick={() => {
                 // console.log('loadasd');
-                set_state_EditNickName(false);
-                fetch(`${HOST_SERVER}/chat/updateNickname`, {
-                  method: 'POST',
-                  credentials: 'include',
-                  body: JSON.stringify({
+                set_state_EditNickName(false)
+                createRequest('POST', '/chat/updateNickname', {
+                  body: {
                     idChat: value_Context_Message.idChat,
                     new_nickname: state_textNickName,
                     slug_member: dataMember.slug_member,
@@ -516,11 +475,8 @@ function ItemEditNickNameMember({ dataMember, value_Context_Message }) {
                         }),
                       ],
                     }),
-                  }),
-                  headers: {
-                    'Content-Type': 'application/json',
                   },
-                });
+                })
               }}
             >
               <Icon_Square_Check />
@@ -528,7 +484,7 @@ function ItemEditNickNameMember({ dataMember, value_Context_Message }) {
           ) : (
             <span
               onClick={() => {
-                set_state_EditNickName(true);
+                set_state_EditNickName(true)
               }}
             >
               <Icon_Pen_Square />
@@ -537,21 +493,21 @@ function ItemEditNickNameMember({ dataMember, value_Context_Message }) {
         }
       />
     </div>
-  );
+  )
 }
 
 function PopUpEditNameChat({ nameChat, idChat }) {
-  const [state_textarea, set_state_textarea] = useState(nameChat);
-  const [state_acceptSubmit, set_state_acceptSubmit] = useState(true);
-  const [state, dispatch] = useStore();
+  const [state_textarea, set_state_textarea] = useState(nameChat)
+  const [state_acceptSubmit, set_state_acceptSubmit] = useState(true)
+  const [state, dispatch] = useStore()
   useEffect(() => {
     set_state_acceptSubmit(
       state_textarea.trim().length > 0 && state_textarea.trim() != nameChat,
-    );
-  }, [state_textarea]);
+    )
+  }, [state_textarea])
   useEffect(() => {
     // console.log('state_acceptSubmit',state_acceptSubmit);
-  }, [state_acceptSubmit]);
+  }, [state_acceptSubmit])
   return (
     <PopUpReviews
       titlePopUp={'Modify name Chat'}
@@ -560,7 +516,7 @@ function PopUpEditNameChat({ nameChat, idChat }) {
           <div className={'section-textareaEditNameChat'}>
             <textarea
               onChange={(event) => {
-                set_state_textarea(event.currentTarget.value);
+                set_state_textarea(event.currentTarget.value)
                 // console.log(state_acceptSubmit);
               }}
             >
@@ -572,16 +528,15 @@ function PopUpEditNameChat({ nameChat, idChat }) {
               key={1}
               isNo={true}
               handleClick={() => {
-                dispatch(delete_popup_review(null));
+                dispatch(delete_popup_review(null))
               }}
               textBtn={'Cancel'}
               isEnable={true}
             />
             <ButtonNormal
               handleClick={() => {
-                fetch(`${HOST_SERVER}/chat/modifyNameChat`, {
-                  method: 'POST',
-                  body: JSON.stringify({
+                createRequest('POST', '/chat/modifyNameChat', {
+                  body: {
                     idChat,
                     nameChat: state_textarea,
                     content_message: new contentPopUpMessenger({
@@ -600,13 +555,9 @@ function PopUpEditNameChat({ nameChat, idChat }) {
                         }),
                       ],
                     }),
-                  }),
-                  credentials: 'include',
-                  headers: {
-                    'Content-Type': 'application/json',
                   },
-                });
-                dispatch(delete_popup_review(null));
+                })
+                dispatch(delete_popup_review(null))
               }}
               key={2}
               textBtn={'Save'}
@@ -616,17 +567,17 @@ function PopUpEditNameChat({ nameChat, idChat }) {
         </Fragment>
       }
     />
-  );
+  )
 }
 
 function PopUpChangeAvatarChat({ avatar_chat, idChat }) {
-  const ref_iptFile = useRef(null);
-  const [state_avatar_chat, set_state_avatar_chat] = useState(avatar_chat);
-  const [state_acceptSubmit, set_state_acceptSubmit] = useState(true);
-  const [state, dispatch] = useStore();
+  const ref_iptFile = useRef(null)
+  const [state_avatar_chat, set_state_avatar_chat] = useState(avatar_chat)
+  const [state_acceptSubmit, set_state_acceptSubmit] = useState(true)
+  const [state, dispatch] = useStore()
   useEffect(() => {
-    set_state_acceptSubmit(state_avatar_chat != avatar_chat);
-  }, [state_avatar_chat]);
+    set_state_acceptSubmit(state_avatar_chat != avatar_chat)
+  }, [state_avatar_chat])
 
   return (
     <PopUpReviews
@@ -639,7 +590,7 @@ function PopUpChangeAvatarChat({ avatar_chat, idChat }) {
               onChange={(event) => {
                 set_state_avatar_chat(
                   URL.createObjectURL(event.currentTarget.files[0]),
-                );
+                )
               }}
               ref={ref_iptFile}
               type={'file'}
@@ -648,7 +599,7 @@ function PopUpChangeAvatarChat({ avatar_chat, idChat }) {
             <ButtonNormal
               textBtn={'Upload file'}
               handleClick={() => {
-                ref_iptFile.current.click();
+                ref_iptFile.current.click()
               }}
             />
           </div>
@@ -657,7 +608,7 @@ function PopUpChangeAvatarChat({ avatar_chat, idChat }) {
               key={1}
               isNo={true}
               handleClick={() => {
-                dispatch(delete_popup_review(null));
+                dispatch(delete_popup_review(null))
               }}
               textBtn={'Cancel'}
               isEnable={true}
@@ -665,9 +616,9 @@ function PopUpChangeAvatarChat({ avatar_chat, idChat }) {
             <ButtonNormal
               handleClick={() => {
                 // console.log('FileAvatar',ref_iptFile.current.files[0]);
-                var form = new FormData();
-                form.append('idChat', idChat);
-                form.append('FileAvatar', ref_iptFile.current.files[0]);
+                var form = new FormData()
+                form.append('idChat', idChat)
+                form.append('FileAvatar', ref_iptFile.current.files[0])
                 form.append(
                   'content_message',
                   JSON.stringify(
@@ -685,13 +636,11 @@ function PopUpChangeAvatarChat({ avatar_chat, idChat }) {
                       ],
                     }),
                   ),
-                );
-                fetch(`${HOST_SERVER}/chat/changeAvatarChat`, {
-                  method: 'POST',
+                )
+                createRequest('POST', '/chat/changeAvatarChat', {
                   body: form,
-                  credentials: 'include',
-                });
-                dispatch(delete_popup_review(null));
+                })
+                dispatch(delete_popup_review(null))
               }}
               key={2}
               textBtn={'Save'}
@@ -701,39 +650,39 @@ function PopUpChangeAvatarChat({ avatar_chat, idChat }) {
         </div>
       }
     />
-  );
+  )
 }
 
 PopUpAddMember.propTypes = {
   data_new_Member: PropTypes.object.isRequired,
   value_Context_Message: PropTypes.object.isRequired,
-};
+}
 
 ItemAddMember.propTypes = {
   data_new_Member: PropTypes.object.isRequired,
   value_Context_Message: PropTypes.object.isRequired,
   state_listSelectedSlug_Member: PropTypes.object.isRequired,
   set_state_listSelectedSlug_Member: PropTypes.object.isRequired,
-};
+}
 
 PopUpChangeAvatarChat.propTypes = {
   avatar_chat: PropTypes.string.isRequired,
   idChat: PropTypes.string.isRequired,
-};
+}
 PopUpEditNameChat.propTypes = {
   nameChat: PropTypes.string.isRequired,
   idChat: PropTypes.string.isRequired,
-};
+}
 
 PopUpEditNickNameMember.propTypes = {
   dataMembers: PropTypes.object.isRequired,
   value_Context_Message: PropTypes.object.isRequired,
-};
+}
 
 ItemEditNickNameMember.propTypes = {
   dataMember: PropTypes.object.isRequired,
   value_Context_Message: PropTypes.object.isRequired,
-};
+}
 
-export default PopupSettingMessenger;
+export default PopupSettingMessenger
 /* eslint-disable no-unused-vars */

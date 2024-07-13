@@ -1,7 +1,6 @@
-import { Link } from 'react-router-dom';
-import LogoWebsiteStyles from '../../logo/logoWebsite/LogoWebsite.module.css';
+import { Link } from 'react-router-dom'
+import LogoWebsiteStyles from '../../logo/logoWebsite/LogoWebsite.module.css'
 function LogoWebsite() {
-  console.log(LogoWebsiteStyles);
   return (
     <Link to={'/'}>
       <div className={LogoWebsiteStyles['container-logo_website']}>
@@ -10,6 +9,6 @@ function LogoWebsite() {
         </div>
       </div>
     </Link>
-  );
+  )
 }
-export default LogoWebsite;
+export default LogoWebsite

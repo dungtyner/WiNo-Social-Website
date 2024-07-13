@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import './PagePersonalHeaderSetting.css';
-import AccountAPI from '../../../../../API/AccountAPI';
-import queryString from 'query-string';
-import { storage } from '../../../../../config/firebase';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import './PagePersonalHeaderSetting.css'
+import AccountAPI from '../../../../../API/AccountAPI'
+import { storage } from '../../../../../config/firebase'
+import { Link } from 'react-router-dom'
 
 import {
   Modal,
@@ -13,29 +12,29 @@ import {
   TextField,
   Typography,
   Box,
-} from '@mui/material';
-import { useStore } from '../../../../../store';
-import CloseIcon from '@mui/icons-material/Close';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import 'flatpickr/dist/themes/dark.css';
-import Flatpickr from 'react-flatpickr';
-import { set_data_account, set_url } from '../../../../../store/actions';
+} from '@mui/material'
+import { useStore } from '../../../../../store'
+import CloseIcon from '@mui/icons-material/Close'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import 'flatpickr/dist/themes/dark.css'
+import Flatpickr from 'react-flatpickr'
+import { set_data_account, set_url } from '../../../../../store/actions'
 function SettingUser() {
-  const [state, dispatch] = useStore();
+  const [state, dispatch] = useStore()
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
-  const [reload, set_reload] = useState(true);
+  const [reload, set_reload] = useState(true)
 
   const handler_Upload_Image = (e) => {
     const uploadTask = storage
       .ref(`social/${e.target.files[0].name}`)
-      .put(e.target.files[0]);
+      .put(e.target.files[0])
     uploadTask.on(
       'state_changed',
       () => {},
       (error) => {
-        console.log(error);
+        console.log(error)
       },
       async () => {
         await storage
@@ -44,87 +43,82 @@ function SettingUser() {
           .getDownloadURL()
           .then((url) => {
             const post_status_data = async () => {
-              const params = {
+              const query = {
                 id_user: state.account._id,
                 avatar_account: url,
-              };
+              }
 
-              const query = '?' + queryString.stringify(params);
+              await AccountAPI.changeAvatar(query)
+              console.log(query)
+            }
 
-              await AccountAPI.change_avatar(query);
-              console.log(query);
-            };
-
-            post_status_data();
-          });
+            post_status_data()
+          })
       },
-    );
+    )
 
-    alert('Image Change Success!');
+    alert('Image Change Success!')
 
-    set_reload(true);
+    set_reload(true)
 
     //document.getElementById('card_delete_post', style="display")
     document
       .getElementById('card_delete_post')
-      .setAttribute('style', 'display: none');
-  };
+      .setAttribute('style', 'display: none')
+  }
 
   const show_upload = () => {
-    document.getElementById('file_upload_user').click();
-  };
+    document.getElementById('file_upload_user').click()
+  }
   /* eslint-disable no-unused-vars */
-  const [user, set_user] = useState({});
+  const [user, set_user] = useState({})
   /* eslint-disable no-unused-vars */
   useEffect(() => {
     if (reload) {
       const fetchData = async () => {
-        const response = await AccountAPI.getId(state.account._id);
+        const response = await AccountAPI.getId(state.account._id)
 
-        set_user(response);
-        set_username(response.user_fname + ' ' + response.user_lname);
-        set_password(response.password);
-        set_user_fname(response.user_fname);
-        set_user_lname(response.user_lname);
-        set_birthday(response.birthday);
-        set_gmail(response.gmail);
-      };
+        set_user(response)
+        set_username(response.user_fname + ' ' + response.user_lname)
+        set_password(response.password)
+        set_user_fname(response.user_fname)
+        set_user_lname(response.user_lname)
+        set_birthday(response.birthday)
+        set_gmail(response.gmail)
+      }
 
-      fetchData();
+      fetchData()
 
-      set_reload(false);
+      set_reload(false)
     }
-  }, [reload]);
+  }, [reload])
 
-  const [username, set_username] = useState('');
-  const [password, set_password] = useState('');
-  const [user_fname, set_user_fname] = useState('');
-  const [user_lname, set_user_lname] = useState('');
-  const [birthday, set_birthday] = useState('');
-  const [gmail, set_gmail] = useState('');
+  const [username, set_username] = useState('')
+  const [password, set_password] = useState('')
+  const [user_fname, set_user_fname] = useState('')
+  const [user_lname, set_user_lname] = useState('')
+  const [birthday, set_birthday] = useState('')
+  const [gmail, set_gmail] = useState('')
 
   const handler_Update = () => {
     const fetchData = async () => {
-      const params = {
+      const query = {
         id_user: state.account._id,
         user_fname: user_fname,
         user_lname: user_lname,
         birthday: birthday,
         gmail: gmail,
-      };
+      }
 
-      const query = '?' + queryString.stringify(params);
+      await AccountAPI.updateInfo(query)
+      state.account.user_fname = user_fname
+      state.account.user_lname = user_lname
+      set_username(`${user_fname} ${user_lname}`)
+      dispatch(set_data_account(state.account))
+    }
 
-      await AccountAPI.update_info(query);
-      state.account.user_fname = user_fname;
-      state.account.user_lname = user_lname;
-      set_username(`${user_fname} ${user_lname}`);
-      dispatch(set_data_account(state.account));
-      alert('Bạn Đã Thay Đổi Thành Công!');
-    };
-
-    fetchData();
-  };
+    fetchData()
+  }
 
   return (
     <div className="container_edit_info_user">
@@ -143,13 +137,13 @@ function SettingUser() {
               <div className="header_form_edit_info_user">
                 <Link
                   onClick={(e) => {
-                    e.preventDefault();
-                    sessionStorage.setItem('noReload', 1);
-                    window.location.href = `/account/personal/${state.account.slug_personal}`;
+                    e.preventDefault()
+                    sessionStorage.setItem('noReload', 1)
+                    window.location.href = `/account/personal/${state.account.slug_personal}`
                     // <Navigate to={`/account/personal/${state.account.slug_personal}`} />
                     // navigate(`/account/personal/${state.account.slug_personal}`);
 
-                    dispatch(set_url(new Date().toLocaleString()));
+                    dispatch(set_url(new Date().toLocaleString()))
                   }}
                   to={`/account/personal/${state.account.slug_personal}`}
                 >
@@ -174,7 +168,7 @@ function SettingUser() {
                 <Button
                   variant="contained"
                   onClick={() => {
-                    setOpen(true);
+                    setOpen(true)
                   }}
                 >
                   Change profile photo
@@ -199,7 +193,7 @@ function SettingUser() {
                 >
                   <span
                     onClick={() => {
-                      setOpen(false);
+                      setOpen(false)
                     }}
                   >
                     <IconButton sx={{ position: 'relative', float: 'right' }}>
@@ -236,7 +230,7 @@ function SettingUser() {
                       variant="contained"
                       color="error"
                       onClick={() => {
-                        setOpen(false);
+                        setOpen(false)
                       }}
                     >
                       No
@@ -321,12 +315,12 @@ function SettingUser() {
                         dateFormat: 'd/m/Y', // format ngày giờ
                       }}
                       onChange={(e) => {
-                        var date = new Date(e[0]);
-                        date.setDate(date.getDate() + 1);
+                        var date = new Date(e[0])
+                        date.setDate(date.getDate() + 1)
 
-                        console.log(date.toISOString());
-                        console.log(birthday);
-                        set_birthday(date.toISOString());
+                        console.log(date.toISOString())
+                        console.log(birthday)
+                        set_birthday(date.toISOString())
                       }}
                     />
                   </div>
@@ -360,7 +354,7 @@ function SettingUser() {
         </div>
       </Box>
     </div>
-  );
+  )
 }
 
-export default SettingUser;
+export default SettingUser

@@ -1,60 +1,60 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Avatar } from '@mui/material';
-import queryString from 'query-string';
-import FormSearch from '../../parts/inputs/forms/formSearch/FormSearch.js';
-import PopupAccountHeader from '../popups/popupHeader/popupAccountHeader/PopupAccountHeader';
-import LabelCircle from '../../parts/labels/labelCircle/LabelCircle.js';
-import '../header/Header.css';
-import LogoWebsite from '../../logo/logoWebsite/LogoWebsite.js';
-import { useStore } from '../../../store';
-import { actions } from '../../../store';
-import AccountAPI from '../../../API/AccountAPI';
-import { Icon_Mess } from '../../parts/icons/fontAwesome/FontAwesome';
-import PopupMessageHeader from '../popups/popupHeader/popupMessageHeader/PopupMessageHeader';
-import PopupNotificationHeader from '../popups/popupHeader/popupNotificationHeader/PopupNotificationHeader';
-import { HOST_SERVER } from '../../../config.js';
-import { set_url } from '../../../store/actions.js';
-import PopUp_ from '../popups/popup.js';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { Avatar } from '@mui/material'
+import queryString from 'query-string'
+import FormSearch from '../../parts/inputs/forms/formSearch/FormSearch.js'
+import PopupAccountHeader from '../popups/popupHeader/popupAccountHeader/PopupAccountHeader'
+import LabelCircle from '../../parts/labels/labelCircle/LabelCircle.js'
+import '../header/Header.css'
+import LogoWebsite from '../../logo/logoWebsite/LogoWebsite.js'
+import { useStore } from '../../../store'
+import { actions } from '../../../store'
+import AccountAPI from '../../../API/AccountAPI'
+import { Icon_Mess } from '../../parts/icons/fontAwesome/FontAwesome'
+import PopupMessageHeader from '../popups/popupHeader/popupMessageHeader/PopupMessageHeader'
+import PopupNotificationHeader from '../popups/popupHeader/popupNotificationHeader/PopupNotificationHeader'
+import { set_url } from '../../../store/actions.js'
+import PopUp_ from '../popups/popup.js'
+import PropTypes from 'prop-types'
+import { createRequest } from '../../../utilities/requests.js'
 
 /* eslint-disable no-unused-vars */
 function Header({ avatar_account, slug_personal, account }) {
-  const [state, dispatch] = useStore();
+  const [state, dispatch] = useStore()
   const [stateCountMess, set_stateCountMess] = useState(
     account.count_notification_chat,
-  );
+  )
   const [stateCountNotification, set_stateCountNotification] = useState(
     account.count_notification,
-  );
-  const [keyword, set_keyword] = useState('');
-  const [show_search, set_show_search] = useState(false);
-  const [list_search, set_list_search] = useState([]);
+  )
+  const [keyword, set_keyword] = useState('')
+  const [show_search, set_show_search] = useState(false)
+  const [list_search, set_list_search] = useState([])
   useEffect(() => {
     state.socketChat.on(`PEOPLE_SENDING`, ({ id_Chat, slug_sender }) => {
-      var tmpState = stateCountMess;
+      var tmpState = stateCountMess
       // console.log(slug_sender,state);
       if (slug_sender && id_Chat && slug_personal) {
         if (slug_sender != slug_personal) {
           if (tmpState.indexOf(id_Chat) < 0) {
             set_stateCountMess((stateCountMess) => {
-              return tmpState.concat([id_Chat]);
-            });
+              return tmpState.concat([id_Chat])
+            })
           }
         }
       }
-    });
-  }, [stateCountMess]);
+    })
+  }, [stateCountMess])
   useEffect(() => {
     state.socket.on(
       `${slug_personal}_UPDATE_COUNT_NOTIFICATION`,
       (data_account) => {
-        console.log(`${slug_personal}_UPDATE_COUNT_NOTIFICATION`, data_account);
-        set_stateCountNotification(data_account.count_notification);
-        state.socket.off(`${slug_personal}_UPDATE_COUNT_NOTIFICATION`);
+        console.log(`${slug_personal}_UPDATE_COUNT_NOTIFICATION`, data_account)
+        set_stateCountNotification(data_account.count_notification)
+        state.socket.off(`${slug_personal}_UPDATE_COUNT_NOTIFICATION`)
       },
-    );
-  }, [stateCountNotification]);
+    )
+  }, [stateCountNotification])
   const handle_renderPopHeader = (
     event,
     isActive,
@@ -64,19 +64,19 @@ function Header({ avatar_account, slug_personal, account }) {
   ) => {
     if (!document.querySelector('.container-popupAccountHeader')) {
       // document.querySelector('.LogoWebsite_body-logo_website__ZeBTa').addEventListener('click',Tmp_add_popup_content(<div>OhAlo</div>))
-      dispatch(actions.add_popup_content(component_PopUp));
+      dispatch(actions.add_popup_content(component_PopUp))
     }
-  };
+  }
   const handler_Search = (value) => {
-    show_menu_search(value);
-    set_keyword(value);
-  };
+    show_menu_search(value)
+    set_keyword(value)
+  }
 
   function show_menu_search(value) {
     if (value !== '') {
-      set_show_search(true);
+      set_show_search(true)
     } else {
-      set_show_search(false);
+      set_show_search(false)
     }
   }
   // Hàm này dùng để hiện menu search
@@ -87,15 +87,14 @@ function Header({ avatar_account, slug_personal, account }) {
       const fetchData = async () => {
         const params = {
           keyword: keyword,
-        };
-        const query = '?' + queryString.stringify(params);
-        const response = await AccountAPI.search_Accounts(query);
-        //  const response = await AccountAPI.get(`query`)
-        set_list_search(response);
-      };
-      fetchData();
+        }
+        const query = '?' + queryString.stringify(params)
+        const response = await AccountAPI.searchAccounts(query)
+        set_list_search(response)
+      }
+      fetchData()
     }
-  }, [keyword]);
+  }, [keyword])
   return (
     <header>
       <div className="section-left_header">
@@ -112,7 +111,7 @@ function Header({ avatar_account, slug_personal, account }) {
           {show_search && (
             <PopUp_
               work_case_unmount={() => {
-                set_show_search(false);
+                set_show_search(false)
               }}
             >
               <div className="drop_menu_search">
@@ -122,8 +121,8 @@ function Header({ avatar_account, slug_personal, account }) {
                       key={idx}
                       className="result-SearchHeader"
                       onClick={(event) => {
-                        set_show_search(false);
-                        dispatch(set_url(`/account/${value.slug_personal}`));
+                        set_show_search(false)
+                        dispatch(set_url(`/account/${value.slug_personal}`))
                       }}
                     >
                       <Link
@@ -160,85 +159,66 @@ function Header({ avatar_account, slug_personal, account }) {
               key={0}
               el_Icon={<Icon_Mess />}
               numCount={stateCountMess.length}
-              handleClick={(
+              handleClick={async (
                 event,
                 isChecked,
                 setChecked,
                 Tmp_add_popup_content,
               ) => {
                 if (stateCountMess.length > 0) {
-                  fetch(
-                    `${HOST_SERVER}/chat/clearNotificationChat?listNotification=${JSON.stringify(stateCountMess)}`,
-                    {
-                      method: 'GET',
-                      credentials: 'include',
-                    },
-                  )
-                    .then((res) => res.text())
-                    .then((dataJson) => {
-                      console.log(dataJson);
-                    });
+                  const query = {
+                    listNotification: stateCountMess,
+                  }
+
+                  await createRequest('GET', '/chat/clearNotificationChat', {
+                    query,
+                  })
                 }
-                fetch(HOST_SERVER + '/chat/getListBoxChat', {
-                  method: 'GET',
-                  credentials: 'include',
-                })
-                  .then((result) => result.text())
-                  .then((dataJson) => {
-                    var data = JSON.parse(dataJson);
-                    handle_renderPopHeader(
-                      event,
-                      isChecked,
-                      setChecked,
-                      <>
-                        <PopupMessageHeader listChat={data} />
-                      </>,
-                      Tmp_add_popup_content,
-                    );
-                    set_stateCountMess([]);
-                  });
+
+                const data = await createRequest('GET', '/chat/getListBoxChat')
+                handle_renderPopHeader(
+                  event,
+                  isChecked,
+                  setChecked,
+                  <>
+                    <PopupMessageHeader listChat={data} />
+                  </>,
+                  Tmp_add_popup_content,
+                )
+                set_stateCountMess([])
               }}
             />
             <LabelCircle
               key={1}
               el_Icon={<i className="fa-regular fa-bell"></i>}
               numCount={stateCountNotification}
-              handleClick={(
+              handleClick={async (
                 event,
                 isChecked,
                 setChecked,
                 Tmp_add_popup_content,
               ) => {
                 if (stateCountNotification > 0) {
-                  fetch(`${HOST_SERVER}/notification/clearCountNotification`, {
-                    method: 'GET',
-                    credentials: 'include',
-                  })
-                    .then((res) => res.text())
-                    .then((dataJson) => {
-                      console.log(dataJson);
-                    });
-                  set_stateCountNotification(0);
+                  await createRequest(
+                    'GET',
+                    '/notification/clearCountNotification',
+                  )
+                  set_stateCountNotification(0)
                 }
 
-                fetch(`${HOST_SERVER}/notification/request_getNotification`, {
-                  method: 'GET',
-                  credentials: 'include',
-                })
-                  .then((res) => res.text())
-                  .then((dataJson) => {
-                    var data = JSON.parse(dataJson);
-                    console.log(data);
-                    handle_renderPopHeader(
-                      event,
-                      isChecked,
-                      setChecked,
-                      <>
-                        <PopupNotificationHeader dataNotification={data} />
-                      </>,
-                      Tmp_add_popup_content,
-                    );
-                  });
+                var data = await createRequest(
+                  'GET',
+                  '/notification/request_getNotification',
+                )
+                handle_renderPopHeader(
+                  event,
+                  isChecked,
+                  setChecked,
+                  <>
+                    <PopupNotificationHeader dataNotification={data} />
+                  </>,
+                  Tmp_add_popup_content,
+                )
               }}
             />
             <LabelCircle
@@ -257,7 +237,7 @@ function Header({ avatar_account, slug_personal, account }) {
                     <PopupAccountHeader />
                   </>,
                   Tmp_add_popup_content,
-                );
+                )
               }}
               urlImg={avatar_account}
               objDetail={{}}
@@ -266,7 +246,7 @@ function Header({ avatar_account, slug_personal, account }) {
         </div>
       </div>
     </header>
-  );
+  )
 }
 
 Header.propTypes = {
@@ -275,7 +255,7 @@ Header.propTypes = {
   account: PropTypes.object.isRequired,
   state: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
-};
+}
 
-export default Header;
+export default Header
 /* eslint-disable no-unused-vars */

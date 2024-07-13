@@ -1,15 +1,15 @@
 import {
   Icon_Angle_Right,
   Icon_Sign_Out,
-} from '../../../../parts/icons/fontAwesome/FontAwesome';
-import '../popupAccountHeader/PopupAccountHeader.css';
-import PopUpHeader from '../PopUpHeader';
-import ItemOpt from '../../../../parts/item/itemOpt/ItemOpt';
-import LabelCircle from '../../../../parts/labels/labelCircle/LabelCircle';
-import { Link } from 'react-router-dom';
-import { useStore } from '../../../../../store/hooks';
-import { set_url } from '../../../../../store/actions';
-import { HOST_SERVER } from '../../../../../config';
+} from '../../../../parts/icons/fontAwesome/FontAwesome'
+import '../popupAccountHeader/PopupAccountHeader.css'
+import PopUpHeader from '../PopUpHeader'
+import ItemOpt from '../../../../parts/item/itemOpt/ItemOpt'
+import LabelCircle from '../../../../parts/labels/labelCircle/LabelCircle'
+import { Link } from 'react-router-dom'
+import { useStore } from '../../../../../store/hooks'
+import { set_url } from '../../../../../store/actions'
+import { createRequest } from '../../../../../utilities/requests'
 var listItemOptAccountHeader = [
   {
     el_Icon_Label: <i className="fa-solid fa-display"></i>,
@@ -31,18 +31,12 @@ var listItemOptAccountHeader = [
     title_itemOpt: 'Sign Out',
     isSummary: false,
     handleClick: async (event, state) => {
-      console.log('CLICK!!!!');
-      const result = JSON.parse(
-        await (
-          await fetch(`${HOST_SERVER}/account/sign-out/`, {
-            credentials: 'include',
-          })
-        ).text(),
-      ).status;
-      if (result === 200) {
-        state.socket.emit(`I'M_SIGN_OUT`, state.account);
-        sessionStorage.setItem('noReload', 4);
-        document.location.reload();
+      const result = await createRequest('/account/sign-out/')
+
+      if (result.status === 200) {
+        state.socket.emit(`I'M_SIGN_OUT`, state.account)
+        sessionStorage.setItem('noReload', 4)
+        document.location.reload()
       }
     },
   },
@@ -51,11 +45,11 @@ var listItemOptAccountHeader = [
     title_itemOpt: 'Feedback',
     isSummary: false,
   },
-];
+]
 function PopupAccountHeader() {
-  console.log('PopupAccountHeader() render');
-  var [state, dispatch] = useStore();
-  var account = state.account;
+  console.log('PopupAccountHeader() render')
+  var [state, dispatch] = useStore()
+  var account = state.account
   /* eslint-disable no-unused-vars */
   return (
     <PopUpHeader
@@ -64,7 +58,7 @@ function PopupAccountHeader() {
         <>
           <Link
             onClick={() => {
-              dispatch(set_url(`/account/personal/${account.slug_personal}`));
+              dispatch(set_url(`/account/personal/${account.slug_personal}`))
             }}
             id="pagePersonal"
             to={'/account/personal/' + account.slug_personal}
@@ -87,12 +81,12 @@ function PopupAccountHeader() {
                 component_Right={el.isSummary ? <Icon_Angle_Right /> : ''}
                 key={idx}
               />
-            );
+            )
           })}
         </>
       }
     />
-  );
+  )
   /* eslint-disable no-unused-vars */
 }
-export default PopupAccountHeader;
+export default PopupAccountHeader

@@ -1,14 +1,14 @@
-import Peer from 'peerjs';
-import { Fragment, useEffect, useRef, useState } from 'react';
-import { HOST_SERVER } from '../../../../config';
-import { useStore } from '../../../../store';
-import { delete_popup_call_video } from '../../../../store/actions';
-import ButtonNormal from '../../../parts/buttons/buttonNormal/ButtonNormal';
-import { Icon_Phone } from '../../../parts/icons/fontAwesome/FontAwesome';
-import ItemOpt from '../../../parts/item/itemOpt/ItemOpt';
-import LabelCircle from '../../../parts/labels/labelCircle/LabelCircle';
-import './PopUpCallVideo.css';
-import PropTypes from 'prop-types';
+import Peer from 'peerjs'
+import { Fragment, useEffect, useRef, useState } from 'react'
+import { useStore } from '../../../../store'
+import { delete_popup_call_video } from '../../../../store/actions'
+import ButtonNormal from '../../../parts/buttons/buttonNormal/ButtonNormal'
+import { Icon_Phone } from '../../../parts/icons/fontAwesome/FontAwesome'
+import ItemOpt from '../../../parts/item/itemOpt/ItemOpt'
+import LabelCircle from '../../../parts/labels/labelCircle/LabelCircle'
+import './PopUpCallVideo.css'
+import PropTypes from 'prop-types'
+import { createRequest } from '../../../../utilities/requests'
 
 /* eslint-disable no-unused-vars */
 function PopUpCallVideo({
@@ -21,27 +21,27 @@ function PopUpCallVideo({
   membersChat = [],
   idChat = '',
 }) {
-  const [state, dispatch] = useStore();
-  const refVideo = useRef(null);
-  const refContainerCallVideo = useRef(null);
-  const refStreamSubCamera = useRef(null);
-  const refStreamMainCamera = useRef(null);
-  const ref_state_list_accepter = useRef([]);
-  const ref_StreamCameraYou = useRef(null);
-  const refButtonTurnOffCallVideo = useRef(null);
+  const [state, dispatch] = useStore()
+  const refVideo = useRef(null)
+  const refContainerCallVideo = useRef(null)
+  const refStreamSubCamera = useRef(null)
+  const refStreamMainCamera = useRef(null)
+  const ref_state_list_accepter = useRef([])
+  const ref_StreamCameraYou = useRef(null)
+  const refButtonTurnOffCallVideo = useRef(null)
 
-  const [state_isZoomIn, set_state_isZoomIn] = useState(false);
-  const [state_stream, set_state_stream] = useState(null);
-  const [state_isResponse, set_state_isResponse] = useState(isResponse);
-  const [state_subCameras, set_state_subCameras] = useState([]);
-  const [state_list_accepter, set_state_list_accepter] = useState([]);
+  const [state_isZoomIn, set_state_isZoomIn] = useState(false)
+  const [state_stream, set_state_stream] = useState(null)
+  const [state_isResponse, set_state_isResponse] = useState(isResponse)
+  const [state_subCameras, set_state_subCameras] = useState([])
+  const [state_list_accepter, set_state_list_accepter] = useState([])
   var who = (stream, call, state_stream) => {
     if (!state_stream) {
       call.on('stream', (remoteStream) => {
-        refVideo.current.srcObject = remoteStream;
-        refVideo.current.play();
-        set_state_stream(remoteStream);
-      });
+        refVideo.current.srcObject = remoteStream
+        refVideo.current.play()
+        set_state_stream(remoteStream)
+      })
     } else if (state_stream) {
       // console.log(state_subCameras);
       call.on('stream', (remoteStream) => {
@@ -52,15 +52,15 @@ function PopUpCallVideo({
               <ItemOpt children_centerItemOpt={<b>{`CCC`}</b>} />
             </Fragment>,
           ]),
-        );
-      });
+        )
+      })
     }
-  };
+  }
   useEffect(() => {
     if (isResponse) {
       membersChat.forEach((member) => {
         if (member.slug_member == account_caller.slug_personal) {
-          account_caller.member = member;
+          account_caller.member = member
         }
         state.socketChat.once(
           `${member.slug_member}_LEAVE_CALL_VIDEO`,
@@ -70,7 +70,7 @@ function PopUpCallVideo({
                 `${member.slug_member}_LEAVE_CALL_VIDEO`,
                 refStreamMainCamera.current,
                 refStreamSubCamera.current,
-              );
+              )
               if (
                 refStreamSubCamera.current.some(
                   (item) =>
@@ -79,29 +79,29 @@ function PopUpCallVideo({
                 )
               ) {
                 refStreamSubCamera.current.forEach((item, idx) => {
-                  console.log(`${member.slug_member}_LEAVE_CALL_VIDEO`, item);
+                  console.log(`${member.slug_member}_LEAVE_CALL_VIDEO`, item)
                   if (
                     item.data.account_joiner &&
                     item.data.account_joiner.slug_personal == data.slug_leaver
                   ) {
-                    refStreamSubCamera.current.splice(idx, 1);
+                    refStreamSubCamera.current.splice(idx, 1)
                   }
-                });
+                })
               } else {
                 if (
                   refStreamMainCamera.current &&
                   refStreamMainCamera.current.data.account_joiner
                     .slug_personal == data.slug_leaver
                 ) {
-                  refStreamMainCamera.current = null;
+                  refStreamMainCamera.current = null
                   // set_state_stream(null);
                   console.log(
                     `${member.slug_member}_LEAVE_CALL_VIDEO`,
                     refStreamMainCamera.current,
                     refStreamSubCamera.current,
-                  );
+                  )
                   if (refStreamSubCamera.current.length >= 2) {
-                    refStreamMainCamera.current = refStreamSubCamera.current[1];
+                    refStreamMainCamera.current = refStreamSubCamera.current[1]
                   }
                 }
               }
@@ -116,13 +116,13 @@ function PopUpCallVideo({
                           children_centerItemOpt={<b>{item.data.nameJoiner}</b>}
                         />
                       </Fragment>
-                    );
+                    )
                   }),
                 ),
-              );
+              )
             }
           },
-        );
+        )
 
         state.socketChat.once(
           `${member.slug_member}_ACCEPT_JOIN_CALL_VIDEO`,
@@ -136,7 +136,7 @@ function PopUpCallVideo({
                   stream_id: data.stream_id,
                 },
               ]),
-            );
+            )
             if (
               !ref_state_list_accepter.current.some(
                 (accepter) => accepter.stream_id == data.stream_id,
@@ -147,26 +147,26 @@ function PopUpCallVideo({
                 member: member,
                 peerId: data.peerId,
                 stream_id: data.stream_id,
-              });
+              })
             }
           },
-        );
-      });
+        )
+      })
       who = (stream, call, state_stream) => {
         if (!refStreamMainCamera.current) {
           call.on('stream', (remoteStream) => {
             // refVideo.current.srcObject = remoteStream;
             // refVideo.current.play();
-            ref_StreamCameraYou.current = stream;
+            ref_StreamCameraYou.current = stream
             if (refButtonTurnOffCallVideo) {
               refButtonTurnOffCallVideo.current.addEventListener(
                 'click',
                 () => {
-                  console.log('ccccc', stream);
+                  console.log('ccccc', stream)
                 },
-              );
+              )
             }
-            set_state_stream(remoteStream);
+            set_state_stream(remoteStream)
             refStreamSubCamera.current = [
               {
                 stream: stream,
@@ -174,7 +174,7 @@ function PopUpCallVideo({
                   nameJoiner: 'You',
                 },
               },
-            ];
+            ]
             set_state_subCameras(
               [].concat(
                 refStreamSubCamera.current.map((item, idx) => {
@@ -185,21 +185,21 @@ function PopUpCallVideo({
                         children_centerItemOpt={<b>{item.data.nameJoiner}</b>}
                       />
                     </Fragment>
-                  );
+                  )
                 }),
               ),
-            );
+            )
             console.log(
               `${''}_ACCEPT_JOIN_CALL_VIDEO`,
               ref_state_list_accepter.current,
-            );
+            )
             refStreamMainCamera.current = {
               stream: remoteStream,
               data: {
                 account_joiner: account_caller,
               },
-            };
-          });
+            }
+          })
         } else if (refStreamMainCamera.current) {
           call.on('stream', (remoteStream) => {
             // console.log();
@@ -208,10 +208,10 @@ function PopUpCallVideo({
               if (
                 accepter.stream_id === remoteStream.id &&
                 !refStreamSubCamera.current.some((item) => {
-                  return item.stream.id === remoteStream.id;
+                  return item.stream.id === remoteStream.id
                 })
               ) {
-                console.log('CCCC');
+                console.log('CCCC')
                 refStreamSubCamera.current.push({
                   stream: remoteStream,
                   data: {
@@ -222,9 +222,9 @@ function PopUpCallVideo({
                         : `${accepter.account_joiner.user_fname} ${accepter.account_joiner.user_lname}`
                     }`,
                   },
-                });
+                })
               }
-            });
+            })
             set_state_subCameras(
               [].concat(
                 refStreamSubCamera.current.map((item, idx) => {
@@ -235,30 +235,30 @@ function PopUpCallVideo({
                         children_centerItemOpt={<b>{item.data.nameJoiner}</b>}
                       />
                     </Fragment>
-                  );
+                  )
                 }),
               ),
-            );
-          });
+            )
+          })
         }
-      };
+      }
     } else if (!isResponse) {
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices
           .getUserMedia({ video: true, audio: false })
           .then((stream) => {
             if (state_subCameras.length == 0) {
-              ref_StreamCameraYou.current = stream;
+              ref_StreamCameraYou.current = stream
               if (refButtonTurnOffCallVideo) {
                 refButtonTurnOffCallVideo.current.addEventListener(
                   'click',
                   () => {
                     // console.log('ccccc',stream);
                     stream.getTracks().forEach((track) => {
-                      track.stop();
-                    });
+                      track.stop()
+                    })
                   },
-                );
+                )
               }
               refStreamSubCamera.current = [
                 {
@@ -267,7 +267,7 @@ function PopUpCallVideo({
                     nameJoiner: 'You',
                   },
                 },
-              ];
+              ]
 
               set_state_subCameras(
                 [].concat(
@@ -279,10 +279,10 @@ function PopUpCallVideo({
                           children_centerItemOpt={<b>{item.data.nameJoiner}</b>}
                         />
                       </Fragment>
-                    );
+                    )
                   }),
                 ),
-              );
+              )
             }
             membersChat.forEach((member) => {
               state.socketChat.once(
@@ -303,9 +303,9 @@ function PopUpCallVideo({
                           item.data.account_joiner.slug_personal ==
                             data.slug_leaver
                         ) {
-                          refStreamSubCamera.current.splice(idx, 1);
+                          refStreamSubCamera.current.splice(idx, 1)
                         }
-                      });
+                      })
                       set_state_subCameras(
                         [].concat(
                           refStreamSubCamera.current.map((item, idx) => {
@@ -318,27 +318,27 @@ function PopUpCallVideo({
                                   }
                                 />
                               </Fragment>
-                            );
+                            )
                           }),
                         ),
-                      );
+                      )
                     } else {
                       console.log(
                         `${member.slug_member}_LEAVE_CALL_VIDEO`,
                         refStreamSubCamera,
                         refStreamMainCamera,
-                      );
+                      )
 
                       if (
                         refStreamMainCamera.current.data.account_joiner
                           .slug_personal == data.slug_leaver
                       ) {
-                        refStreamMainCamera.current = null;
-                        set_state_stream(null);
+                        refStreamMainCamera.current = null
+                        set_state_stream(null)
                         if (refStreamSubCamera.current.length >= 2) {
                           refStreamMainCamera.current =
-                            refStreamSubCamera.current[1];
-                          refStreamSubCamera.current.splice(1, 1);
+                            refStreamSubCamera.current[1]
+                          refStreamSubCamera.current.splice(1, 1)
                           set_state_subCameras(
                             [].concat(
                               refStreamSubCamera.current.map((item, idx) => {
@@ -351,35 +351,35 @@ function PopUpCallVideo({
                                       }
                                     />
                                   </Fragment>
-                                );
+                                )
                               }),
                             ),
-                          );
+                          )
                         }
                       }
                     }
                   }
                 },
-              );
+              )
               state.socketChat.once(
                 `${member.slug_member}_ACCEPT_JOIN_CALL_VIDEO`,
                 (data) => {
                   if (
                     !ref_state_list_accepter.current.some((accepter) => {
                       // console.log(`${member.slug_member}_ACCEPT_JOIN_CALL_VIDEO`,accepter.stream_id,data.stream_id)
-                      return accepter.stream_id == data.stream_id;
+                      return accepter.stream_id == data.stream_id
                     })
                   ) {
-                    const call = peer.call(data.peerId, stream);
+                    const call = peer.call(data.peerId, stream)
                     call.on('stream', (remoteStream) => {
                       if (!refStreamMainCamera.current) {
-                        console.log(remoteStream);
+                        console.log(remoteStream)
                         ref_state_list_accepter.current.push({
                           account_joiner: data.account_joiner,
                           member: member,
                           peerId: data.peerId,
                           stream_id: data.stream_id,
-                        });
+                        })
 
                         refStreamMainCamera.current = {
                           stream: remoteStream,
@@ -389,13 +389,13 @@ function PopUpCallVideo({
                             peerId: data.peerId,
                             stream_id: data.stream_id,
                           },
-                        };
+                        }
                         console.log(
                           `_ACCEPT_JOIN_CALL_VIDEO`,
                           data,
                           refStreamMainCamera,
-                        );
-                        set_state_stream(remoteStream);
+                        )
+                        set_state_stream(remoteStream)
                       } else if (refStreamMainCamera.current) {
                         // console.log(state_subCameras);
 
@@ -416,7 +416,7 @@ function PopUpCallVideo({
                                   : `${data.account_joiner.user_fname} ${data.account_joiner.user_lname}`
                               }`,
                             },
-                          });
+                          })
                           set_state_subCameras(
                             [].concat(
                               refStreamSubCamera.current.map((item, idx) => {
@@ -429,10 +429,10 @@ function PopUpCallVideo({
                                       }
                                     />
                                   </Fragment>
-                                );
+                                )
                               }),
                             ),
-                          );
+                          )
 
                           // set_state_subCameras(
                           //   state_subCameras.concat([
@@ -448,15 +448,15 @@ function PopUpCallVideo({
                           // );
                         }
                       }
-                    });
+                    })
                   }
                 },
-              );
-            });
-          });
+              )
+            })
+          })
       }
     }
-  }, [state_subCameras, state_stream, state_list_accepter]);
+  }, [state_subCameras, state_stream, state_list_accepter])
   return (
     <div className="container-popupCallVideo" ref={refContainerCallVideo}>
       <div className="main-popupCallVideo">
@@ -499,7 +499,7 @@ function PopUpCallVideo({
                     {/* eslint-disable-next-line react/no-unescaped-entities */}
                     <b>"{joiner.name_chat}" be calling...</b>
                   </div>
-                );
+                )
               })}
             </div>
             <div className="section-infoShortCallVideo">
@@ -516,7 +516,7 @@ function PopUpCallVideo({
                 <ButtonNormal
                   handleClick={() => {
                     // console.log(state_stream);
-                    set_state_isResponse(false);
+                    set_state_isResponse(false)
                     if (isResponse) {
                       // console.log(refStreamSubCamera.current);
                       if (
@@ -525,25 +525,23 @@ function PopUpCallVideo({
                       ) {
                         navigator.mediaDevices
                           .getUserMedia({ video: true, audio: true })
-                          .then((stream) => {
-                            fetch(`${HOST_SERVER}/chat/acceptJoinCallVideo`, {
-                              method: 'POST',
-                              body: JSON.stringify({
-                                peerId: peer._id,
-                                account_caller: account_caller,
-                                idChat,
-                                stream_id: stream.id,
-                              }),
-                              credentials: 'include',
-                              headers: {
-                                'Content-Type': 'application/json',
-                              },
-                            });
+                          .then(async (stream) => {
+                            const body = {
+                              peerId: peer._id,
+                              account_caller: account_caller,
+                              idChat,
+                              stream_id: stream.id,
+                            }
+
+                            await createRequest(
+                              'POST',
+                              '/chat/acceptJoinCallVideo',
+                              { body },
+                            )
                             peer.on('call', (call) => {
                               // set_state_subCameras(state_subCameras.concat([<VideoCamera stream={stream}/>]))
-                              call.answer(stream);
-                              // console.log(stream);
-                              who(stream, call, state_stream);
+                              call.answer(stream)
+                              who(stream, call, state_stream)
 
                               if (state_list_accepter.length == 0) {
                                 // set_state_subCameras(state_subCameras.concat([<Fragment >
@@ -552,7 +550,7 @@ function PopUpCallVideo({
                                 // </Fragment>]))
                               } else {
                                 state_list_accepter.forEach((data) => {
-                                  const call = peer.call(data.peerId, stream);
+                                  const call = peer.call(data.peerId, stream)
                                   call.on('stream', (remoteStream) => {
                                     // console.log(state_subCameras);
                                     set_state_subCameras(
@@ -580,12 +578,12 @@ function PopUpCallVideo({
                                           />
                                         </Fragment>,
                                       ]),
-                                    );
-                                  });
-                                });
+                                    )
+                                  })
+                                })
                               }
-                            });
-                          });
+                            })
+                          })
                       }
                     }
                   }}
@@ -603,13 +601,13 @@ function PopUpCallVideo({
           <div className="sidebarRight-popupCallVideo">
             {state_subCameras.map((subCamera, idx) => {
               // console.log(state_subCameras);
-              return <SubCameraCallVideo subCamera={subCamera} key={idx} />;
+              return <SubCameraCallVideo subCamera={subCamera} key={idx} />
             })}
           </div>
           {!state_isZoomIn ? (
             <div
               onClick={() => {
-                set_state_isZoomIn(!state_isZoomIn);
+                set_state_isZoomIn(!state_isZoomIn)
               }}
               className="btn-zoomInScreenCallVideo"
             >
@@ -618,7 +616,7 @@ function PopUpCallVideo({
           ) : (
             <div
               onClick={() => {
-                set_state_isZoomIn(!state_isZoomIn);
+                set_state_isZoomIn(!state_isZoomIn)
               }}
               className="btn-zoomOutScreenCallVideo"
             >
@@ -628,71 +626,64 @@ function PopUpCallVideo({
         </div>
       </div>
     </div>
-  );
+  )
 }
 function ButtonTurnOffCallVideo({ stream, idChat }) {
-  const [state, dispatch] = useStore();
+  const [state, dispatch] = useStore()
   if (stream) {
     stream.oninactive = () => {
-      console.log('stream running');
+      console.log('stream running')
       stream.getTracks().forEach((track) => {
-        track.stop();
-        track.enabled = false;
-      });
-    };
+        track.stop()
+        track.enabled = false
+      })
+    }
   }
   return (
     <div
       className="btn_turnoffCallVideo"
       onClick={() => {
         if (stream) {
-          var videos = document.querySelectorAll(`video`);
+          var videos = document.querySelectorAll(`video`)
           videos.forEach((video) => {
-            console.log(video.srcObject);
+            console.log(video.srcObject)
             if (video.x && video.srcObject.id == stream.id) {
               video.srcObject.getTracks().forEach((track) => {
-                track.stop();
-              });
-              video.pause();
-              video.src = '';
-              video.srcObject = null;
-              video.remove();
+                track.stop()
+              })
+              video.pause()
+              video.src = ''
+              video.srcObject = null
+              video.remove()
               // window.localStream
             }
-          });
+          })
           // stream.stop();
         }
         // localMediaStream.stop();
-        fetch(`${HOST_SERVER}/chat/leaveCallVideo`, {
-          credentials: 'include',
-          method: 'POST',
-          body: JSON.stringify({
-            idChat,
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        dispatch(delete_popup_call_video(null));
+        const body = { idChat }
+
+        createRequest('POST', '/chat/leaveCallVideo', { body })
+        dispatch(delete_popup_call_video(null))
       }}
     >
       <span>
         <i className="fa-solid fa-phone"></i>
       </span>
     </div>
-  );
+  )
 }
 function VideoCamera({ stream }) {
-  console.log('VideoCamera', stream);
-  var refVideo = useRef(null);
+  console.log('VideoCamera', stream)
+  var refVideo = useRef(null)
   useEffect(() => {
     if (refVideo) {
-      refVideo.current.srcObject = stream;
+      refVideo.current.srcObject = stream
 
-      refVideo.current.play();
+      refVideo.current.play()
     }
-  }, []);
-  return <video ref={refVideo}></video>;
+  }, [])
+  return <video ref={refVideo}></video>
 }
 function MainCameraCallVideo({ stream, data }) {
   // console.log(data);
@@ -701,10 +692,10 @@ function MainCameraCallVideo({ stream, data }) {
       <VideoCamera stream={stream} />
       <ItemOpt children_centerItemOpt={data.nameJoiner} />
     </Fragment>
-  );
+  )
 }
 function SubCameraCallVideo({ subCamera }) {
-  return <div className="item-SubCameraCallVideo">{subCamera}</div>;
+  return <div className="item-SubCameraCallVideo">{subCamera}</div>
 }
 
 PopUpCallVideo.propTypes = {
@@ -716,26 +707,26 @@ PopUpCallVideo.propTypes = {
   account_caller: PropTypes.object,
   membersChat: PropTypes.object,
   idChat: PropTypes.string,
-};
+}
 
 ButtonTurnOffCallVideo.propTypes = {
   stream: PropTypes.object,
   idChat: PropTypes.string.isRequired,
-};
+}
 
 VideoCamera.propTypes = {
   stream: PropTypes.object,
-};
+}
 
 MainCameraCallVideo.propTypes = {
   stream: PropTypes.object,
   data: PropTypes.shape({
     nameJoiner: PropTypes.string.isRequired,
   }).isRequired,
-};
+}
 
 SubCameraCallVideo.propTypes = {
   subCamera: PropTypes.node.isRequired,
-};
-export default PopUpCallVideo;
+}
+export default PopUpCallVideo
 /* eslint-disable no-unused-vars */

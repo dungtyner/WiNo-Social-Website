@@ -1,6 +1,6 @@
-import { default as PopUp } from '../popup';
-import '../popupHeader/PopUpHeader.css';
-import PropTypes from 'prop-types';
+import { default as PopUp } from '../popup'
+import '../popupHeader/PopUpHeader.css'
+import PropTypes from 'prop-types'
 
 /* eslint-disable no-unused-vars */
 function PopUpHeader({
@@ -22,7 +22,7 @@ function PopUpHeader({
         </div>
       </div>
     </PopUp>
-  );
+  )
 }
 PopUpHeader.propTypes = {
   isActive: PropTypes.bool.isRequired,
@@ -32,7 +32,7 @@ PopUpHeader.propTypes = {
   codeLabelPopUP: PropTypes.string,
   workMount: PropTypes.func,
   workUnMount: PropTypes.func,
-};
+}
 
-export default PopUpHeader;
+export default PopUpHeader
 /* eslint-disable no-unused-vars */

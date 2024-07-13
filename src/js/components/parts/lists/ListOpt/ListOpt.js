@@ -3,6 +3,6 @@ function ListOpt() {
     <div className={'container-listOpt'}>
       <div className="main-listOpt"></div>
     </div>
-  );
+  )
 }
-export default ListOpt;
+export default ListOpt

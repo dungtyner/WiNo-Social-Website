@@ -1,14 +1,14 @@
-import React, { useState, useRef } from 'react';
-import './MessageSender.css';
-import { Avatar, Button } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import React, { useState, useRef } from 'react'
+import './MessageSender.css'
+import { Avatar, Button } from '@mui/material'
+import IconButton from '@mui/material/IconButton'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import {
   EmojiEmotions,
   Image,
   PersonAdd,
   VideoCameraBack,
-} from '@mui/icons-material';
+} from '@mui/icons-material'
 import {
   Box,
   ButtonGroup,
@@ -17,54 +17,54 @@ import {
   TextField,
   Typography,
   Input,
-} from '@mui/material';
-import Card from '@mui/material/Card';
-import CloseIcon from '@mui/icons-material/Close';
-import styled from '@emotion/styled';
-import Picker from 'emoji-picker-react';
+} from '@mui/material'
+import Card from '@mui/material/Card'
+import CloseIcon from '@mui/icons-material/Close'
+import styled from '@emotion/styled'
+import Picker from 'emoji-picker-react'
 
 /* eslint-disable no-unused-vars */
 export default function MessageSender() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
   const UserBox = styled(Box)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     gap: '10px',
     marginBottom: '20px',
-  }));
+  }))
 
   // Handle Button select moij
-  const [inputStr, setInputStr] = useState('');
-  const [showPicker, setShowPicker] = useState(false);
+  const [inputStr, setInputStr] = useState('')
+  const [showPicker, setShowPicker] = useState(false)
   const onEmojiClick = (event, emojiObject) => {
     setInputStr((prevInput) => {
-      console.log(emojiObject);
+      console.log(emojiObject)
 
-      return prevInput + emojiObject.emoji;
-    });
+      return prevInput + emojiObject.emoji
+    })
     // setShowPicker(false);
-  };
+  }
 
   // Handle file choose img
-  const [image, setImage] = useState(null);
-  const imageRef = useRef();
+  const [image, setImage] = useState(null)
+  const imageRef = useRef()
   const onImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
-      let img = event.target.files[0];
+      let img = event.target.files[0]
       setImage({
         image: URL.createObjectURL(img),
-      });
+      })
     }
-  };
+  }
 
   // Handle open form tag friend
-  const [tagFriend, setTagFriend] = useState(false);
+  const [tagFriend, setTagFriend] = useState(false)
   const handleTagFriend = () => {
-    setTagFriend(!tagFriend);
+    setTagFriend(!tagFriend)
     document
       .getElementById('card_post_parent')
-      .setAttribute('style', 'display: none');
-  };
+      .setAttribute('style', 'display: none')
+  }
   return (
     <div className="btn-messageSender-showCard-createPost">
       <Card
@@ -81,7 +81,7 @@ export default function MessageSender() {
           <ButtonGroup
             title={'ADD'}
             onClick={(event) => {
-              setOpen(true);
+              setOpen(true)
             }}
             sx={{
               position: 'relative',
@@ -115,7 +115,7 @@ export default function MessageSender() {
             >
               <span
                 onClick={(event) => {
-                  setOpen(null);
+                  setOpen(null)
                 }}
               >
                 <IconButton
@@ -295,6 +295,6 @@ export default function MessageSender() {
         </Card>
       </Card>
     </div>
-  );
+  )
 }
 /* eslint-disable no-unused-vars */

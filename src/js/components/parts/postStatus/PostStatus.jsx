@@ -1,30 +1,30 @@
-import React, { useState } from 'react';
-import './PostStatus.css';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import CardActions from '@mui/material/CardActions';
-import { Checkbox, Input, Box, ButtonGroup } from '@mui/material';
-import { Favorite, FavoriteBorder, EmojiEmotions } from '@mui/icons-material';
-import ShareIcon from '@mui/icons-material/Share';
-import CloseIcon from '@mui/icons-material/Close';
-import SendIcon from '@mui/icons-material/Send';
-import Picker from 'emoji-picker-react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react'
+import './PostStatus.css'
+import Card from '@mui/material/Card'
+import CardHeader from '@mui/material/CardHeader'
+import Avatar from '@mui/material/Avatar'
+import IconButton from '@mui/material/IconButton'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import CardMedia from '@mui/material/CardMedia'
+import CardContent from '@mui/material/CardContent'
+import Typography from '@mui/material/Typography'
+import CardActions from '@mui/material/CardActions'
+import { Checkbox, Input, Box, ButtonGroup } from '@mui/material'
+import { Favorite, FavoriteBorder, EmojiEmotions } from '@mui/icons-material'
+import ShareIcon from '@mui/icons-material/Share'
+import CloseIcon from '@mui/icons-material/Close'
+import SendIcon from '@mui/icons-material/Send'
+import Picker from 'emoji-picker-react'
+import PropTypes from 'prop-types'
 
 function PostStatus({ avatar, title, descr, date, link }) {
-  const [setInputStr] = useState('');
-  const [showPicker, setShowPicker] = useState(false);
+  const [setInputStr] = useState('')
+  const [showPicker, setShowPicker] = useState(false)
   const onEmojiClick = (event, emojiObject) => {
     setInputStr((prevInput) => {
-      return prevInput + emojiObject.emoji;
-    });
-  };
+      return prevInput + emojiObject.emoji
+    })
+  }
 
   return (
     <Card
@@ -116,7 +116,7 @@ function PostStatus({ avatar, title, descr, date, link }) {
         </ButtonGroup>
       </Box>
     </Card>
-  );
+  )
 }
 
 PostStatus.propTypes = {
@@ -125,6 +125,6 @@ PostStatus.propTypes = {
   descr: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   link: PropTypes.string.isRequired,
-};
+}
 
-export default PostStatus;
+export default PostStatus

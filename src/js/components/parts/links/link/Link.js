@@ -1,6 +1,6 @@
-import clsx from 'clsx';
-import LinkStyles from '../link/Link.module.css';
-import PropTypes from 'prop-types';
+import clsx from 'clsx'
+import LinkStyles from '../link/Link.module.css'
+import PropTypes from 'prop-types'
 
 function Link({ isUnderline = false, text }) {
   return (
@@ -14,11 +14,11 @@ function Link({ isUnderline = false, text }) {
         {text}
       </div>
     </div>
-  );
+  )
 }
 Link.propTypes = {
   isUnderline: PropTypes.bool,
   text: PropTypes.string.isRequired,
-};
+}
 
-export default Link;
+export default Link

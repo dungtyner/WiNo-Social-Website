@@ -1,7 +1,7 @@
-import { useEffect, useState, useRef } from 'react';
-import { ContextPopUp } from '../../../store/Context';
-import './Popup_.css';
-import PropTypes from 'prop-types';
+import { useEffect, useState, useRef } from 'react'
+import { ContextPopUp } from '../../../store/Context'
+import './Popup_.css'
+import PropTypes from 'prop-types'
 
 function PopUp_({
   children,
@@ -9,29 +9,29 @@ function PopUp_({
   work_case_unmount = () => {},
   showContainerOutside = false,
 }) {
-  var ref_ = useRef(null);
-  const [active_, setActive_] = useState(true);
+  var ref_ = useRef(null)
+  const [active_, setActive_] = useState(true)
   const handleClickOutSite = (event) => {
     if (ref_.current && !ref_.current.contains(event.target)) {
       setActive_((active_) => {
-        work_case_unmount();
-        return !active_;
-      });
+        work_case_unmount()
+        return !active_
+      })
     }
-  };
+  }
 
   useEffect(() => {
     if (isClickOutside) {
       document.addEventListener('mousedown', (event) => {
-        handleClickOutSite(event);
-      });
+        handleClickOutSite(event)
+      })
       return () => {
         document.removeEventListener('mousedown', (event) => {
-          handleClickOutSite(event);
-        });
-      };
+          handleClickOutSite(event)
+        })
+      }
     }
-  }, [ref_]);
+  }, [ref_])
   return active_ ? (
     <ContextPopUp.Provider value={{ active_, setActive_, work_case_unmount }}>
       <div
@@ -44,7 +44,7 @@ function PopUp_({
     </ContextPopUp.Provider>
   ) : (
     ''
-  );
+  )
 }
 
 PopUp_.propTypes = {
@@ -52,6 +52,6 @@ PopUp_.propTypes = {
   isClickOutside: PropTypes.bool,
   work_case_unmount: PropTypes.func,
   showContainerOutside: PropTypes.bool,
-};
+}
 
-export default PopUp_;
+export default PopUp_

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import './Home.css';
-import StoryReel from './story/StoryReel';
+import React, { useState, useEffect } from 'react'
+import './Home.css'
+import StoryReel from './story/StoryReel'
 import {
   EmojiEmotions,
   Image,
@@ -8,7 +8,7 @@ import {
   VideoCameraBack,
   Favorite,
   FavoriteBorder,
-} from '@mui/icons-material';
+} from '@mui/icons-material'
 import {
   ButtonGroup,
   Chip,
@@ -21,258 +21,223 @@ import {
   Typography,
   Input,
   Box,
-} from '@mui/material';
+} from '@mui/material'
 import {
   Card,
   CardHeader,
   CardMedia,
   CardContent,
   CardActions,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import SendIcon from '@mui/icons-material/Send';
-import styled from '@emotion/styled';
-import Picker from 'emoji-picker-react';
-import queryString from 'query-string';
-import { Link } from 'react-router-dom';
-import { storage } from '../../../config/firebase';
-import { format } from 'timeago.js';
-import { useStore } from '../../../store';
-import Users_Home from '../../../API/Users_Home';
-import Like from '../../../API/Like';
-import { HOST_SERVER } from '../../../config';
-import PropTypes from 'prop-types';
+} from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import SendIcon from '@mui/icons-material/Send'
+import styled from '@emotion/styled'
+import Picker from 'emoji-picker-react'
+import queryString from 'query-string'
+import { Link } from 'react-router-dom'
+import { storage } from '../../../config/firebase'
+import { format } from 'timeago.js'
+import { useStore } from '../../../store'
+import UsersHome from '../../../API/UsersHome'
+import Like from '../../../API/Like'
+import PropTypes from 'prop-types'
+import { createRequest } from '../../../utilities/requests'
 
 /* eslint-disable no-unused-vars */
 export default function Home({ avatar_account, full_name, data_account }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
   const UserBox = styled(Box)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     gap: '10px',
     marginBottom: '20px',
-  }));
+  }))
 
-  // Handle Button select moij
-
-  const [showPicker, setShowPicker] = useState(false);
-  const [send, set_Send] = useState('');
+  const [showPicker, setShowPicker] = useState(false)
+  const [send, set_Send] = useState('')
   const onEmojiClick = (event, emojiObject) => {
     set_Send((prevInput) => {
-      console.log(emojiObject);
-
-      return prevInput + emojiObject.emoji;
-    });
+      return prevInput + emojiObject.emoji
+    })
     // setShowPicker(false);
-  };
-  // Hàm này dùng để nhận dữ liệu khi gõ phím
+  }
   const handleSend = (e) => {
-    set_Send(e.target.value);
-  };
+    set_Send(e.target.value)
+  }
 
-  // Handle file choose img
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState(null)
   const handler_Change_Image = (e) => {
     if (e.target.files && e.target.files[0]) {
-      var reader = new FileReader();
+      var reader = new FileReader()
       reader.onload = function (e) {
-        var show_image = document.getElementById('show_image_status');
-        show_image.setAttribute('src', e.target.result);
-      };
+        var show_image = document.getElementById('show_image_status')
+        show_image.setAttribute('src', e.target.result)
+      }
 
-      reader.readAsDataURL(e.target.files[0]);
-      setImage(e.target.files[0]);
+      reader.readAsDataURL(e.target.files[0])
+      setImage(e.target.files[0])
     }
     // document.getElementById('group_get_image').setAttribute('style', 'display: block')
-  };
+  }
 
-  // Hàm này dùng để hiện thị mở file vì input đã display none
   const show_upload = () => {
-    document.getElementById('file_upload_id').click();
-  };
+    document.getElementById('file_upload_id').click()
+  }
 
-  // Hàm này dùng để upload file lên google cloud
   const handler_post_status = () => {
-    // Dòng này dùng để upload
-    document.body.style.overflow = 'auto';
-    const uploadTask = storage.ref(`social/${image.name}`).put(image);
+    document.body.style.overflow = 'auto'
+    const uploadTask = storage.ref(`social/${image.name}`).put(image)
     uploadTask.on(
       'state_changed',
       (snapshot) => {},
       (error) => {
-        console.log(error);
+        console.log(error)
       },
       async () => {
-        // Phần này dùng để lấy url
         await storage
           .ref('social')
           .child(image.name)
           .getDownloadURL()
           .then((url) => {
-            // Bắt đầu gọi API để xử lý dữ liệu dưới database
             const post_status_data = async () => {
-              const params = {
+              const query = {
                 id_user: data_account._id,
                 title: send,
                 image_body: url,
-              };
+              }
+              await UsersHome.postStatusUser(query)
+              set_reload(true)
+            }
 
-              const query = '?' + queryString.stringify(params);
+            post_status_data()
 
-              // console.log('Loaded');
-              await Users_Home.post_Status_User(query);
-              set_reload(true);
-            };
-
-            post_status_data();
-
-            set_Send('');
-
-            // Thay đổi state để gọi là hàm useEffect
-          });
+            set_Send('')
+          })
       },
-    );
-    alert('Story Upload');
+    )
+    alert('Story Upload')
 
     document
       .getElementById('card_post_parent')
-      .setAttribute('style', 'display: none');
-  };
+      .setAttribute('style', 'display: none')
+  }
 
   // -----------------------PHAN HOME-----------------------------//
 
-  const [list_post_home, set_list_post_home] = useState([]);
-  const [state, dispatch] = useStore();
-  const [reload, set_reload] = useState(false);
+  const [list_post_home, set_list_post_home] = useState([])
+  const [state, dispatch] = useStore()
+  const [reload, set_reload] = useState(false)
 
   // Hàm này dùng để load bài viết ở trang home lan dau tien
-  useEffect(() => {
+  useEffect(async () => {
     const fetchData = async () => {
-      const params = {
+      const query = {
         id_user: data_account._id,
-      };
+      }
 
-      const query = '?' + queryString.stringify(params);
+      const response = await UsersHome.getUsersHome(query)
 
-      const response = await Users_Home.get_Users_Home(query);
-
-      const reverse_data = response.reverse();
+      const reverse_data = response.reverse()
       //  console.log(response.reverse());
-      const data = status_like(reverse_data);
+      const data = status_like(reverse_data)
       // set_list_post_home(data);
-    };
-    fetchData();
+    }
+    fetchData()
 
-    const fetchAPI = () => {
-      // console.log(data_account.slug_friends);
-      // console.log(data_account);
-      fetch(`${HOST_SERVER}/friend/posts`, {
-        method: 'POST',
-        body: JSON.stringify({
-          slug_friends: data_account.list_slug_friend,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
+    const fetchAPI = async () => {
+      const body = {
+        slug_friends: data_account.list_slug_friend,
+      }
+
+      const data = await createRequest('POST', '/friend/posts', { body })
+
+      data.result.map((postFriend) => {
+        set_list_post_home(list_post_home.concat(postFriend.reverse()))
       })
-        .then((res) => res.text())
-        .then((dataJSon) => {
-          var data = JSON.parse(dataJSon);
-          // console.log(data.result.reverse());
-          data.result.map((postFriend) => {
-            set_list_post_home(list_post_home.concat(postFriend.reverse()));
-          });
-        });
-    };
-    fetchAPI();
-  }, []);
+    }
+    await fetchAPI()
+  }, [])
 
   // Hàm này dùng để load bài viết ở trang home phụ thuộc vào state reload
   useEffect(() => {
     if (reload) {
       const fetchData = async () => {
-        const params = {
+        const query = {
           id_user: data_account._id,
-        };
+        }
 
-        const query = '?' + queryString.stringify(params);
+        const response = await UsersHome.getUsersHome(query)
 
-        const response = await Users_Home.get_Users_Home(query);
-
-        const reverse_data = response.reverse();
-        console.log(reverse_data);
-        set_list_post_home(reverse_data);
-        set_reload(false);
-      };
-      fetchData();
+        const reverse_data = response.reverse()
+        set_list_post_home(reverse_data)
+        set_reload(false)
+      }
+      fetchData()
     }
-  }, [reload]);
+  }, [reload])
 
   function status_like(data) {
-    let array_new = [];
+    let array_new = []
     for (let i = 0; i < data.length; i++) {
-      console.log(data);
+      console.log(data)
       if (!data[i].status_like) {
-        array_new.push(data[i]);
+        array_new.push(data[i])
       }
     }
-    return array_new;
+    return array_new
   }
 
   //---- Phần này dùng để show modal khi user bấm kiểm tra số lượng người like ----//
 
-  const [id_image_post, set_id_image_post] = useState('');
+  const [id_image_post, set_id_image_post] = useState('')
 
-  const [load_modal, set_load_modal] = useState(false);
+  const [load_modal, set_load_modal] = useState(false)
 
-  const [users_like, set_users_like] = useState([]);
+  const [users_like, set_users_like] = useState([])
 
   // Lấy id_image_post khi bấm vào xem like của bài viết
   const GET_id_image_post = (value) => {
-    set_id_image_post(value);
+    set_id_image_post(value)
 
-    set_load_modal(true); // khởi động load dữ liệu ra modal
-  };
+    set_load_modal(true) // khởi động load dữ liệu ra modal
+  }
 
   useEffect(() => {
     if (load_modal) {
       const fetchData = async () => {
-        const params = {
+        const query = {
           id_image_post: id_image_post,
-        };
+        }
 
-        const query = '?' + queryString.stringify(params);
+        const response = await Like.countLike(query)
 
-        const response = await Like.count_like(query);
+        set_users_like(response)
+      }
 
-        set_users_like(response);
-      };
-
-      fetchData();
+      fetchData()
     }
-  }, [load_modal]);
+  }, [load_modal])
 
   // ------- Phần này dùng để lấy dữ liệu của chính user
-  const [user, set_user] = useState({});
+  const [user, set_user] = useState({})
 
   useEffect(() => {
     const fetchData = async () => {
       const params = {
         id_user: data_account._id,
-      };
+      }
 
-      const query = '?' + queryString.stringify(params);
+      const query = '?' + queryString.stringify(params)
 
       // const response = await AccountAPI.getId(query);
       // console.log(response)
 
       // set_user(response)
-    };
+    }
 
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   // // State data của comment
   // const [comments, set_comments] = useState([])
@@ -285,7 +250,7 @@ export default function Home({ avatar_account, full_name, data_account }) {
 
   //         const fetchData = async () => {
 
-  //             const response = await Comment.get_all_comment(state.comments.id_image_post)
+  //             const response = await Comment.getAllComment(state.comments.id_image_post)
   //             console.log(response)
 
   //             set_comments(response)
@@ -300,11 +265,11 @@ export default function Home({ avatar_account, full_name, data_account }) {
 
   // }, [load_comment])
 
-  const [tagFriend, setTagFriend] = useState(false);
+  const [tagFriend, setTagFriend] = useState(false)
   const handleTagFriend = () => {
-    setTagFriend(!tagFriend);
+    setTagFriend(!tagFriend)
     //document.getElementById("card_post_parent").setAttribute("style", "display: none");
-  };
+  }
 
   return (
     <div className="home">
@@ -329,7 +294,7 @@ export default function Home({ avatar_account, full_name, data_account }) {
             <Chip
               title={'ADD'}
               onClick={(event) => {
-                setOpen(true);
+                setOpen(true)
               }}
               sx={{
                 marginLeft: '10px',
@@ -364,7 +329,7 @@ export default function Home({ avatar_account, full_name, data_account }) {
             >
               <span
                 onClick={(event) => {
-                  setOpen(false);
+                  setOpen(false)
                 }}
               >
                 <IconButton
@@ -478,84 +443,71 @@ export default function Home({ avatar_account, full_name, data_account }) {
           {list_post_home &&
             list_post_home.map((value) => {
               // console.log(value);
-              return <ItemPostHome key={value._id} dataPost={value} />;
+              return <ItemPostHome key={value._id} dataPost={value} />
             })}
         </div>
       </Box>
     </div>
-  );
+  )
 }
 function ItemPostHome({ dataPost }) {
-  const [state, dispatch] = useStore();
-  const [send, set_Send] = useState('');
-  const [showPickerComment, setShowPickerComment] = useState(false);
-  const [state_status_like, set_status_like] = useState(dataPost.status_like);
+  const [state, dispatch] = useStore()
+  const [send, set_Send] = useState('')
+  const [showPickerComment, setShowPickerComment] = useState(false)
+  const [state_status_like, set_status_like] = useState(dataPost.status_like)
   const onEmojiClick = (event, emojiObject) => {
     set_Send((prevInput) => {
-      console.log(emojiObject);
+      console.log(emojiObject)
 
-      return prevInput + emojiObject.emoji;
-    });
+      return prevInput + emojiObject.emoji
+    })
     // setShowPicker(false);
-  };
+  }
   const handler_Click_Untym = (id_image_post, id_user_following) => {
     const fetchData = async () => {
       // delete dữ liệu Database Like
-      const params = {
+      const query = {
         // id_user: state.account._id,
         id_image_post: id_image_post,
-      };
+      }
 
-      const query = '?' + queryString.stringify(params);
+      const response = await Like.putUnlike(query)
+    }
 
-      const response = await Like.put_unlike(query);
-      console.log(response);
-    };
-
-    fetchData();
+    fetchData()
 
     let id_temp_following =
-      id_user_following === '' ? state.account._id : id_user_following;
+      id_user_following === '' ? state.account._id : id_user_following
 
-    console.log(id_temp_following);
+    console.log(id_temp_following)
 
     const deleteData = async () => {
-      const params = {
+      const query = {
         id_user: id_temp_following,
         id_user_another: state.account._id,
-      };
+      }
 
-      console.log(params);
+      await Favorite.deleteFavorite(query)
+    }
 
-      const query = '?' + queryString.stringify(params);
-
-      console.log(query);
-
-      // const response = await Favorite.delete_Favorite(query)
-      // console.log(response)
-    };
-
-    deleteData();
-    set_status_like(false);
+    deleteData()
+    set_status_like(false)
 
     // set_reload(true)
-  };
+  }
   const handler_Click_Tym = (id_image_post, id_user_following, image_body) => {
     const fetchData = async () => {
-      // Thêm dữ liệu vào Database Like
-      const params = {
+      const query = {
         id_user: state.account._id,
         id_image_post: id_image_post,
-      };
+      }
 
-      const query = '?' + queryString.stringify(params);
+      const response = await Like.postLike(query)
+    }
+    fetchData()
 
-      const response = await Like.post_like(query);
-    };
-    fetchData();
-
-    set_status_like(true);
-  };
+    set_status_like(true)
+  }
 
   return (
     <div className="box_poster_details">
@@ -739,17 +691,17 @@ function ItemPostHome({ dataPost }) {
         </div>
       </Card>
     </div>
-  );
+  )
 }
 
 Home.propTypes = {
   avatar_account: PropTypes.string.isRequired,
   full_name: PropTypes.string.isRequired,
   data_account: PropTypes.object.isRequired,
-};
+}
 
 ItemPostHome.propTypes = {
   dataPost: PropTypes.object.isRequired,
-};
+}
 
 /* eslint-disable no-unused-vars */

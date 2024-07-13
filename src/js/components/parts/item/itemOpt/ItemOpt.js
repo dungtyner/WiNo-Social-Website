@@ -1,13 +1,13 @@
-import { useStore } from '../../../../store/hooks';
-import ItemOptStyles from '../itemOpt/ItemOpt.module.css';
-import PropTypes from 'prop-types';
+import { useStore } from '../../../../store/hooks'
+import ItemOptStyles from '../itemOpt/ItemOpt.module.css'
+import PropTypes from 'prop-types'
 
 export const constant_ItemOpt = {
   TYPE_ITEM_OPT: {
     NORMAL: 'NORMAL',
     CONFIRM: 'CONFIRM',
   },
-};
+}
 /* eslint-disable no-unused-vars */
 function ItemOpt({
   TYPE_ITEM_OPT = constant_ItemOpt.TYPE_ITEM_OPT.NORMAL,
@@ -17,12 +17,12 @@ function ItemOpt({
   component_Sub,
   handleClick = () => {},
 }) {
-  const [state, dispatch] = useStore();
+  const [state, dispatch] = useStore()
   return (
     <div
       className={ItemOptStyles['container-itemOpt']}
       onClick={(event) => {
-        handleClick(event, state);
+        handleClick(event, state)
       }}
     >
       <div className={ItemOptStyles['main-itemOpt']}>
@@ -61,7 +61,7 @@ function ItemOpt({
         )}
       </div>
     </div>
-  );
+  )
 }
 
 ItemOpt.propTypes = {
@@ -71,7 +71,7 @@ ItemOpt.propTypes = {
   component_Right: PropTypes.node.isRequired,
   component_Sub: PropTypes.node.isRequired,
   handleClick: PropTypes.func,
-};
+}
 
-export default ItemOpt;
+export default ItemOpt
 /* eslint-disable no-unused-vars */

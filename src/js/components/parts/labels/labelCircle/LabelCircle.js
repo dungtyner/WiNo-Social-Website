@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import LabelCircleStyles from '../labelCircle/LabelCircle.module.css';
-import { createContext } from 'react';
-import { Icon_Close } from '../../icons/fontAwesome/FontAwesome';
-import { SIZE_TINY } from '../../../../store/constants';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react'
+import LabelCircleStyles from '../labelCircle/LabelCircle.module.css'
+import { createContext } from 'react'
+import { Icon_Close } from '../../icons/fontAwesome/FontAwesome'
+import { SIZE_TINY } from '../../../../store/constants'
+import PropTypes from 'prop-types'
 
-export const CreateContext = createContext();
+export const CreateContext = createContext()
 function Tmp_add_popup_content(component_PopUp) {
-  return <CreateContext.Provider>{component_PopUp}</CreateContext.Provider>;
+  return <CreateContext.Provider>{component_PopUp}</CreateContext.Provider>
 }
 function LabelCircle({
   urlImg,
@@ -20,17 +20,17 @@ function LabelCircle({
   handleRemove,
   handleClick = () => {},
 }) {
-  const [isChecked, setChecked] = useState(false);
-  const [isHover, setHover] = useState(false);
+  const [isChecked, setChecked] = useState(false)
+  const [isHover, setHover] = useState(false)
 
   return (
     <div
       className={LabelCircleStyles['container-labelCircle']}
       onMouseOver={() => {
-        setHover(true);
+        setHover(true)
       }}
       onMouseOut={() => {
-        setHover(false);
+        setHover(false)
       }}
     >
       <div
@@ -41,7 +41,7 @@ function LabelCircle({
           LabelCircleStyles[sizeLabel],
         ].join(' ')}
         onClick={(event) => {
-          handleClick(event, isChecked, setChecked, Tmp_add_popup_content);
+          handleClick(event, isChecked, setChecked, Tmp_add_popup_content)
         }}
       >
         {urlImg ? (
@@ -106,7 +106,7 @@ function LabelCircle({
               }}
               /* eslint-disable no-unused-vars */
               onClick={(event) => {
-                handleRemove();
+                handleRemove()
               }}
               /* eslint-disable no-unused-vars */
             >
@@ -134,7 +134,7 @@ function LabelCircle({
         )}
       </div>
     </div>
-  );
+  )
 }
 
 LabelCircle.propTypes = {
@@ -147,6 +147,6 @@ LabelCircle.propTypes = {
   styles: PropTypes.object,
   handleRemove: PropTypes.func.isRequired,
   handleClick: PropTypes.func,
-};
+}
 
-export default LabelCircle;
+export default LabelCircle

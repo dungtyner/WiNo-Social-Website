@@ -1,37 +1,37 @@
-import { useEffect, useState, Fragment } from 'react';
-import './PopupNotificationHeader.css';
-import PopUpHeader from '../PopUpHeader';
-import ItemOpt from '../../../../parts/item/itemOpt/ItemOpt';
-import LabelCircle from '../../../../parts/labels/labelCircle/LabelCircle';
-import HeaderSpaceBetween from '../../../../parts/subHeaders/headerSpaceBetween/HeaderSpaceBetween';
-import ButtonNormal from '../../../../parts/buttons/buttonNormal/ButtonNormal';
-import { Icon_Circle } from '../../../../parts/icons/fontAwesome/FontAwesome';
-import { Link } from 'react-router-dom';
-import { useStore } from '../../../../../store';
-import { set_url } from '../../../../../store/actions';
+import { useEffect, useState, Fragment } from 'react'
+import './PopupNotificationHeader.css'
+import PopUpHeader from '../PopUpHeader'
+import ItemOpt from '../../../../parts/item/itemOpt/ItemOpt'
+import LabelCircle from '../../../../parts/labels/labelCircle/LabelCircle'
+import HeaderSpaceBetween from '../../../../parts/subHeaders/headerSpaceBetween/HeaderSpaceBetween'
+import ButtonNormal from '../../../../parts/buttons/buttonNormal/ButtonNormal'
+import { Icon_Circle } from '../../../../parts/icons/fontAwesome/FontAwesome'
+import { Link } from 'react-router-dom'
+import { useStore } from '../../../../../store'
+import { set_url } from '../../../../../store/actions'
 import {
   dateTo_textAgo,
   req_acceptAddNewFriend,
   req_refuse_requestAddFriend,
-} from '../../../../../store/functions';
-import PropTypes from 'prop-types';
+} from '../../../../../store/functions'
+import PropTypes from 'prop-types'
 
 /* eslint-disable no-unused-vars */
 function PopupNotificationHeader({ dataNotification }) {
-  console.log('PopupNotificationHeader() render');
-  const [state, dispatch] = useStore();
+  console.log('PopupNotificationHeader() render')
+  const [state, dispatch] = useStore()
   const [state_dataNotification, set_state_dataNotification] =
-    useState(dataNotification);
+    useState(dataNotification)
   useEffect(() => {
     state.socket.on(
       `${state.account.slug_personal}_UPDATE_NOTIFICATION`,
       (data_account) => {
-        console.log(`${state.account.slug_personal}_UPDATE_NOTIFICATION`);
-        set_state_dataNotification(data_account.notification);
-        state.socket.off(`${state.account.slug_personal}_UPDATE_NOTIFICATION`);
+        console.log(`${state.account.slug_personal}_UPDATE_NOTIFICATION`)
+        set_state_dataNotification(data_account.notification)
+        state.socket.off(`${state.account.slug_personal}_UPDATE_NOTIFICATION`)
       },
-    );
-  }, [state_dataNotification]);
+    )
+  }, [state_dataNotification])
 
   return (
     <PopUpHeader
@@ -42,7 +42,7 @@ function PopupNotificationHeader({ dataNotification }) {
             bodyLeft={<h1>Notification</h1>}
             bodyRight={[<i key={1} className="fa-solid fa-ellipsis"></i>].map(
               (el, idx) => {
-                return <LabelCircle key={idx} el_Icon={el} />;
+                return <LabelCircle key={idx} el_Icon={el} />
               },
             )}
           />
@@ -68,16 +68,16 @@ function PopupNotificationHeader({ dataNotification }) {
         </Fragment>
       }
     />
-  );
+  )
 }
 export function Notification({
   time_notification,
   value_notification,
   isSeen = false,
 }) {
-  this.time_notification = time_notification;
-  this.value_notification = value_notification;
-  this.isSeen = isSeen;
+  this.time_notification = time_notification
+  this.value_notification = value_notification
+  this.isSeen = isSeen
 }
 export function ResponseNewFriend({
   name_friend,
@@ -85,11 +85,11 @@ export function ResponseNewFriend({
   count_mutual_friend,
   avatar_friend,
 } = {}) {
-  this.name_friend = name_friend;
-  this.slug_friend = slug_friend;
-  this.count_mutual_friend = count_mutual_friend;
-  this.avatar_friend = avatar_friend;
-  this.typeNotification = 'ResponseNewFriend';
+  this.name_friend = name_friend
+  this.slug_friend = slug_friend
+  this.count_mutual_friend = count_mutual_friend
+  this.avatar_friend = avatar_friend
+  this.typeNotification = 'ResponseNewFriend'
 }
 function NotificationResponseNewFriend({
   dataNotification,
@@ -108,7 +108,7 @@ function NotificationResponseNewFriend({
                 onClick={(event) => {
                   dispatch(
                     set_url(`/account/${item.data_requester.slug_personal}`),
-                  );
+                  )
                 }}
                 to={`/account/${item.data_requester.slug_personal}`}
               >
@@ -135,12 +135,9 @@ function NotificationResponseNewFriend({
                 >
                   <ButtonNormal
                     handleClick={() => {
-                      req_acceptAddNewFriend(item.data_requester);
-                      dataNotification.friend.response_new_friend.splice(
-                        idx,
-                        1,
-                      );
-                      set_state_dataNotification(dataNotification);
+                      req_acceptAddNewFriend(item.data_requester)
+                      dataNotification.friend.response_new_friend.splice(idx, 1)
+                      set_state_dataNotification(dataNotification)
                     }}
                     isNo={false}
                     textBtn={'Accept'}
@@ -149,14 +146,11 @@ function NotificationResponseNewFriend({
                     isNo={true}
                     textBtn={'Refuse'}
                     handleClick={() => {
-                      req_refuse_requestAddFriend(item.data_requester);
-                      dataNotification.friend.response_new_friend.splice(
-                        idx,
-                        1,
-                      );
+                      req_refuse_requestAddFriend(item.data_requester)
+                      dataNotification.friend.response_new_friend.splice(idx, 1)
                       set_state_dataNotification(
                         Object.assign({}, dataNotification),
-                      );
+                      )
                     }}
                   />
                 </div>
@@ -164,10 +158,10 @@ function NotificationResponseNewFriend({
             }
             key={idx}
           />
-        );
+        )
       })}
     </>
-  );
+  )
 }
 function NotificationAcceptFriend({ dataNotification, state, dispatch }) {
   return (
@@ -181,7 +175,7 @@ function NotificationAcceptFriend({ dataNotification, state, dispatch }) {
                 onClick={(event) => {
                   dispatch(
                     set_url(`/account/${item.data_accepter.slug_personal}`),
-                  );
+                  )
                 }}
                 to={`/account/${item.data_accepter.slug_personal}`}
               >
@@ -203,10 +197,10 @@ function NotificationAcceptFriend({ dataNotification, state, dispatch }) {
             component_Right={item.isSeen ? '' : <Icon_Circle />}
             key={idx}
           />
-        );
+        )
       })}
     </>
-  );
+  )
 }
 
 PopupNotificationHeader.propTypes = {
@@ -238,7 +232,7 @@ PopupNotificationHeader.propTypes = {
       ).isRequired,
     }).isRequired,
   }).isRequired,
-};
+}
 
 NotificationResponseNewFriend.propTypes = {
   dataNotification: PropTypes.shape({
@@ -258,14 +252,14 @@ NotificationResponseNewFriend.propTypes = {
     }).isRequired,
   }).isRequired,
   setStateDataNotification: PropTypes.func.isRequired,
-};
+}
 
 NotificationResponseNewFriend.propTypes = {
   dataNotification: PropTypes.object.isRequired,
   state: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
   set_state_dataNotification: PropTypes.func.isRequired,
-};
+}
 
 NotificationAcceptFriend.propTypes = {
   dataNotification: PropTypes.shape({
@@ -286,7 +280,7 @@ NotificationAcceptFriend.propTypes = {
   }).isRequired,
   state: PropTypes.object.isRequired, // adjust the shape as per your actual state object
   dispatch: PropTypes.func.isRequired,
-};
+}
 
-export default PopupNotificationHeader;
+export default PopupNotificationHeader
 /* eslint-disable no-unused-vars */

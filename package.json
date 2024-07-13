@@ -9,9 +9,6 @@
         "@giphy/react-components": "^6.2.0",
         "@mui/icons-material": "^5.10.9",
         "@mui/material": "^5.10.11",
-        "@testing-library/jest-dom": "^5.16.5",
-        "@testing-library/react": "^13.4.0",
-        "@testing-library/user-event": "^13.5.0",
         "axios": "^1.1.3",
         "clsx": "^1.2.1",
         "date-fns": "^2.29.3",
@@ -33,7 +30,7 @@
     },
     "scripts": {
         "postinstall": "bash ./scripts/postinstall.sh",
-        "build": "npm run postinstall && react-scripts build",
+        "build": "npm run postinstall && react-scripts build  --no-cache",
         "start": "npm run postinstall && react-scripts start",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
@@ -60,6 +57,9 @@
         ]
     },
     "devDependencies": {
+        "@testing-library/jest-dom": "^5.16.5",
+        "@testing-library/react": "^13.4.0",
+        "@testing-library/user-event": "^13.5.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-prettier": "^5.1.3",
         "eslint-plugin-react": "^7.34.3",

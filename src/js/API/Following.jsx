@@ -1,22 +1,19 @@
-import { HOST_SERVER } from '../config';
+import { createRequest } from '../utilities/requests'
 const Following = {
-  get_following: async (id) => {
-    const url = `${HOST_SERVER}/following/${id}`;
-    var data = await fetch(url, { method: 'GET' }).then((res) => res.json());
-    return data;
+  getFollowing: async (id) => {
+    const path = '/following/:id'
+    return await createRequest('GET', path, { query: { id } })
   },
 
-  get_status_following: async (query) => {
-    const url = `${HOST_SERVER}/following/${query}`;
-    var data = await fetch(url, { method: 'GET' }).then((res) => res.json());
-    return data;
+  getStatusFollowing: async (query) => {
+    const path = '/following'
+    return await createRequest('GET', path, { query })
   },
 
-  post_status_following: async (query) => {
-    const url = `${HOST_SERVER}/following/${query}`;
-    var data = await fetch(url, { method: 'POST' }).then((res) => res.json());
-    return data;
+  postStatusFollowing: async (query) => {
+    const path = '/following'
+    return await createRequest('POST', path, { query })
   },
-};
+}
 
-export default Following;
+export default Following

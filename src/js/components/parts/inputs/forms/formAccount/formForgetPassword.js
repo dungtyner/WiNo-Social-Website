@@ -1,31 +1,20 @@
-import React, { useState } from 'react';
-import { HOST_SERVER } from '../../../../../config';
-import LogoWebsite from '../../../../logo/logoWebsite/LogoWebsite';
-import FormAccount from '../formAccount/FormAccount.module.scss';
+import React, { useState } from 'react'
+import LogoWebsite from '../../../../logo/logoWebsite/LogoWebsite'
+import FormAccount from '../formAccount/FormAccount.module.scss'
+import { createRequest } from '../../../../../utilities/requests'
 function RestorePass() {
-  const [gmail, setGmail] = useState('');
-  const [password, setPassword] = useState('');
-  const handleRestorePass = function (e) {
-    e.preventDefault();
-    fetch(HOST_SERVER + '/account/restore-pass', {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        password,
-        gmail,
-      }),
-      credentials: 'include',
-    }).then((res) => {
-      res.text().then((text) => {
-        if ('ok' === JSON.parse(text).mess) {
-          window.location.href = '/CheckCodeEmail';
-        }
-      });
-    });
-  };
+  const [gmail, setGmail] = useState('')
+  const [password, setPassword] = useState('')
+  const handleRestorePass = async function (e) {
+    e.preventDefault()
+    const res = await createRequest('POST', '/account/restore-pass', {
+      body: { password, gmail },
+    })
+
+    if ('ok' === res.mess) {
+      window.location.href = '/CheckCodeEmail'
+    }
+  }
   return (
     <div className={FormAccount.wrapper}>
       {/* <img src="https://toptechmakers.com/wp-content/uploads/2022/04/social-media-marketing-services.png" alt=""></img> */}
@@ -41,7 +30,7 @@ function RestorePass() {
               name="email"
               placeholder="Enter email address"
               onChange={(e) => {
-                setGmail(e.currentTarget.value);
+                setGmail(e.currentTarget.value)
               }}
             />
           </div>
@@ -53,7 +42,7 @@ function RestorePass() {
               name="password"
               placeholder="Enter new password"
               onChange={(e) => {
-                setPassword(e.currentTarget.value);
+                setPassword(e.currentTarget.value)
               }}
             />
             {/* <VisibilityIcon/> */}
@@ -68,7 +57,7 @@ function RestorePass() {
     </Routes> */}
       </section>
     </div>
-  );
+  )
 }
 
-export default RestorePass;
+export default RestorePass

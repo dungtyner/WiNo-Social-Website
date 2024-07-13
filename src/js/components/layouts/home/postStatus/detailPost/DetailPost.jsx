@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import './DetailPost.css';
-import { useParams } from 'react-router';
-import { Link } from 'react-router-dom';
-import queryString from 'query-string';
-import Users_Activity from '../../../../../API/Users_Activity';
-import Like from '../../../../../API/Like';
-import Comment from '../../../../../API/Comment';
+import React, { useEffect, useState } from 'react'
+import './DetailPost.css'
+import { useParams } from 'react-router'
+import { Link } from 'react-router-dom'
+import Users_Activity from '../../../../../API/UsersActivity'
+import Like from '../../../../../API/Like'
+import Comment from '../../../../../API/Comment'
 import {
   ButtonGroup,
   Modal,
@@ -15,103 +14,96 @@ import {
   Typography,
   Input,
   Box,
-} from '@mui/material';
-import { Navigate } from 'react-router-dom';
-import { useStore } from '../../../../../store';
-import { Card, CardHeader, CardMedia } from '@mui/material';
-import { EmojiEmotions, Favorite, FavoriteBorder } from '@mui/icons-material';
-import CloseIcon from '@mui/icons-material/Close';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import SendIcon from '@mui/icons-material/Send';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import Picker from 'emoji-picker-react';
+} from '@mui/material'
+import { Navigate } from 'react-router-dom'
+import { useStore } from '../../../../../store'
+import { Card, CardHeader, CardMedia } from '@mui/material'
+import { EmojiEmotions, Favorite, FavoriteBorder } from '@mui/icons-material'
+import CloseIcon from '@mui/icons-material/Close'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import SendIcon from '@mui/icons-material/Send'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import Picker from 'emoji-picker-react'
 // import io from "socket.io-client";
 // const socket = io("http://localhost:5001");
 
 /* eslint-disable no-unused-vars */
 function DetailPost() {
-  const [open, setOpen] = useState(false);
-  const [openLiker, setOpenLiker] = useState(false);
-  const { id } = useParams();
+  const [open, setOpen] = useState(false)
+  const [openLiker, setOpenLiker] = useState(false)
+  const { id } = useParams()
 
-  const id_slit = id.split('_');
+  const id_slit = id.split('_')
 
-  const [id_image_post, set_id_image_post] = useState(id_slit[0]);
+  const [id_image_post, set_id_image_post] = useState(id_slit[0])
 
-  const [id_user_post, set_id_user_post] = useState(id_slit[1]);
+  const [id_user_post, set_id_user_post] = useState(id_slit[1])
 
-  const [post, set_post] = useState({});
+  const [post, set_post] = useState({})
 
-  const [reload_post, set_reload_post] = useState(true);
+  const [reload_post, set_reload_post] = useState(true)
 
-  const [showPickerComment, setShowPickerComment] = useState(false);
+  const [showPickerComment, setShowPickerComment] = useState(false)
   // State send cua input
-  const [send, set_send] = useState('');
+  const [send, set_send] = useState('')
   const onEmojiClick = (event, emojiObject) => {
     set_send((prevInput) => {
-      console.log(emojiObject);
+      console.log(emojiObject)
 
-      return prevInput + emojiObject.emoji;
-    });
+      return prevInput + emojiObject.emoji
+    })
     // setShowPicker(false);
-  };
+  }
   // Hàm này dùng để load ra bài viết
   useEffect(() => {
     if (reload_post) {
-      const params = {
+      const query = {
         // id_user_post: id_user_post,
         id_image_post: id_image_post,
-      };
-
-      const query = '?' + queryString.stringify(params);
-
-      console.log(query);
+      }
 
       const fetchData = async () => {
-        const response = await Users_Activity.detail_Post(query);
+        const response = await Users_Activity.detailPost(query)
         // console.log(response)
-        set_post(response);
-        set_user(response);
-      };
+        set_post(response)
+        set_user(response)
+      }
 
-      fetchData();
+      fetchData()
 
-      set_reload_post(false);
+      set_reload_post(false)
     }
-  }, [reload_post]);
+  }, [reload_post])
 
   // Hàm này dùng để kiểm tra user đã từng like bài viết này hay chưa
-  const [status_like, set_status_like] = useState(null);
-  const [state, dispatch] = useStore();
-  const [load_status_like, set_load_status_like] = useState(true);
+  const [status_like, set_status_like] = useState(null)
+  const [state, dispatch] = useStore()
+  const [load_status_like, set_load_status_like] = useState(true)
 
   useEffect(() => {
     if (load_status_like) {
       const fetchData = async () => {
-        const params = {
+        const query = {
           // id_user: id_user_post,
           id_image_post: id_image_post,
-        };
+        }
 
-        const query = '?' + queryString.stringify(params);
-
-        const response = await Like.checking_like(query);
-        console.log(response.mess);
+        const response = await Like.checkingLike(query)
 
         if (response.mess !== 'That Bai') {
-          set_status_like(true);
+          set_status_like(true)
         } else {
-          set_status_like(false);
+          set_status_like(false)
         }
-      };
+      }
 
-      fetchData();
+      fetchData()
 
       // set_load_status_like(true)
     }
-  }, [load_status_like]);
+  }, [load_status_like])
 
-  const [user, set_user] = useState({});
+  const [user, set_user] = useState({})
 
   // Hàm này dùng để load ra thông tin user đã đăng bài đó
   useEffect(() => {
@@ -122,39 +114,34 @@ function DetailPost() {
       // const query = '?' + queryString.stringify(params)
       // const response = await AccountAPI.getId(id_user_post);
       // set_user(response);
-    };
+    }
 
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   // Hàm này dùng để tym
   const handler_Tym = () => {
     const fetchData = async () => {
-      const params = {
+      const query = {
         // id_user: state.account._id,
         id_image_post: id_image_post,
-      };
+      }
 
-      const query = '?' + queryString.stringify(params);
-
-      const response = await Like.post_like(query);
-      console.log(response);
+      const response = await Like.postLike(query)
 
       // // Xử lý thêm dữ liệu vào Database Favorite
-      // const params_far = {
+      // const query_far = {
       //     id_user: state.account._id,
       //     id_user_another: id_user_post,
       //     id_image_post: id_image_post,
       //     category: false
       // }
 
-      // const query_far = '?' + queryString.stringify(params_far)
-
-      // const response_far = await Favorites.post_Favorite(query_far)
+      // const response_far = await Favorites.postFavorite(query_far)
       // console.log(response_far)
-    };
-    set_status_like(true);
-    fetchData();
+    }
+    set_status_like(true)
+    fetchData()
 
     // Bắt đầu gửi socket
     // const data = {
@@ -164,101 +151,89 @@ function DetailPost() {
 
     //socket.emit('like', data)
 
-    set_reload_post(true);
+    set_reload_post(true)
 
-    set_load_status_like(true);
-  };
+    set_load_status_like(true)
+  }
 
   // Hàm này dùng để hủy tym
   const handler_UnTym = () => {
     const fetchData = async () => {
-      const params = {
+      const query = {
         // id_user: id_user_post,
         id_image_post: id_image_post,
-      };
+      }
 
-      const query = '?' + queryString.stringify(params);
-
-      const response = await Like.put_unlike(query);
-    };
-    set_status_like(false);
-    fetchData();
+      const response = await Like.putUnlike(query)
+    }
+    set_status_like(false)
+    fetchData()
 
     // const deleteData = async () => {
 
     //     // Xử lý delete dữ liệu Database Favorite
-    //     const params = {
+    //     const query = {
     //         id_user: id_user_post,
     //         id_user_another: state.account._id,
     //     }
 
-    //     const query = '?' + queryString.stringify(params)
-
-    //     console.log(query)
-
-    //     const response = await Favorites.delete_Favorite(query)
+    //     const response = await Favorites.deleteFavorite(query)
     //     console.log(response)
 
     // }
 
     // deleteData()
 
-    set_reload_post(true);
+    set_reload_post(true)
 
-    set_load_status_like(true);
-  };
+    set_load_status_like(true)
+  }
 
   // State data của comment
-  const [comments, set_comments] = useState([]);
+  const [comments, set_comments] = useState([])
 
   // State dùng để load lại hàm useEffect
-  const [load_comment, set_load_comment] = useState(true);
+  const [load_comment, set_load_comment] = useState(true)
 
   // Hàm này dùng để gọi API load dữ liệu trong database comment ra
   useEffect(() => {
     if (load_comment) {
       const fetchData = async () => {
-        const response = await Comment.get_all_comment(id_image_post);
-        console.log(response);
+        const response = await Comment.getAllComment(id_image_post)
 
-        set_comments(response);
-      };
+        set_comments(response)
+      }
 
-      fetchData();
+      fetchData()
 
-      set_load_comment(false);
+      set_load_comment(false)
     }
-  }, [load_comment]);
+  }, [load_comment])
 
   // Hàm này dùng để xử lý khi user muốn comment bài viết
   const handler_Comment = () => {
     const fetchData = async () => {
-      const params = {
+      const query = {
         id_user: state.account._id,
         id_image_post: id_image_post,
         send: send,
-      };
+      }
 
-      const query = '?' + queryString.stringify(params);
-
-      const response = await Comment.post_comment(query);
-      console.log(response);
+      await Comment.postComment(query)
 
       // // Xử lý thêm dữ liệu vào Database Favorite
-      // const params_far = {
+      // const query_far = {
       //     id_user: state.account._id,
       //     id_user_another: id_user_post,
       //     id_image_post: id_image_post,
       //     category: true
       // }
 
-      // const query_far = '?' + queryString.stringify(params_far)
-
-      // const response_far = await Favorites.post_Favorite(query_far)
+      // const response_far = await Favorites.postFavorite(query_far)
       // console.log(response_far)
-    };
+    }
 
-    fetchData();
+    fetchData()
 
     // // Bắt đầu gửi socket
     // const data = {
@@ -268,49 +243,44 @@ function DetailPost() {
 
     // //socket.emit('like', data)
 
-    set_load_comment(true);
+    set_load_comment(true)
 
-    set_send('');
-  };
+    set_send('')
+  }
 
   // State Navigate
-  const [navigate, set_navigate] = useState(false);
+  const [navigate, set_navigate] = useState(false)
 
   const handler_Post_Delete = () => {
     const fetchData = async () => {
-      const params = {
+      const query = {
         id_user: id_user_post,
         id_image_post: id_image_post,
-      };
+      }
 
-      const query = '?' + queryString.stringify(params);
+      await Users_Activity.deletePost(query)
+    }
 
-      const response = await Users_Activity.delete_Post(query);
-      console.log(response);
-    };
+    fetchData()
 
-    fetchData();
+    set_navigate(true)
+  }
 
-    set_navigate(true);
-  };
-
-  const [users_like, set_users_like] = useState([]);
+  const [users_like, set_users_like] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
-      const params = {
+      const query = {
         id_image_post: id_image_post,
-      };
+      }
 
-      const query = '?' + queryString.stringify(params);
+      const response = await Like.countLike(query)
 
-      const response = await Like.count_like(query);
+      set_users_like(response)
+    }
 
-      set_users_like(response);
-    };
-
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   return (
     <div className="container_detail_post">
@@ -336,7 +306,7 @@ function DetailPost() {
                       {' '}
                       <Favorite
                         onClick={() => {
-                          handler_UnTym();
+                          handler_UnTym()
                         }}
                         style={{
                           fontSize: '30px',
@@ -349,7 +319,7 @@ function DetailPost() {
                     <IconButton>
                       <FavoriteBorder
                         onClick={() => {
-                          handler_Tym();
+                          handler_Tym()
                         }}
                         style={{ fontSize: '30px', cursor: 'pointer' }}
                       />
@@ -363,7 +333,7 @@ function DetailPost() {
                 // data-toggle="modal"
                 // data-target={`#${id_image_post}_like`}
                 onClick={(event) => {
-                  setOpenLiker(true);
+                  setOpenLiker(true)
                 }}
               >
                 {post.like} like
@@ -394,7 +364,7 @@ function DetailPost() {
                     >
                       <span
                         onClick={(event) => {
-                          setOpenLiker(false);
+                          setOpenLiker(false)
                         }}
                       >
                         <IconButton
@@ -467,7 +437,7 @@ function DetailPost() {
                     <IconButton
                       sx={{ position: 'relative', float: 'right' }}
                       onClick={(event) => {
-                        setOpen(true);
+                        setOpen(true)
                       }}
                     >
                       <CloseIcon />
@@ -499,7 +469,7 @@ function DetailPost() {
                     >
                       <span
                         onClick={(event) => {
-                          setOpen(false);
+                          setOpen(false)
                         }}
                       >
                         <IconButton
@@ -538,7 +508,7 @@ function DetailPost() {
                           variant="outlined"
                           color="error"
                           onClick={(event) => {
-                            setOpen(false);
+                            setOpen(false)
                           }}
                         >
                           No
@@ -622,9 +592,9 @@ function DetailPost() {
         </div>
       </Box>
     </div>
-  );
+  )
 }
 
-export default DetailPost;
+export default DetailPost
 
 /* eslint-disable no-unused-vars */

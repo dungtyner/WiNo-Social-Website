@@ -1,8 +1,8 @@
-import '../../buttons/buttonNormal/ButtonNormal.css';
-import clsx from 'clsx';
-import { useEffect, useState } from 'react';
-import PopUp_ from '../../../layouts/popups/popup';
-import PropTypes from 'prop-types';
+import '../../buttons/buttonNormal/ButtonNormal.css'
+import clsx from 'clsx'
+import { useEffect, useState } from 'react'
+import PopUp_ from '../../../layouts/popups/popup'
+import PropTypes from 'prop-types'
 
 function ButtonNormal({
   elIcon = '',
@@ -14,30 +14,30 @@ function ButtonNormal({
   componentPopUP = [],
   isRadio = false,
 }) {
-  const [stateEnable, set_stateEnable] = useState(isEnable);
-  const [stateShowPopUp, set_stateShowPopUp] = useState(false);
+  const [stateEnable, set_stateEnable] = useState(isEnable)
+  const [stateShowPopUp, set_stateShowPopUp] = useState(false)
   useEffect(() => {
-    console.log(stateShowPopUp);
-  }, [stateShowPopUp]);
+    console.log(stateShowPopUp)
+  }, [stateShowPopUp])
   useEffect(() => {
-    set_stateEnable(isEnable);
-  }, [isEnable]);
+    set_stateEnable(isEnable)
+  }, [isEnable])
 
   return (
     <div className="container-buttonNormal" style={styles}>
       <div className="main-buttonNormal">
         <div
           onClick={(event) => {
-            set_stateShowPopUp(true);
+            set_stateShowPopUp(true)
             if (stateEnable) {
-              console.log(handleClick);
+              console.log(handleClick)
               // set_stateShowPopUp(false)
 
-              handleClick(event);
+              handleClick(event)
             }
 
             if (isRadio) {
-              set_stateEnable(false);
+              set_stateEnable(false)
             }
           }}
           className={clsx([
@@ -52,7 +52,7 @@ function ButtonNormal({
         {stateShowPopUp && componentPopUP.length > 0 && (
           <PopUp_
             work_case_unmount={() => {
-              set_stateShowPopUp(false);
+              set_stateShowPopUp(false)
             }}
           >
             <div
@@ -72,19 +72,19 @@ function ButtonNormal({
                   <span
                     key={idx}
                     onClick={() => {
-                      set_stateShowPopUp(false);
+                      set_stateShowPopUp(false)
                     }}
                   >
                     {el}
                   </span>
-                );
+                )
               })}
             </div>
           </PopUp_>
         )}
       </div>
     </div>
-  );
+  )
 }
 
 ButtonNormal.defaultProps = {
@@ -95,7 +95,7 @@ ButtonNormal.defaultProps = {
   isEnable: true,
   componentPopUP: [],
   isRadio: false,
-};
+}
 
 ButtonNormal.propTypes = {
   elIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
@@ -106,6 +106,6 @@ ButtonNormal.propTypes = {
   isEnable: PropTypes.bool,
   componentPopUP: PropTypes.arrayOf(PropTypes.element),
   isRadio: PropTypes.bool,
-};
+}
 
-export default ButtonNormal;
+export default ButtonNormal

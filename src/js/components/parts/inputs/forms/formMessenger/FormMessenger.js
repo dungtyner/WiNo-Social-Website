@@ -1,54 +1,54 @@
-import '../formMessenger/FormMessenger.css';
-import * as IconFontAwesome from '../../../icons/fontAwesome/FontAwesome';
-import { StrictMode, useContext, useEffect, useRef, useState } from 'react';
+import '../formMessenger/FormMessenger.css'
+import * as IconFontAwesome from '../../../icons/fontAwesome/FontAwesome'
+import { StrictMode, useContext, useEffect, useRef, useState } from 'react'
 import {
   beTyping_chat,
   Context_Message,
   noTyping_chat,
-} from '../../../../layouts/popups/popupMessenger/PopUpMessenger';
-import { contentPopUpMessenger } from '../../../../layouts/popups/popupMessenger/PopUpMessenger';
-import { content_sessionMessage } from '../../../../layouts/popups/popupMessenger/PopUpMessenger';
-import * as IconMUI from '../../../../parts/icons/iconMUI/IconMUI';
-import { Icon_Image } from '../../../icons/fontAwesome/FontAwesome';
-import LabelSquare from '../../../labels/labelSquare/LabelSquare';
-import LabelCircle from '../../../labels/labelCircle/LabelCircle';
+} from '../../../../layouts/popups/popupMessenger/PopUpMessenger'
+import { contentPopUpMessenger } from '../../../../layouts/popups/popupMessenger/PopUpMessenger'
+import { content_sessionMessage } from '../../../../layouts/popups/popupMessenger/PopUpMessenger'
+import * as IconMUI from '../../../../parts/icons/iconMUI/IconMUI'
+import { Icon_Image } from '../../../icons/fontAwesome/FontAwesome'
+import LabelSquare from '../../../labels/labelSquare/LabelSquare'
+import LabelCircle from '../../../labels/labelCircle/LabelCircle'
 import {
   FILE_AUDIO,
   FILE_DOCUMENT,
   FILE_IMAGE,
   FILE_VIDEO,
-} from '../../../../../store/constants';
-import { useStore } from '../../../../../store';
-import { HOST_SERVER } from '../../../../../config';
-import PopUp_ from '../../../../layouts/popups/popup';
-import { Grid } from '@giphy/react-components';
-import { GiphyFetch } from '@giphy/js-fetch-api';
-import PickerEmoji from '../../../pickers/pickerEmoji/PickerEmoji';
-import PropTypes from 'prop-types';
+} from '../../../../../store/constants'
+import { useStore } from '../../../../../store'
+import PopUp_ from '../../../../layouts/popups/popup'
+import { Grid } from '@giphy/react-components'
+import { GiphyFetch } from '@giphy/js-fetch-api'
+import PickerEmoji from '../../../pickers/pickerEmoji/PickerEmoji'
+import PropTypes from 'prop-types'
+import { createRequest } from '../../../../../utilities/requests'
 
 /* eslint-disable no-unused-vars */
 function FormMessenger({ idChat }) {
-  var refIptFile = useRef(null);
-  var refIpt_text = useRef(null);
-  var refIptPicker_GIF = useRef(window);
+  var refIptFile = useRef(null)
+  var refIpt_text = useRef(null)
+  var refIptPicker_GIF = useRef(window)
 
-  var value_Context_Message = useContext(Context_Message);
-  const giphyFetch = new GiphyFetch('sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh');
-  const fetchGifs = (offset) => giphyFetch.trending({ offset, limit: 10 });
-  var [state, dispatch] = useStore();
-  var [listFile, set_listFile] = useState([]);
-  const [stateTextMess, set_stateTextMess] = useState('');
-  const [state_IptPicker_GIF, set_state_IptPicker_GIF] = useState('');
-  const [stateShowPickerEmoji, set_stateShowPickerEmoji] = useState(false);
-  const [stateShowPickerGIF, set_stateShowPickerGIF] = useState(false);
-  const [stateSending, set_stateSending] = useState(false);
-  const [stateShowMicRecorder, set_stateShowMicRecorder] = useState(false);
-  const [stateAccountTyping, set_stateAccountTyping] = useState(null);
+  var value_Context_Message = useContext(Context_Message)
+  const giphyFetch = new GiphyFetch('sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh')
+  const fetchGifs = (offset) => giphyFetch.trending({ offset, limit: 10 })
+  var [state, dispatch] = useStore()
+  var [listFile, set_listFile] = useState([])
+  const [stateTextMess, set_stateTextMess] = useState('')
+  const [state_IptPicker_GIF, set_state_IptPicker_GIF] = useState('')
+  const [stateShowPickerEmoji, set_stateShowPickerEmoji] = useState(false)
+  const [stateShowPickerGIF, set_stateShowPickerGIF] = useState(false)
+  const [stateSending, set_stateSending] = useState(false)
+  const [stateShowMicRecorder, set_stateShowMicRecorder] = useState(false)
+  const [stateAccountTyping, set_stateAccountTyping] = useState(null)
 
   const fetchGifs_search = (offset) => {
     // console.log("here");
-    return giphyFetch.search(state_IptPicker_GIF, { offset, limit: 10 });
-  };
+    return giphyFetch.search(state_IptPicker_GIF, { offset, limit: 10 })
+  }
 
   useEffect(() => {
     state.socketChat.on(`PEOPLE_${idChat}_TYPING`, (account) => {
@@ -73,12 +73,12 @@ function FormMessenger({ idChat }) {
                 />
               </div>
             ),
-          ]);
+          ])
 
         // console.log(state.account);
-        set_stateAccountTyping(account);
+        set_stateAccountTyping(account)
       }
-    });
+    })
     state.socketChat.on(`IN_${idChat}_NO_TYPING`, (accountTyping) => {
       value_Context_Message.state_typingsPopUpMessenger.forEach(
         (element, idx) => {
@@ -86,20 +86,20 @@ function FormMessenger({ idChat }) {
             element.props.props['data-slug-typing'] ===
             accountTyping.slug_personal
           ) {
-            value_Context_Message.state_typingsPopUpMessenger.splice(idx, 1);
+            value_Context_Message.state_typingsPopUpMessenger.splice(idx, 1)
           }
         },
-      );
+      )
       value_Context_Message.setState_typingsPopUpMessenger(
         value_Context_Message.state_typingsPopUpMessenger.concat([]),
-      );
-      set_stateAccountTyping(null);
-    });
-  }, [stateAccountTyping, value_Context_Message.state_typingsPopUpMessenger]);
+      )
+      set_stateAccountTyping(null)
+    })
+  }, [stateAccountTyping, value_Context_Message.state_typingsPopUpMessenger])
   const handleSearchGIF = (event) => {
     // console.log(state_IptPicker_GIF);
-    set_state_IptPicker_GIF(event.currentTarget.value);
-  };
+    set_state_IptPicker_GIF(event.currentTarget.value)
+  }
 
   const handleSubmitMess = (event, isClick) => {
     if (event.key === 'Enter' || isClick) {
@@ -107,14 +107,14 @@ function FormMessenger({ idChat }) {
         listFile: listFile,
         stateTextMess: stateTextMess,
         reply: value_Context_Message.stateReplyMess,
-      });
+      })
       if (value_content_sessionMessage.length > 0) {
         submitSaveMessage({
           state: state,
           value_content_sessionMessage: value_content_sessionMessage,
           listFile: listFile,
           idChat: idChat,
-        });
+        })
 
         renderMyScreen({
           state: state,
@@ -122,13 +122,13 @@ function FormMessenger({ idChat }) {
           value_Context_Message: value_Context_Message,
           set_listFile,
           set_stateTextMess,
-        });
+        })
 
         noTyping_chat({
           idChat: idChat,
           socket: state.socketChat,
           accountTyping: state.account,
-        });
+        })
         // state.socketChat.emit(`IN_${idChat}_PEOPLE_SENDING`, {
         //   account: state.account,
         //   value_content_sessionMessage: value_content_sessionMessage,
@@ -140,21 +140,21 @@ function FormMessenger({ idChat }) {
           idChat,
           socket: state.socketChat,
           accountTyping: state.account,
-        });
+        })
       } else {
         noTyping_chat({
           idChat,
           socket: state.socketChat,
           accountTyping: state.account,
-        });
+        })
       }
     }
-  };
+  }
   useEffect(() => {
     if (stateShowPickerGIF) {
       // set_stateWithPickGIF(refIptPicker_GIF.current.innerWidth)
     }
-  }, [stateShowPickerGIF]);
+  }, [stateShowPickerGIF])
   useEffect(() => {
     if (stateSending) {
       if (stateTextMess.length > 0 || listFile.length > 0)
@@ -162,32 +162,32 @@ function FormMessenger({ idChat }) {
           idChat,
           socket: state.socketChat,
           accountTyping: state.account,
-        });
+        })
     } else
       noTyping_chat({
         idChat,
         socket: state.socketChat,
         accountTyping: state.account,
-      });
-  }, [stateSending]);
+      })
+  }, [stateSending])
   useEffect(() => {
-    console.log('stateTextMess changed:', stateTextMess);
+    console.log('stateTextMess changed:', stateTextMess)
     if (stateTextMess.length !== 0) {
-      set_stateSending(true);
+      set_stateSending(true)
     } else if (stateTextMess.length === 0) {
-      set_stateSending(false);
+      set_stateSending(false)
     }
-  }, [stateTextMess]);
+  }, [stateTextMess])
   useEffect(() => {
-    console.log('listFile changed:', listFile);
+    console.log('listFile changed:', listFile)
     if (listFile.length !== 0) {
-      set_stateSending(true);
+      set_stateSending(true)
     } else if (listFile.length === 0) {
-      set_stateSending(false);
+      set_stateSending(false)
     }
-    refIpt_text.current.focus();
-  }, [listFile]);
-  console.log('FormMessenger RENDER');
+    refIpt_text.current.focus()
+  }, [listFile])
+  console.log('FormMessenger RENDER')
 
   return !stateShowMicRecorder ? (
     <div className="container-formMessenger">
@@ -196,7 +196,7 @@ function FormMessenger({ idChat }) {
           {stateShowPickerGIF ? (
             <PopUp_
               work_case_unmount={() => {
-                set_stateShowPickerGIF(false);
+                set_stateShowPickerGIF(false)
               }}
             >
               <div
@@ -231,8 +231,8 @@ function FormMessenger({ idChat }) {
                       type={'text'}
                       className={'ipt-searchGIF'}
                       onChange={(event) => {
-                        set_state_IptPicker_GIF(event.currentTarget.value);
-                        handleSearchGIF(event);
+                        set_state_IptPicker_GIF(event.currentTarget.value)
+                        handleSearchGIF(event)
                       }}
                       ref={refIptPicker_GIF}
                       placeholder={'Search GIFs'}
@@ -249,20 +249,20 @@ function FormMessenger({ idChat }) {
                     />
                     <Grid
                       onGifClick={(gif, event) => {
-                        event.preventDefault();
+                        event.preventDefault()
                         var value_content_sessionMessage =
                           cast_inputs_to_valueContentMessNew({
                             stateTextMess: stateTextMess,
                             gif: gif.id,
                             listFile: listFile,
-                          });
+                          })
                         submitSaveMessage({
                           idChat: idChat,
                           listFile: listFile,
                           state: state,
                           value_content_sessionMessage:
                             value_content_sessionMessage,
-                        });
+                        })
                         renderMyScreen({
                           state: state,
                           value_Context_Message: value_Context_Message,
@@ -270,7 +270,7 @@ function FormMessenger({ idChat }) {
                             value_content_sessionMessage,
                           set_listFile,
                           set_stateTextMess,
-                        });
+                        })
                       }}
                       key={state_IptPicker_GIF}
                       fetchGifs={
@@ -295,7 +295,7 @@ function FormMessenger({ idChat }) {
         {stateShowPickerEmoji ? (
           <PopUp_
             work_case_unmount={() => {
-              set_stateShowPickerEmoji(false);
+              set_stateShowPickerEmoji(false)
             }}
           >
             <div>
@@ -308,8 +308,8 @@ function FormMessenger({ idChat }) {
                 }}
                 handleClickPicker={(event, emojiData) => {
                   set_stateTextMess((pre_stateTextMess) => {
-                    return `${stateTextMess}${emojiData.emoji}`;
-                  });
+                    return `${stateTextMess}${emojiData.emoji}`
+                  })
                 }}
               />
             </div>
@@ -326,8 +326,8 @@ function FormMessenger({ idChat }) {
                   {
                     <span
                       onClick={() => {
-                        console.log('CLICK');
-                        refIptFile.current.click();
+                        console.log('CLICK')
+                        refIptFile.current.click()
                       }}
                     >
                       <LabelSquare
@@ -364,8 +364,8 @@ function FormMessenger({ idChat }) {
                           <span
                             onClick={() => {
                               set_listFile(() => {
-                                return listFile.filter((elm) => elm != el);
-                              });
+                                return listFile.filter((elm) => elm != el)
+                              })
                             }}
                           >
                             <LabelCircle
@@ -409,7 +409,7 @@ function FormMessenger({ idChat }) {
                           ) : null
                         }
                       />
-                    );
+                    )
                   })}
                 </div>
               )}
@@ -419,7 +419,7 @@ function FormMessenger({ idChat }) {
             <div className="contentLeft-formMessenger">
               <span
                 onClick={(event) => {
-                  set_stateShowMicRecorder(true);
+                  set_stateShowMicRecorder(true)
                 }}
               >
                 <IconFontAwesome.Icon_MIC />
@@ -430,37 +430,37 @@ function FormMessenger({ idChat }) {
                 style={{ display: 'none' }}
                 ref={refIptFile}
                 onChange={(event) => {
-                  var files = event.currentTarget.files;
-                  console.log(files);
+                  var files = event.currentTarget.files
+                  console.log(files)
                   if (files.length > 0) {
                     if (listFile.length > 0) {
                       set_listFile(() => {
                         var tmp_listFile = Object.entries(files).map((el) => {
                           // [[key][value]]
-                          return el[1];
-                        });
-                        return listFile.concat(tmp_listFile);
-                      });
+                          return el[1]
+                        })
+                        return listFile.concat(tmp_listFile)
+                      })
                     } else {
                       set_listFile(
                         Object.entries(files).map((el) => {
-                          return el[1];
+                          return el[1]
                         }),
-                      );
+                      )
                     }
                   }
                 }}
               />
               <span
                 onClick={() => {
-                  refIptFile.current.click();
+                  refIptFile.current.click()
                 }}
               >
                 <Icon_Image />
               </span>
               <span
                 onClick={() => {
-                  set_stateShowPickerGIF(!stateShowPickerGIF);
+                  set_stateShowPickerGIF(!stateShowPickerGIF)
                 }}
               >
                 <IconMUI.Icon_Gif />
@@ -473,23 +473,23 @@ function FormMessenger({ idChat }) {
                   className="iptText-formMessenger"
                   value={stateTextMess}
                   onFocus={(event) => {
-                    set_stateSending(true);
+                    set_stateSending(true)
                   }}
                   onBlur={(event) => {
-                    set_stateSending(false);
+                    set_stateSending(false)
                   }}
                   onChange={(event) => {
-                    set_stateTextMess(event.currentTarget.value);
+                    set_stateTextMess(event.currentTarget.value)
                   }}
                   type={'text'}
                   placeholder="Aa"
                   onKeyUp={(event) => {
-                    handleSubmitMess(event);
+                    handleSubmitMess(event)
                   }}
                 />
                 <span
                   onClick={(event) => {
-                    set_stateShowPickerEmoji(!stateShowPickerEmoji);
+                    set_stateShowPickerEmoji(!stateShowPickerEmoji)
                   }}
                 >
                   <IconFontAwesome.Icon_Smile />
@@ -501,7 +501,7 @@ function FormMessenger({ idChat }) {
               {stateSending && (
                 <span
                   onClick={(event) => {
-                    handleSubmitMess(event, true);
+                    handleSubmitMess(event, true)
                   }}
                 >
                   <IconFontAwesome.Icon_Send_Mess />
@@ -518,10 +518,10 @@ function FormMessenger({ idChat }) {
       idChat={idChat}
       state={state}
       handleClose={() => {
-        set_stateShowMicRecorder(false);
+        set_stateShowMicRecorder(false)
       }}
     />
-  );
+  )
 }
 function cast_inputs_to_valueContentMessNew({
   listFile,
@@ -529,31 +529,31 @@ function cast_inputs_to_valueContentMessNew({
   gif,
   reply,
 }) {
-  var value_content_sessionMessage = [];
+  var value_content_sessionMessage = []
   if (listFile.length > 0) {
     value_content_sessionMessage = listFile.map((file) => {
-      var tmp_mess = new content_sessionMessage();
-      tmp_mess[file.type.split('/')[0]] = URL.createObjectURL(file);
-      return tmp_mess;
-    });
+      var tmp_mess = new content_sessionMessage()
+      tmp_mess[file.type.split('/')[0]] = URL.createObjectURL(file)
+      return tmp_mess
+    })
   }
   if (gif) {
-    value_content_sessionMessage.push(new content_sessionMessage({ gif: gif }));
+    value_content_sessionMessage.push(new content_sessionMessage({ gif: gif }))
   }
   if (stateTextMess.trim().length > 0) {
     value_content_sessionMessage.push(
       new content_sessionMessage({
         text: stateTextMess.substring(0, stateTextMess.length - 1),
       }),
-    );
+    )
   }
   if (reply) {
     value_content_sessionMessage[
       value_content_sessionMessage.length - 1
-    ].reply = reply;
+    ].reply = reply
   }
-  console.log(value_content_sessionMessage);
-  return value_content_sessionMessage;
+  console.log(value_content_sessionMessage)
+  return value_content_sessionMessage
 }
 function submitSaveMessage({
   state,
@@ -561,12 +561,12 @@ function submitSaveMessage({
   listFile,
   idChat,
 }) {
-  var form = new FormData();
-  form.append('idChat', idChat);
-  form.append('socket', JSON.stringify(state.socket.id));
+  var form = new FormData()
+  form.append('idChat', idChat)
+  form.append('socket', JSON.stringify(state.socket.id))
 
   for (let i = 0; i < listFile.length; i++) {
-    form.append('listFile', listFile[i]);
+    form.append('listFile', listFile[i])
   }
   form.append(
     'value_content_sessionMessage',
@@ -576,12 +576,10 @@ function submitSaveMessage({
         session_messages: value_content_sessionMessage,
       }),
     ),
-  );
-  fetch(`${HOST_SERVER}/chat/saveMessage`, {
-    method: 'POST',
+  )
+  createRequest('POST', '/chat/saveMessage', {
     body: form,
-    credentials: 'include',
-  });
+  })
 }
 function renderMyScreen({
   value_Context_Message,
@@ -590,7 +588,7 @@ function renderMyScreen({
   set_listFile,
   set_stateTextMess,
 }) {
-  var state_tmp = value_Context_Message.state_contentsPopUpMessenger;
+  var state_tmp = value_Context_Message.state_contentsPopUpMessenger
   // value_Context_Message.setState_contentsPopUpMessenger(() => [
   //   ...state_tmp,
   //   new contentPopUpMessenger({
@@ -603,15 +601,15 @@ function renderMyScreen({
   //   }),
   // ]);
 
-  value_Context_Message.set_stateReplyMess(null);
+  value_Context_Message.set_stateReplyMess(null)
 
-  set_stateTextMess('');
-  set_listFile([]);
+  set_stateTextMess('')
+  set_listFile([])
 
   value_Context_Message.refContentPopUp.current.scrollTo(
     0,
     value_Context_Message.refContentPopUp.current.scrollHeight,
-  );
+  )
 }
 function MicRecorderMess({
   idChat,
@@ -620,20 +618,20 @@ function MicRecorderMess({
   handlePause = () => {},
   handleSubmit = () => {},
 } = {}) {
-  const [state_countTime, set_state_countTime] = useState(0);
-  const ref_mediaAudio = useRef(null);
-  const ref_chunks = useRef([]);
-  const [state_blob, set_state_blob] = useState(null);
+  const [state_countTime, set_state_countTime] = useState(0)
+  const ref_mediaAudio = useRef(null)
+  const ref_chunks = useRef([])
+  const [state_blob, set_state_blob] = useState(null)
 
   const isMicUser =
-    navigator.mediaDevices && navigator.mediaDevices.getUserMedia;
-  var ref_idTimeOut = useRef(null);
+    navigator.mediaDevices && navigator.mediaDevices.getUserMedia
+  var ref_idTimeOut = useRef(null)
 
-  var saveRecorder = useRef(null);
+  var saveRecorder = useRef(null)
   useEffect(() => {
     saveRecorder.current = (callback) => {
       if (!state_blob) {
-        var tmp_blob;
+        var tmp_blob
 
         ref_mediaAudio.current.onstop = (event) => {
           var dateCode = new Date()
@@ -642,56 +640,56 @@ function MicRecorderMess({
             .replaceAll(':', '')
             .replaceAll('-', '')
             .replaceAll('.', '')
-            .toLowerCase();
+            .toLowerCase()
           set_state_blob(() => {
-            var blob = new Blob(ref_chunks.current, { type: 'audio/mp3' });
-            blob.name = `${state.account.slug_personal}${dateCode}.mp3`;
-            blob.lastModified = new Date();
-            tmp_blob = blob;
-            if (callback) callback(blob);
-            return blob;
-          });
-        };
-        ref_mediaAudio.current.stop();
-        clearInterval(ref_idTimeOut.current);
-        return tmp_blob;
+            var blob = new Blob(ref_chunks.current, { type: 'audio/mp3' })
+            blob.name = `${state.account.slug_personal}${dateCode}.mp3`
+            blob.lastModified = new Date()
+            tmp_blob = blob
+            if (callback) callback(blob)
+            return blob
+          })
+        }
+        ref_mediaAudio.current.stop()
+        clearInterval(ref_idTimeOut.current)
+        return tmp_blob
       } else {
-        callback(state_blob);
-        return state_blob;
+        callback(state_blob)
+        return state_blob
       }
-    };
-  }, [state_blob]);
+    }
+  }, [state_blob])
   useEffect(() => {
     if (state_countTime == 0) {
       ref_idTimeOut.current = setInterval(() => {
         set_state_countTime((preState) => {
-          return preState + 1;
-        });
-      }, 1000);
+          return preState + 1
+        })
+      }, 1000)
     } else if (state_countTime > 60) {
-      saveRecorder.current();
+      saveRecorder.current()
     }
-  }, [state_countTime]);
+  }, [state_countTime])
   useEffect(() => {
     if (isMicUser) {
       navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-        ref_mediaAudio.current = new MediaRecorder(stream);
-        ref_mediaAudio.current.start();
+        ref_mediaAudio.current = new MediaRecorder(stream)
+        ref_mediaAudio.current.start()
 
         ref_mediaAudio.current.ondataavailable = (e) => {
-          ref_chunks.current.push(e.data);
-        };
-      });
+          ref_chunks.current.push(e.data)
+        }
+      })
     }
-  }, []);
+  }, [])
   return (
     <div className="body-micRecorderMess">
       <div className="contentLeft-micRecorderMess">
         <div
           className="btnClose-micRecorderMess"
           onClick={(event) => {
-            clearInterval(ref_idTimeOut.current);
-            handleClose();
+            clearInterval(ref_idTimeOut.current)
+            handleClose()
           }}
         >
           <IconFontAwesome.Icon_Close />
@@ -707,7 +705,7 @@ function MicRecorderMess({
             <div
               className="btnStop-micRecorderMess"
               onClick={(event) => {
-                saveRecorder.current();
+                saveRecorder.current()
               }}
             >
               <IconFontAwesome.Icon_Stop />
@@ -735,15 +733,15 @@ function MicRecorderMess({
                   listFile: [new File([blob], blob.name, { type: blob.type })],
                   reply: null,
                   stateTextMess: '',
-                });
+                })
                 submitSaveMessage({
                   idChat,
                   state,
                   listFile: [new File([blob], blob.name, { type: blob.type })],
                   value_content_sessionMessage: valueContentMessNew,
-                });
-              });
-              handleClose();
+                })
+              })
+              handleClose()
             }}
           >
             <IconFontAwesome.Icon_Send_Mess />
@@ -751,22 +749,22 @@ function MicRecorderMess({
         )}
       </div>
     </div>
-  );
+  )
 }
 function AudioMess({ srcAudio }) {
-  const [state_countTime, set_state_countTime] = useState(0);
-  const [state_playAudio, set_state_playAudio] = useState(false);
-  const ref_audio = useRef(null);
+  const [state_countTime, set_state_countTime] = useState(0)
+  const [state_playAudio, set_state_playAudio] = useState(false)
+  const ref_audio = useRef(null)
   useEffect(() => {
     if (ref_audio) {
       ref_audio.current.addEventListener('ended', (event) => {
-        set_state_playAudio(false);
-      });
+        set_state_playAudio(false)
+      })
       ref_audio.current.addEventListener('play', (event) => {
-        set_state_playAudio(true);
-      });
+        set_state_playAudio(true)
+      })
     }
-  }, [ref_audio]);
+  }, [ref_audio])
   return (
     <div className="timeline-micRecorderMess">
       <audio style={{ display: 'none' }} ref={ref_audio} src="srcAudio"></audio>
@@ -780,7 +778,7 @@ function AudioMess({ srcAudio }) {
         <div
           className="btnPlay-micRecorderMess"
           onClick={(event) => {
-            ref_audio.current.play();
+            ref_audio.current.play()
           }}
         >
           <IconFontAwesome.Icon_Video />
@@ -789,8 +787,8 @@ function AudioMess({ srcAudio }) {
         <div
           className="btnPause-micRecorderMess"
           onClick={(event) => {
-            ref_audio.current.pause();
-            set_state_playAudio(false);
+            ref_audio.current.pause()
+            set_state_playAudio(false)
           }}
         >
           <IconFontAwesome.Icon_Pause />
@@ -802,16 +800,16 @@ function AudioMess({ srcAudio }) {
         }`}
       </div>
     </div>
-  );
+  )
 }
 
 FormMessenger.propTypes = {
   idChat: PropTypes.string.isRequired,
-};
+}
 
 AudioMess.propTypes = {
   srcAudio: PropTypes.object.isRequired,
-};
+}
 
 MicRecorderMess.propTypes = {
   idChat: PropTypes.string.isRequired,
@@ -819,7 +817,7 @@ MicRecorderMess.propTypes = {
   handleClose: PropTypes.func,
   handlePause: PropTypes.func,
   handleSubmit: PropTypes.func,
-};
+}
 
-export default FormMessenger;
+export default FormMessenger
 /* eslint-disable no-unused-vars */

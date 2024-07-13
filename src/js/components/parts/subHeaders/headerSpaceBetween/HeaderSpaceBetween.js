@@ -1,5 +1,5 @@
-import HeaderSpaceBetweenStyles from '../headerSpaceBetween/HeaderSpaceBetween.module.css';
-import PropTypes from 'prop-types';
+import HeaderSpaceBetweenStyles from '../headerSpaceBetween/HeaderSpaceBetween.module.css'
+import PropTypes from 'prop-types'
 
 function HeaderSpaceBetween({ bodyLeft, bodyRight }) {
   return (
@@ -9,12 +9,12 @@ function HeaderSpaceBetween({ bodyLeft, bodyRight }) {
         {bodyRight}
       </div>
     </div>
-  );
+  )
 }
 
 HeaderSpaceBetween.propTypes = {
   bodyLeft: PropTypes.object.isRequired,
   bodyRight: PropTypes.object.isRequired,
-};
+}
 
-export default HeaderSpaceBetween;
+export default HeaderSpaceBetween

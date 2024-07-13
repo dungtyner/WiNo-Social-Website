@@ -1,6 +1,6 @@
-import OverLay from '../../overlays/OverLay';
-import './LabelSquare.css';
-import PropTypes from 'prop-types';
+import OverLay from '../../overlays/OverLay'
+import './LabelSquare.css'
+import PropTypes from 'prop-types'
 
 function LabelSquare({
   el_Icon,
@@ -40,7 +40,7 @@ function LabelSquare({
         </div>
       </div>
     </div>
-  );
+  )
 }
 LabelSquare.propTypes = {
   el_Icon: PropTypes.node.isRequired,
@@ -51,6 +51,6 @@ LabelSquare.propTypes = {
   elSub: PropTypes.node.isRequired,
   isBorderRadius: PropTypes.bool,
   tooltip: PropTypes.node.isRequired,
-};
+}
 
-export default LabelSquare;
+export default LabelSquare

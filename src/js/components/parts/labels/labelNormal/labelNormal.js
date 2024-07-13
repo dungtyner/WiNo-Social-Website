@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
 function LabelNormal({ el_Icon }) {
   return (
@@ -15,11 +15,11 @@ function LabelNormal({ el_Icon }) {
         )}
       </div>
     </div>
-  );
+  )
 }
 
 LabelNormal.propTypes = {
   el_Icon: PropTypes.node.isRequired,
-};
+}
 
-export default LabelNormal;
+export default LabelNormal

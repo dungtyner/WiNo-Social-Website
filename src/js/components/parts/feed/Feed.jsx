@@ -1,8 +1,8 @@
-import './Feed.css';
-import StoryReel from '../storyReel/StoryReel';
-import MessageSender from '../messageSender/MessageSender';
-import PostStatus from '../postStatus/PostStatus';
-import { Box } from '@mui/material';
+import './Feed.css'
+import StoryReel from '../storyReel/StoryReel'
+import MessageSender from '../messageSender/MessageSender'
+import PostStatus from '../postStatus/PostStatus'
+import { Box } from '@mui/material'
 
 export default function Feed() {
   return (
@@ -32,5 +32,5 @@ export default function Feed() {
         />
       </Box>
     </div>
-  );
+  )
 }

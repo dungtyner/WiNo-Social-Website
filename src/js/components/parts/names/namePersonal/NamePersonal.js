@@ -1,5 +1,5 @@
-import NamePersonalStyles from '../namePersonal/NamePersonal.module.css';
-import PropTypes from 'prop-types';
+import NamePersonalStyles from '../namePersonal/NamePersonal.module.css'
+import PropTypes from 'prop-types'
 
 function NamePersonal({ elOfficial = '', textName }) {
   return (
@@ -13,12 +13,12 @@ function NamePersonal({ elOfficial = '', textName }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 NamePersonal.propTypes = {
   elOfficial: PropTypes.string,
   textName: PropTypes.string.isRequired,
-};
+}
 
-export default NamePersonal;
+export default NamePersonal

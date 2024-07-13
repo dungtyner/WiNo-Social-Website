@@ -1,40 +1,28 @@
-import { HOST_SERVER } from '../config';
-import axios from 'axios';
+import { createRequest } from '../utilities/requests'
 const AccountAPI = {
-  /* eslint-disable no-unused-vars */
-  getAll: async (query) => {
-    const url = `${HOST_SERVER}/account`;
-    var data = await fetch(url, { method: 'GET' }).then((res) => res.json());
-    return data;
+  getAll: async (query = {}) => {
+    const path = '/account'
+    return await createRequest('GET', path, { query })
   },
-  /* eslint-disable no-unused-vars */
-  getId: async (query) => {
-    const url = `${HOST_SERVER}/account/${query}`;
-    var data = await fetch(url, { method: 'GET' }).then((res) => res.json());
-    return data;
+  getId: async (id) => {
+    const path = '/account/:id'
+    return await createRequest('GET', path, { id })
   },
 
-  search_Accounts: async (query) => {
-    const url = `${HOST_SERVER}/account/search/keyword${query}`;
-    var data = await fetch(url, { method: 'GET' }).then((res) => res.json());
-    return data;
+  searchAccounts: async (query = {}) => {
+    const path = '/account/search/keyword'
+    return await createRequest('GET', path, { query })
   },
 
-  update_info: (query) => {
-    const url = `${HOST_SERVER}/account/update${query}`;
-    var data = axios.put(url).then(function (res) {
-      console.log(res);
-    });
-    return data;
+  updateInfo: async (query = {}) => {
+    const path = '/account/update/:id'
+    return await createRequest('PUT', path, { query })
   },
 
-  change_avatar: (query) => {
-    const url = `${HOST_SERVER}/account/update/avatar${query}`;
-    var data = axios.put(url).then(function (res) {
-      console.log(res);
-    });
-    return data;
+  changeAvatar: async (query = {}) => {
+    const path = '/account/update/avatar'
+    return await createRequest('PUT', path, { query })
   },
-};
+}
 
-export default AccountAPI;
+export default AccountAPI

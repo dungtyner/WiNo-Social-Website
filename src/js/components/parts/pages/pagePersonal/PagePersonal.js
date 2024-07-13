@@ -1,88 +1,82 @@
-import { useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
-import PagePersonalStyles from '../pagePersonal/PagePersonal.module.css';
-import { Fragment, useEffect, useState } from 'react';
-import PagePersonalHeader from '../../subHeaders/pagePersonalHeader/PagePersonalHeader';
-import { HOST_SERVER } from '../../../../config';
-import { createContext } from 'react';
-import { NoResult } from '../../inputs/forms/formSearch/FormSearch';
+import { useNavigate } from 'react-router'
+import { Link } from 'react-router-dom'
+import PagePersonalStyles from '../pagePersonal/PagePersonal.module.css'
+import { Fragment, useEffect, useState } from 'react'
+import PagePersonalHeader from '../../subHeaders/pagePersonalHeader/PagePersonalHeader'
+import { createContext } from 'react'
+import { NoResult } from '../../inputs/forms/formSearch/FormSearch'
 
-import AccountAPI from '../../../../API/AccountAPI';
-import Users_Activity from '../../../../API/Users_Activity';
-import { useStore } from '../../../../store/';
-import PropTypes from 'prop-types';
+import AccountAPI from '../../../../API/AccountAPI'
+import Users_Activity from '../../../../API/UsersActivity'
+import { useStore } from '../../../../store/'
+import PropTypes from 'prop-types'
+import { createRequest } from '../../../../utilities/requests'
 
-export const Context_PagePersonal = createContext();
+export const Context_PagePersonal = createContext()
 function PagePersonal({ slugs }) {
-  const [stateAccount, set_stateAccount] = useState(null);
-  const navigate = useNavigate();
+  const [stateAccount, set_stateAccount] = useState(null)
+  const navigate = useNavigate()
   useEffect(() => {
     var fetchAPI = async () => {
       if (slugs) {
-        fetch(`${HOST_SERVER}/${slugs.map((slug) => slug).join('/')}`, {
-          method: 'GET',
-          credentials: 'include',
-        })
-          .then((res) => res.text())
-          .then((dataJSON) => {
-            var data = JSON.parse(dataJSON);
-            navigate(
-              `/${slugs
-                .map((slug) => {
-                  return slug;
-                })
-                .join('/')}`,
-              { replace: true },
-            );
-            if (data.result) {
-              set_stateAccount(
-                Object.assign(
-                  { id_chatPersonalPage: data.id_chatPersonalPage },
-                  data.result,
-                ),
-              );
-            }
-          });
+        const data = await createRequest(
+          'GET',
+          `/${slugs.map((slug) => slug).join('/')}`,
+        )
+        navigate(
+          `/${slugs
+            .map((slug) => {
+              return slug
+            })
+            .join('/')}`,
+          { replace: true },
+        )
+        if (data.result) {
+          set_stateAccount(
+            Object.assign(
+              { id_chatPersonalPage: data.id_chatPersonalPage },
+              data.result,
+            ),
+          )
+        }
       }
-    };
+    }
 
-    fetchAPI();
-  }, []);
+    fetchAPI()
+  }, [])
   /* eslint-disable no-unused-vars */
-  const [user, set_user] = useState({});
-  const [state, dispatch] = useStore();
-  const [user_activity, set_user_activity] = useState({});
+  const [user, set_user] = useState({})
+  const [state, dispatch] = useStore()
+  const [user_activity, set_user_activity] = useState({})
 
-  const [check_list_image, set_check_list_image] = useState(false);
+  const [check_list_image, set_check_list_image] = useState(false)
   /* eslint-disable no-unused-vars */
   useEffect(() => {
     const fetchData = async () => {
-      const response = await AccountAPI.getId(state.account._id);
+      const response = await AccountAPI.getId(state.account._id)
 
-      set_user(response);
-    };
+      set_user(response)
+    }
 
-    fetchData();
-  }, [state.account._id]);
+    fetchData()
+  }, [state.account._id])
 
   useEffect(() => {
     const fetch_users_activity = async () => {
-      const response = await Users_Activity.get_Users_Activity(
-        state.account._id,
-      );
-      console.log(response);
+      const response = await Users_Activity.getUsersActivity(state.account._id)
+      console.log(response)
 
-      set_user_activity(response);
+      set_user_activity(response)
 
       if (response.list_image.length > 0) {
-        set_check_list_image(true);
+        set_check_list_image(true)
       } else {
-        set_check_list_image(false);
+        set_check_list_image(false)
       }
-    };
+    }
 
-    fetch_users_activity();
-  }, [state.account._id]);
+    fetch_users_activity()
+  }, [state.account._id])
   return (
     // <BrowserRouter key={3}>
 
@@ -140,11 +134,11 @@ function PagePersonal({ slugs }) {
       )}
     </Fragment>
     // </BrowserRouter >
-  );
+  )
 }
 
 PagePersonal.propTypes = {
   slugs: PropTypes.object.isRequired,
-};
+}
 
-export default PagePersonal;
+export default PagePersonal

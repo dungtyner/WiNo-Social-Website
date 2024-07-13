@@ -1,6 +1,6 @@
-import EmojiPicker from 'emoji-picker-react';
-import './PickerEmoji.css';
-import PropTypes from 'prop-types';
+import EmojiPicker from 'emoji-picker-react'
+import './PickerEmoji.css'
+import PropTypes from 'prop-types'
 /* eslint-disable no-unused-vars */
 function PickerEmoji({
   handleClickPicker = (event, emojiData) => {},
@@ -22,17 +22,17 @@ function PickerEmoji({
           background: 'var(--greenColorEnd_Background)',
         }}
         onEmojiClick={(event, emojiData) => {
-          handleClickPicker(event, emojiData);
+          handleClickPicker(event, emojiData)
         }}
       />
     </div>
-  );
+  )
 }
 
 PickerEmoji.propTypes = {
   handleClickPicker: PropTypes.func,
   styles: PropTypes.object,
-};
+}
 
-export default PickerEmoji;
+export default PickerEmoji
 /* eslint-disable no-unused-vars */

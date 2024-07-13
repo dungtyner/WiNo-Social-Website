@@ -1,24 +1,24 @@
-import { useStore } from '../../../../store';
-import { delete_popup_review } from '../../../../store/actions';
-import { Icon_Close } from '../../../parts/icons/fontAwesome/FontAwesome';
-import PopUp_ from '../popup';
-import './PopUpReviews.css';
-import PropTypes from 'prop-types';
+import { useStore } from '../../../../store'
+import { delete_popup_review } from '../../../../store/actions'
+import { Icon_Close } from '../../../parts/icons/fontAwesome/FontAwesome'
+import PopUp_ from '../popup'
+import './PopUpReviews.css'
+import PropTypes from 'prop-types'
 
 /* eslint-disable no-unused-vars */
 function PopUpReviews({ titlePopUp, contentPopUp }) {
-  const [state, dispatch] = useStore();
+  const [state, dispatch] = useStore()
   return (
     <PopUp_
       work_case_unmount={() => {
-        dispatch(delete_popup_review(null));
+        dispatch(delete_popup_review(null))
       }}
     >
       <div className="container-popUpReviews">
         <div className="main-popUpReviews">
           <div
             onClick={(event) => {
-              dispatch(delete_popup_review(null));
+              dispatch(delete_popup_review(null))
             }}
             className="btnClose-popUpReviews"
           >
@@ -33,13 +33,13 @@ function PopUpReviews({ titlePopUp, contentPopUp }) {
         </div>
       </div>
     </PopUp_>
-  );
+  )
 }
 
 PopUpReviews.propTypes = {
   titlePopUp: PropTypes.string.isRequired,
   contentPopUp: PropTypes.node.isRequired,
-};
+}
 
-export default PopUpReviews;
+export default PopUpReviews
 /* eslint-disable no-unused-vars */

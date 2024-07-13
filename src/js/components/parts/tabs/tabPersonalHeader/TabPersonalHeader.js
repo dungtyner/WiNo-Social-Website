@@ -1,9 +1,9 @@
 // import { useEffect, useState } from 'react'
-import { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Context_PagePersonal } from '../../pages/pagePersonal/PagePersonal';
-import TabPersonalHeaderStyles from '../tabPersonalHeader/TabPersonalHeader.module.css';
-import PropTypes from 'prop-types';
+import { useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Context_PagePersonal } from '../../pages/pagePersonal/PagePersonal'
+import TabPersonalHeaderStyles from '../tabPersonalHeader/TabPersonalHeader.module.css'
+import PropTypes from 'prop-types'
 
 /* eslint-disable no-unused-vars */
 function TabPersonalHeader({
@@ -13,25 +13,25 @@ function TabPersonalHeader({
   handleClick = () => {},
   slug_personal,
 }) {
-  const navigate = useNavigate();
-  const value_Context_PagePersonal = useContext(Context_PagePersonal);
+  const navigate = useNavigate()
+  const value_Context_PagePersonal = useContext(Context_PagePersonal)
   return (
     <Link
       onClick={(event) => {
         if (value_Context_PagePersonal.slugs[0] === 'friends') {
-          event.preventDefault();
+          event.preventDefault()
           navigate(
             `/account/personal/${value_Context_PagePersonal.slugs[value_Context_PagePersonal.slugs.length - 1]}/${textTab}`,
             { replace: true },
-          );
+          )
         } else {
-          event.preventDefault();
+          event.preventDefault()
           navigate(
             `/account/personal/${value_Context_PagePersonal.stateAccount.slug_personal}/${textTab}`,
             { replace: true },
-          );
+          )
         }
-        handleClick(idx);
+        handleClick(idx)
       }}
       id={idx}
       to={`/account/personal/${value_Context_PagePersonal.slugs[value_Context_PagePersonal.slugs.length - 1]}/${textTab}`}
@@ -49,7 +49,7 @@ function TabPersonalHeader({
         </div>
       </div>
     </Link>
-  );
+  )
 }
 
 TabPersonalHeader.propTypes = {
@@ -58,7 +58,7 @@ TabPersonalHeader.propTypes = {
   para_isActing: PropTypes.string,
   handleClick: PropTypes.func,
   slug_personal: PropTypes.string.isRequired,
-};
+}
 
-export default TabPersonalHeader;
+export default TabPersonalHeader
 /* eslint-disable no-unused-vars */

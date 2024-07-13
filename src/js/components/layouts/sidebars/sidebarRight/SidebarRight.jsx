@@ -1,11 +1,11 @@
-import React from 'react';
-import './SidebarRight.css';
-import SidebarRow from '../sidebarLeft/SidebarRow';
-import { List, ListItem, ListItemButton } from '@mui/material';
-import PropTypes from 'prop-types';
+import React from 'react'
+import './SidebarRight.css'
+import SidebarRow from '../sidebarLeft/SidebarRow'
+import { List, ListItem, ListItemButton } from '@mui/material'
+import PropTypes from 'prop-types'
 
 export default function Widgets({ friendsOnline = [] }) {
-  console.log(friendsOnline);
+  console.log(friendsOnline)
   return (
     <div className="widgets">
       <List>
@@ -19,13 +19,13 @@ export default function Widgets({ friendsOnline = [] }) {
                 />
               </ListItemButton>
             </ListItem>
-          );
+          )
         })}
       </List>
     </div>
-  );
+  )
 }
 
 Widgets.propTypes = {
   friendsOnline: PropTypes.object,
-};
+}

@@ -1,29 +1,19 @@
-import React, { useState } from 'react';
-import { HOST_SERVER } from '../../../../../config';
-import LogoWebsite from '../../../../logo/logoWebsite/LogoWebsite';
-import FormAccount from '../formAccount/FormAccount.module.scss';
+import React, { useState } from 'react'
+import LogoWebsite from '../../../../logo/logoWebsite/LogoWebsite'
+import FormAccount from '../formAccount/FormAccount.module.scss'
+import { createRequest } from '../../../../../utilities/requests'
 function CheckCodeEmail() {
-  const [code, setCode] = useState('');
-  const handleRestorePass = function (e) {
-    e.preventDefault();
-    fetch(HOST_SERVER + '/account/CheckCodeEmail', {
-      method: 'POST',
-      mode: 'cors',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        code,
-      }),
-    }).then((res) => {
-      res.text().then((text) => {
-        if ('ok' === JSON.parse(text).mess) {
-          window.location.href = '/';
-        }
-      });
-    });
-  };
+  const [code, setCode] = useState('')
+  const handleRestorePass = async function (e) {
+    e.preventDefault()
+    const res = await createRequest('POST', '/account/CheckCodeEmail', {
+      body: { code },
+    })
+
+    if ('ok' === res.mess) {
+      window.location.href = '/'
+    }
+  }
   return (
     <div className={FormAccount.wrapper}>
       {/* <img src="https://toptechmakers.com/wp-content/uploads/2022/04/social-media-marketing-services.png" alt=""></img> */}
@@ -39,7 +29,7 @@ function CheckCodeEmail() {
               name="email"
               placeholder="Enter Code"
               onChange={(e) => {
-                setCode(e.currentTarget.value);
+                setCode(e.currentTarget.value)
               }}
             />
           </div>
@@ -49,7 +39,7 @@ function CheckCodeEmail() {
         </form>
       </section>
     </div>
-  );
+  )
 }
 
-export default CheckCodeEmail;
+export default CheckCodeEmail

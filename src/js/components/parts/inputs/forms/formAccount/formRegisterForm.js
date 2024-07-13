@@ -1,43 +1,34 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import FormAccount from '../formAccount/FormAccount.module.scss';
-
-import { HOST_SERVER } from '../../../../../config';
-import LogoWebsite from '../../../../logo/logoWebsite/LogoWebsite';
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import FormAccount from '../formAccount/FormAccount.module.scss'
+import LogoWebsite from '../../../../logo/logoWebsite/LogoWebsite'
+import { createRequest } from '../../../../../utilities/requests'
 
 function Register() {
-  const [user_fname, setUser_fname] = useState('');
-  const [user_lname, setUser_lname] = useState('');
-  const [gmail, setGmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [birthday, setBirthday] = useState('');
-  const [gender, setGender] = useState('1');
-  const handleSignUp = function (e) {
-    e.preventDefault();
-    fetch(HOST_SERVER + '/account/signup', {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+  const [user_fname, setUser_fname] = useState('')
+  const [user_lname, setUser_lname] = useState('')
+  const [gmail, setGmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [birthday, setBirthday] = useState('')
+  const [gender, setGender] = useState('1')
+  const handleSignUp = async function (e) {
+    e.preventDefault()
+    const res = await createRequest('POST', '/account/signup', {
+      body: {
         password,
         gmail,
         user_fname,
         user_lname,
         birthday,
         gender,
-      }),
-    }).then((res) => {
-      res.text().then((text) => {
-        console.log();
-        if ('ok' === JSON.parse(text).status) {
-          window.location.href = '/';
-        }
-      });
-    });
-  };
-  console.log(FormAccount);
+      },
+    })
+
+    if ('ok' === res.status) {
+      window.location.href = '/'
+    }
+  }
+  console.log(FormAccount)
   return (
     <div className={FormAccount.wrapper}>
       <section className={FormAccount.register__form}>
@@ -53,7 +44,7 @@ function Register() {
                 name="fname"
                 placeholder="First name"
                 onChange={(e) => {
-                  setUser_fname(e.currentTarget.value);
+                  setUser_fname(e.currentTarget.value)
                 }}
               />
             </div>
@@ -65,7 +56,7 @@ function Register() {
                 name="lname"
                 placeholder="Last name"
                 onChange={(e) => {
-                  setUser_lname(e.currentTarget.value);
+                  setUser_lname(e.currentTarget.value)
                 }}
               />
             </div>
@@ -78,7 +69,7 @@ function Register() {
               name="email"
               placeholder="Enter mobile number or email address"
               onChange={(e) => {
-                setGmail(e.currentTarget.value);
+                setGmail(e.currentTarget.value)
               }}
             />
           </div>
@@ -90,7 +81,7 @@ function Register() {
               name="password"
               placeholder="Enter new password"
               onChange={(e) => {
-                setPassword(e.currentTarget.value);
+                setPassword(e.currentTarget.value)
               }}
             />
             {/* <VisibilityIcon/> */}
@@ -103,7 +94,7 @@ function Register() {
               value={0}
               checked={false}
               onChange={(e) => {
-                setGender(e.currentTarget.value);
+                setGender(e.currentTarget.value)
               }}
             />{' '}
             <p>Female</p>
@@ -115,7 +106,7 @@ function Register() {
               checked={true}
               value={1}
               onChange={(e) => {
-                setGender(e.currentTarget.value);
+                setGender(e.currentTarget.value)
               }}
             />
             <p className="male">Male</p>
@@ -127,7 +118,7 @@ function Register() {
               className="ipt-birthday_formSignUp"
               type="date"
               onChange={(e) => {
-                setBirthday(e.currentTarget.value);
+                setBirthday(e.currentTarget.value)
               }}
             />
           </div>
@@ -141,7 +132,7 @@ function Register() {
         </div>
       </section>
     </div>
-  );
+  )
 }
 
-export default Register;
+export default Register

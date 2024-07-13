@@ -1,22 +1,22 @@
-import { Fragment, useEffect, useState } from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
-import { HOST_SERVER } from '../../../../config';
-import { useStore } from '../../../../store';
-import { set_url } from '../../../../store/actions';
+import { Fragment, useEffect, useState } from 'react'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { useStore } from '../../../../store'
+import { set_url } from '../../../../store/actions'
 import {
   req_acceptAddNewFriend,
   req_refuse_requestAddFriend,
-} from '../../../../store/functions';
-import ButtonNormal from '../../buttons/buttonNormal/ButtonNormal';
+} from '../../../../store/functions'
+import ButtonNormal from '../../buttons/buttonNormal/ButtonNormal'
 import {
   Icon_Arrow_Left,
   Icon_Friend,
   Icon_Send_Mess,
   Icon_Share,
-} from '../../icons/fontAwesome/FontAwesome';
-import ItemOpt from '../../item/itemOpt/ItemOpt';
-import LabelCircle from '../../labels/labelCircle/LabelCircle';
-import './PageFriend.css';
+} from '../../icons/fontAwesome/FontAwesome'
+import ItemOpt from '../../item/itemOpt/ItemOpt'
+import LabelCircle from '../../labels/labelCircle/LabelCircle'
+import './PageFriend.css'
+import { createRequest } from '../../../../utilities/requests'
 
 function PageFriend() {
   return (
@@ -27,11 +27,11 @@ function PageFriend() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 /* eslint-disable no-unused-vars */
 export function SidebarFriendMenuDefault() {
-  const [state, dispatch] = useStore();
+  const [state, dispatch] = useStore()
   return (
     <Fragment>
       <div className="sidebarLeft-pageFriend">
@@ -42,7 +42,7 @@ export function SidebarFriendMenuDefault() {
           <Link
             to={`request`}
             onClick={() => {
-              dispatch(set_url(`${window.location.href}/${'response'}`));
+              dispatch(set_url(`${window.location.href}/${'response'}`))
             }}
           >
             <ItemOpt
@@ -53,7 +53,7 @@ export function SidebarFriendMenuDefault() {
 
           <Link
             onClick={() => {
-              dispatch(set_url(`${window.location.href}/${'response'}`));
+              dispatch(set_url(`${window.location.href}/${'response'}`))
             }}
             to={`response`}
           >
@@ -64,7 +64,7 @@ export function SidebarFriendMenuDefault() {
           </Link>
           <Link
             onClick={() => {
-              dispatch(set_url(`${window.location.href}/${'list'}`));
+              dispatch(set_url(`${window.location.href}/${'list'}`))
             }}
             to={`list`}
           >
@@ -79,25 +79,18 @@ export function SidebarFriendMenuDefault() {
         <h1>Please select the list of friends you want to see</h1>
       </div>
     </Fragment>
-  );
+  )
 }
 
 export function SidebarFriendRequest() {
-  const [state_listFriend, set_state_listFriend] = useState(null);
+  const [state_listFriend, set_state_listFriend] = useState(null)
   useEffect(() => {
     const fetchAPI = async () => {
-      fetch(`${HOST_SERVER}/friend/getListRequestFriend`, {
-        method: 'GET',
-        credentials: 'include',
-      })
-        .then((res) => res.text())
-        .then((dataJson) => {
-          var data = JSON.parse(dataJson);
-          set_state_listFriend(data.result);
-        });
-    };
-    fetchAPI();
-  }, []);
+      const data = await createRequest('GET', '/friend/getListRequestFriend')
+      set_state_listFriend(data.result)
+    }
+    fetchAPI()
+  }, [])
   return (
     <Fragment>
       <div className="sidebarLeft-pageFriend">
@@ -132,7 +125,7 @@ export function SidebarFriendRequest() {
                       }
                     />
                   </Link>
-                );
+                )
               })
             : ''}
         </div>
@@ -141,24 +134,17 @@ export function SidebarFriendRequest() {
         <Outlet />
       </div>
     </Fragment>
-  );
+  )
 }
 export function SidebarFriendResponse() {
-  const [state_listFriend, set_state_listFriend] = useState(null);
+  const [state_listFriend, set_state_listFriend] = useState(null)
   useEffect(() => {
     const fetchAPI = async () => {
-      fetch(`${HOST_SERVER}/friend/getListResponseFriend`, {
-        method: 'GET',
-        credentials: 'include',
-      })
-        .then((res) => res.text())
-        .then((dataJson) => {
-          var data = JSON.parse(dataJson);
-          set_state_listFriend(data.result);
-        });
-    };
-    fetchAPI();
-  }, []);
+      const data = await createRequest('GET', '/friend/getListResponseFriend')
+      set_state_listFriend(data.result)
+    }
+    fetchAPI()
+  }, [])
   return (
     <Fragment>
       <div className="sidebarLeft-pageFriend">
@@ -200,7 +186,7 @@ export function SidebarFriendResponse() {
                           >
                             <ButtonNormal
                               handleClick={() => {
-                                req_acceptAddNewFriend(friend);
+                                req_acceptAddNewFriend(friend)
                                 // dataNotification.friend.response_new_friend.splice(idx,1);
                                 // set_state_dataNotification(dataNotification)
                               }}
@@ -211,7 +197,7 @@ export function SidebarFriendResponse() {
                               isNo={true}
                               textBtn={'Refuse'}
                               handleClick={() => {
-                                req_refuse_requestAddFriend(friend);
+                                req_refuse_requestAddFriend(friend)
                                 // dataNotification.friend.response_new_friend.splice(idx,1);
                                 // set_state_dataNotification(Object.assign({},dataNotification))
                               }}
@@ -221,7 +207,7 @@ export function SidebarFriendResponse() {
                       }
                     />
                   </Link>
-                );
+                )
               })
             : ''}
         </div>
@@ -230,26 +216,19 @@ export function SidebarFriendResponse() {
         <Outlet />
       </div>
     </Fragment>
-  );
+  )
 }
 export function SidebarFriendList() {
-  const [state_listFriend, set_state_listFriend] = useState(null);
-  const [state, dispatch] = useStore();
-  var navigate = useNavigate();
+  const [state_listFriend, set_state_listFriend] = useState(null)
+  const [state, dispatch] = useStore()
+  var navigate = useNavigate()
   useEffect(() => {
     const fetchAPI = async () => {
-      fetch(`${HOST_SERVER}/friend/getListFriend`, {
-        method: 'GET',
-        credentials: 'include',
-      })
-        .then((res) => res.text())
-        .then((dataJson) => {
-          var data = JSON.parse(dataJson);
-          set_state_listFriend(data.result);
-        });
-    };
-    fetchAPI();
-  }, []);
+      const data = createRequest('GET', '/friend/getListFriend')
+      set_state_listFriend(data.result)
+    }
+    fetchAPI()
+  }, [])
 
   return (
     <Fragment>
@@ -272,9 +251,9 @@ export function SidebarFriendList() {
                     key={idx}
                     onClick={() => {
                       // console.log(friend.slug_personal);
-                      navigate(`${friend.slug_personal}`);
+                      navigate(`${friend.slug_personal}`)
                       // navigate(0);
-                      dispatch(set_url(`/${friend.slug_personal}`));
+                      dispatch(set_url(`/${friend.slug_personal}`))
                     }}
                   >
                     {/* <Link key={idx}  to={`${friend.slug_personal}`}> */}
@@ -288,7 +267,7 @@ export function SidebarFriendList() {
                     />
                     {/* </Link> */}
                   </span>
-                );
+                )
               })
             : ''}
         </div>
@@ -297,7 +276,7 @@ export function SidebarFriendList() {
         <Outlet />
       </div>
     </Fragment>
-  );
+  )
 }
-export default PageFriend;
+export default PageFriend
 /* eslint-disable no-unused-vars */

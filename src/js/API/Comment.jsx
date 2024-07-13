@@ -1,17 +1,15 @@
-import { HOST_SERVER } from '../config';
+import { createRequest } from '../utilities/requests'
 
 const Comment = {
-  get_all_comment: async (id) => {
-    const url = `${HOST_SERVER}/comment/${id}`;
-    var data = await fetch(url, { method: 'GET' }).then((res) => res.json());
-    return data;
+  getAllComment: async (id) => {
+    const path = '/comment/:id'
+    return await createRequest('GET', path, { query: { id } })
   },
 
-  post_comment: async (query) => {
-    const url = `${HOST_SERVER}/comment/${query}`;
-    var data = await fetch(url, { method: 'POST' }).then((res) => res.json());
-    return data;
+  postComment: async (query) => {
+    const path = '/comment'
+    return await createRequest('POST', path, { query })
   },
-};
+}
 
-export default Comment;
+export default Comment

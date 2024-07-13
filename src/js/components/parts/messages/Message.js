@@ -1,43 +1,40 @@
-import { Gif } from '@giphy/react-components';
-import { useContext, useEffect, useState } from 'react';
+import { Gif } from '@giphy/react-components'
+import { useContext, useEffect, useState } from 'react'
 import {
   Icon_Document,
   Icon_Ellipsis,
   Icon_Plus,
   Icon_Share,
   Icon_Smile,
-} from '../icons/fontAwesome/FontAwesome';
-import LabelCircle from '../labels/labelCircle/LabelCircle';
-import { GiphyFetch } from '@giphy/js-fetch-api';
-import './Message.css';
+} from '../icons/fontAwesome/FontAwesome'
+import LabelCircle from '../labels/labelCircle/LabelCircle'
+import { GiphyFetch } from '@giphy/js-fetch-api'
+import './Message.css'
 import {
   Context_Message,
   interactMessage,
-} from '../../layouts/popups/popupMessenger/PopUpMessenger';
-import { useStore } from '../../../store';
-import {
-  LIST_INTERACT_MESS_DEFAULT,
-  SIZE_TINY,
-} from '../../../store/constants';
+} from '../../layouts/popups/popupMessenger/PopUpMessenger'
+import { useStore } from '../../../store'
+import { LIST_INTERACT_MESS_DEFAULT, SIZE_TINY } from '../../../store/constants'
 import {
   check_UnsentMessage,
   isMeSender,
   Render_notification_callVideo,
   shortLassSessionMess,
-} from '../../layouts/popups/popupHeader/popupMessageHeader/PopupMessageHeader';
-import PopUp_ from '../../layouts/popups/popup';
-import { bytesToSize, onlyUnique } from '../../../store/functions';
-import { HOST_SERVER } from '../../../config';
-import PickerEmoji from '../pickers/pickerEmoji/PickerEmoji';
-import { add_popup_call_video, add_popup_review } from '../../../store/actions';
-import PopUpReviews from '../../layouts/popups/popupReview/PopUpReviews';
+} from '../../layouts/popups/popupHeader/popupMessageHeader/PopupMessageHeader'
+import PopUp_ from '../../layouts/popups/popup'
+import { bytesToSize, onlyUnique } from '../../../store/functions'
+import PickerEmoji from '../pickers/pickerEmoji/PickerEmoji'
+import { add_popup_call_video, add_popup_review } from '../../../store/actions'
+import PopUpReviews from '../../layouts/popups/popupReview/PopUpReviews'
 import TabReactions, {
   OBJ_TabReactions,
-} from '../tabs/tabReactions/TabReactions';
-import ItemOpt from '../item/itemOpt/ItemOpt';
-import ButtonNormal from '../buttons/buttonNormal/ButtonNormal';
-import PopUpCallVideo from '../../layouts/popups/popupCallVideo/PopUpCallVideo';
-import PropTypes from 'prop-types';
+} from '../tabs/tabReactions/TabReactions'
+import ItemOpt from '../item/itemOpt/ItemOpt'
+import ButtonNormal from '../buttons/buttonNormal/ButtonNormal'
+import PopUpCallVideo from '../../layouts/popups/popupCallVideo/PopUpCallVideo'
+import PropTypes from 'prop-types'
+import { createRequest } from '../../../utilities/requests'
 
 /* eslint-disable no-unused-vars */
 function Message({
@@ -48,10 +45,10 @@ function Message({
   slug_sender,
   component_contentCenter = [],
 }) {
-  const value_Context_Message = useContext(Context_Message);
-  const [state, dispatch] = useStore();
+  const value_Context_Message = useContext(Context_Message)
+  const [state, dispatch] = useStore()
   const [state_component_contentCenter, set_state_component_contentCenter] =
-    useState(component_contentCenter);
+    useState(component_contentCenter)
   useEffect(() => {
     state.socketChat.on(
       `${value_Context_Message.idChat}_SHUTDOWN_CALL_VIDEO`,
@@ -60,17 +57,17 @@ function Message({
           component_contentCenter[0].time_send ==
           data.value_content_message.session_messages[0].time_send
         ) {
-          console.log('CCCC', data.value_content_message.session_messages);
+          console.log('CCCC', data.value_content_message.session_messages)
           set_state_component_contentCenter(
             data.value_content_message.session_messages,
-          );
+          )
         }
       },
-    );
-  }, []);
+    )
+  }, [])
   useEffect(() => {
-    set_state_component_contentCenter(component_contentCenter);
-  }, [component_contentCenter]);
+    set_state_component_contentCenter(component_contentCenter)
+  }, [component_contentCenter])
 
   return (
     component_contentCenter.length > 0 &&
@@ -101,7 +98,7 @@ function Message({
                         sessionMessage={sessionMessage}
                         propsParent={{ idxMessage, slug_sender, name_sender }}
                       />
-                    );
+                    )
                   },
                 )}
               </div>
@@ -112,7 +109,7 @@ function Message({
         </div>
       </div>
     )
-  );
+  )
 }
 function ListOptMoreSessionMessage({
   idx_sessionMessage,
@@ -126,57 +123,44 @@ function ListOptMoreSessionMessage({
     <div className="container-OptMoreSessionMessage">
       <div className="body-OptMoreSessionMessage">
         <div
-          onClick={(event) => {
-            fetch(`${HOST_SERVER}/chat/getListBoxChat`, {
-              method: 'GET',
-              credentials: 'include',
-            })
-              .then((res) => res.text())
-              .then((dataJson) => {
-                var data = JSON.parse(dataJson);
-                // console.log(data);
-                dispatch(
-                  add_popup_review(
-                    <PopUpReviews
-                      titlePopUp={'Share Message'}
-                      contentPopUp={data.map((chat, idx) => {
-                        return (
-                          <ItemOpt
-                            key={idx}
-                            component_Left={
-                              <LabelCircle urlImg={chat.avatarChat} />
-                            }
-                            children_centerItemOpt={<b>{chat.nameChat}</b>}
-                            component_Right={
-                              <ButtonNormal
-                                handleClick={(event) => {
-                                  fetch(`${HOST_SERVER}/chat/shareMessage`, {
-                                    method: 'POST',
-                                    body: JSON.stringify({
-                                      idChat_src: idChat,
-                                      idChat_send: chat._id,
-                                      idx_sessionMessage,
-                                    }),
-                                    credentials: 'include',
-                                    headers: {
-                                      'Content-Type': 'application/json',
-                                    },
-                                  });
-                                }}
-                                isEnable={true}
-                                styles={{
-                                  fontWeight: 'normal',
-                                }}
-                                textBtn={'Send'}
-                              />
-                            }
+          onClick={async (event) => {
+            const data = await createRequest('GET', '/chat/getListBoxChat')
+            dispatch(
+              add_popup_review(
+                <PopUpReviews
+                  titlePopUp={'Share Message'}
+                  contentPopUp={data.map((chat, idx) => {
+                    return (
+                      <ItemOpt
+                        key={idx}
+                        component_Left={
+                          <LabelCircle urlImg={chat.avatarChat} />
+                        }
+                        children_centerItemOpt={<b>{chat.nameChat}</b>}
+                        component_Right={
+                          <ButtonNormal
+                            handleClick={(event) => {
+                              createRequest('POST', '/chat/shareMessage', {
+                                body: {
+                                  idChat_src: idChat,
+                                  idChat_send: chat._id,
+                                  idx_sessionMessage,
+                                },
+                              })
+                            }}
+                            isEnable={true}
+                            styles={{
+                              fontWeight: 'normal',
+                            }}
+                            textBtn={'Send'}
                           />
-                        );
-                      })}
-                    />,
-                  ),
-                );
-              });
+                        }
+                      />
+                    )
+                  })}
+                />,
+              ),
+            )
           }}
           className="item-optMoreSessionMessage"
         >
@@ -186,82 +170,82 @@ function ListOptMoreSessionMessage({
         <div
           className="item-optMoreSessionMessage"
           onClick={() => {
-            obj_stateShowMoreOpt.set_stateShowMoreOpt(false);
+            obj_stateShowMoreOpt.set_stateShowMoreOpt(false)
             request_removeSessionMess({
               idx_sessionMessage,
               slug_sender,
               idChat,
               state,
-            });
+            })
           }}
         >
           Remove
         </div>
       </div>
     </div>
-  );
+  )
 }
 function SessionMessage({ obj_sessionMessage, isReply = false }) {
   // console.log(obj_sessionMessage);
-  const [state_gifs, set_state_gifs] = useState(null);
+  const [state_gifs, set_state_gifs] = useState(null)
   useEffect(() => {
     if (typeof state_gifs === 'string') {
       var fetch = async () => {
         var { data } = await new GiphyFetch(
           'sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh',
-        ).gif(state_gifs);
+        ).gif(state_gifs)
         set_state_gifs(
           <div>
             <Gif gif={data} />
           </div>,
-        );
-      };
-      fetch();
+        )
+      }
+      fetch()
     }
-  }, [state_gifs]);
+  }, [state_gifs])
   if (!isReply) {
     if (!check_UnsentMessage(obj_sessionMessage)) {
       return Object.entries(obj_sessionMessage).map((el) => {
-        console.log(el[0] != 'time_send' && el[1] != null);
+        console.log(el[0] != 'time_send' && el[1] != null)
         if (el[1] && el[0] !== 'time_send') {
           switch (el[0]) {
             case 'image':
-              return <img src={el[1]}></img>;
+              return <img src={el[1]}></img>
             case 'text':
-              return el[1];
+              return el[1]
             case 'video':
-              return <video muted src={el[1]} controls autoPlay></video>;
+              return <video muted src={el[1]} controls autoPlay></video>
             case 'audio':
-              return <audio muted src={el[1]} controls autoPlay></audio>;
+              return <audio muted src={el[1]} controls autoPlay></audio>
             case 'application':
-              console.log(el[1]);
+              console.log(el[1])
               return (
                 <DocumentMessage
                   nameFile={el[1].nameFile}
                   sizeFile={el[1].size}
                 />
-              );
+              )
             case 'gif': {
               if (state_gifs == null) {
-                console.log(el[1]);
-                set_state_gifs(el[1]);
+                console.log(el[1])
+                set_state_gifs(el[1])
               }
               return (
                 <div className="gif">
                   {typeof state_gifs === 'string' ? <b>{'GIF'}</b> : state_gifs}
                 </div>
-              );
+              )
             }
             default:
-              break;
+              break
           }
         }
-      });
+      })
     } else {
-      return <div className="sessionMessage_remove">unsent a message</div>;
+      return <div className="sessionMessage_remove">unsent a message</div>
     }
   } else {
-    return shortLassSessionMess(obj_sessionMessage);
+    return shortLassSessionMess(obj_sessionMessage)
   }
 }
 function request_updateInteractMess({
@@ -271,21 +255,15 @@ function request_updateInteractMess({
   state,
   isNotification,
 }) {
-  console.log(isNotification);
-  fetch(`${HOST_SERVER}/chat/updateInteractMess`, {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
+  createRequest('POST', '/chat/updateInteractMess', {
+    body: {
       IdChat,
       idx_sessionMessage,
       value_sessionMessage,
       socket: state.socketChat.id,
       isNotification,
-    }),
-  });
+    },
+  })
 }
 function request_removeSessionMess({
   idx_sessionMessage,
@@ -293,18 +271,14 @@ function request_removeSessionMess({
   idChat,
   state,
 }) {
-  fetch(`${HOST_SERVER}/chat/removeSessionMess`, {
-    method: 'POST',
-    body: JSON.stringify({
+  createRequest('POST', '/chat/removeSessionMess', {
+    body: {
       idx_sessionMessage,
       slug_sender,
       idChat,
       socket: state.socketChat.id,
-    }),
-    headers: {
-      'Content-Type': 'application/json',
     },
-  });
+  })
 }
 function DocumentMessage({ nameFile, sizeFile }) {
   return (
@@ -319,7 +293,7 @@ function DocumentMessage({ nameFile, sizeFile }) {
         <div className="infoSize-documentMessage">{bytesToSize(sizeFile)}</div>
       </div>
     </div>
-  );
+  )
 }
 function MainSessionMessage({
   sessionMessage,
@@ -328,15 +302,15 @@ function MainSessionMessage({
   name_sender,
   slug_sender,
 }) {
-  const [state, dispatch] = useStore();
+  const [state, dispatch] = useStore()
   var list_valueInteract = sessionMessage.interact.map((el) => {
-    return el.value_interact;
-  });
-  var list_valueInteractUnique = list_valueInteract.filter(onlyUnique);
-  const value_Context_Message = useContext(Context_Message);
-  const [stateShowMoreOpt, set_stateShowMoreOpt] = useState(false);
-  const [stateListInteractMess, set_stateListInteractMess] = useState(false);
-  const [stateShowPickerEmoji, set_stateShowPickerEmoji] = useState([]);
+    return el.value_interact
+  })
+  var list_valueInteractUnique = list_valueInteract.filter(onlyUnique)
+  const value_Context_Message = useContext(Context_Message)
+  const [stateShowMoreOpt, set_stateShowMoreOpt] = useState(false)
+  const [stateListInteractMess, set_stateListInteractMess] = useState(false)
+  const [stateShowPickerEmoji, set_stateShowPickerEmoji] = useState([])
 
   useEffect(() => {
     if (stateShowPickerEmoji.length > 0) {
@@ -344,13 +318,13 @@ function MainSessionMessage({
         value_Context_Message.statePopupContentMess.concat(
           stateShowPickerEmoji,
         ),
-      );
+      )
     } else {
-      value_Context_Message.set_statePopupContentMess([]);
+      value_Context_Message.set_statePopupContentMess([])
     }
-  }, [stateShowPickerEmoji]);
+  }, [stateShowPickerEmoji])
 
-  console.log(sessionMessage);
+  console.log(sessionMessage)
   return sessionMessage.notification ? (
     <SessionMessageNotification
       obj_IsMeSender={{ name_sender, slug_sender }}
@@ -414,38 +388,38 @@ function MainSessionMessage({
                                     value_tabReactions:
                                       sessionMessage.interact.map(
                                         (interact) => {
-                                          return interact.name_interact_er;
+                                          return interact.name_interact_er
                                         },
                                       ),
                                   }),
                                 ].concat(
                                   list_valueInteractUnique.map((value) => {
-                                    var list_nameInteract = [];
+                                    var list_nameInteract = []
                                     sessionMessage.interact.forEach(
                                       (interact) => {
                                         if (interact.value_interact == value) {
                                           list_nameInteract.push(
                                             interact.name_interact_er,
-                                          );
+                                          )
                                         }
                                       },
-                                    );
+                                    )
                                     return new OBJ_TabReactions({
                                       name_tabReactions: `${list_nameInteract.length} ${value}`,
                                       value_tabReactions: list_nameInteract,
-                                    });
+                                    })
                                   }),
                                 )}
                               />
                             }
                           />,
                         ),
-                      );
+                      )
                     }}
                   >
                     {el}
                   </span>
-                );
+                )
               })}
           </div>
         )}
@@ -457,7 +431,7 @@ function MainSessionMessage({
           {stateListInteractMess && (
             <PopUp_
               work_case_unmount={() => {
-                set_stateListInteractMess(false);
+                set_stateListInteractMess(false)
               }}
             >
               <div className={`body-interactMess `}>
@@ -471,18 +445,18 @@ function MainSessionMessage({
                             el.slug_interact_er ==
                               state.account.slug_personal &&
                             el.value_interact == interactMess
-                          );
+                          )
                         })
                           ? 'isMe'
                           : ''
                       }`}
                       onClick={(event) => {
-                        var isNotification = true;
+                        var isNotification = true
                         if (
                           !sessionMessage.interact.some((el) => {
                             return (
                               el.slug_interact_er == state.account.slug_personal
-                            );
+                            )
                           })
                         ) {
                           sessionMessage.interact.push(
@@ -492,49 +466,49 @@ function MainSessionMessage({
                               slug_interact_er: state.account.slug_personal,
                               time_interact: new Date().toISOString(),
                             }),
-                          );
+                          )
                         } else {
                           sessionMessage.interact.forEach((el) => {
                             if (
                               el.slug_interact_er == state.account.slug_personal
                             ) {
-                              el.value_interact = interactMess;
-                              isNotification = false;
+                              el.value_interact = interactMess
+                              isNotification = false
                             }
-                          });
+                          })
                         }
-                        set_stateListInteractMess(false);
+                        set_stateListInteractMess(false)
                         var tmp =
-                          value_Context_Message.state_contentsPopUpMessenger;
+                          value_Context_Message.state_contentsPopUpMessenger
                         tmp[propsParent.idxMessage].session_messages[
                           idx_sessionMessage
-                        ] = sessionMessage;
+                        ] = sessionMessage
                         value_Context_Message.setState_contentsPopUpMessenger(
                           tmp,
-                        );
+                        )
                         request_updateInteractMess({
                           IdChat: value_Context_Message.idChat,
                           idx_sessionMessage: `${propsParent.idxMessage}/${idx_sessionMessage}`,
                           value_sessionMessage: sessionMessage,
                           state,
                           isNotification,
-                        });
+                        })
                       }}
                     >
                       {interactMess}
                     </div>
-                  );
+                  )
                 })}
                 <div
                   className="interactMess"
                   onClick={(event) => {
-                    set_stateListInteractMess(false);
+                    set_stateListInteractMess(false)
                     set_stateShowPickerEmoji([
                       ...stateShowPickerEmoji,
                       <PopUp_
                         key={stateShowPickerEmoji.length}
                         work_case_unmount={() => {
-                          set_stateShowPickerEmoji([]);
+                          set_stateShowPickerEmoji([])
                         }}
                       >
                         <PickerEmoji
@@ -546,14 +520,14 @@ function MainSessionMessage({
                             zIndex: 1,
                           }}
                           handleClickPicker={(event, emojiData) => {
-                            set_stateShowPickerEmoji([]);
-                            var isNotification = true;
+                            set_stateShowPickerEmoji([])
+                            var isNotification = true
                             if (
                               !sessionMessage.interact.some((el) => {
                                 return (
                                   el.slug_interact_er ==
                                   state.account.slug_personal
-                                );
+                                )
                               })
                             ) {
                               sessionMessage.interact.push(
@@ -563,37 +537,37 @@ function MainSessionMessage({
                                   slug_interact_er: state.account.slug_personal,
                                   time_interact: new Date().toISOString(),
                                 }),
-                              );
+                              )
                             } else {
                               sessionMessage.interact.forEach((el) => {
                                 if (
                                   el.slug_interact_er ==
                                   state.account.slug_personal
                                 ) {
-                                  el.value_interact = emojiData.emoji;
-                                  isNotification = false;
+                                  el.value_interact = emojiData.emoji
+                                  isNotification = false
                                 }
-                              });
+                              })
                             }
                             var tmp =
-                              value_Context_Message.state_contentsPopUpMessenger;
+                              value_Context_Message.state_contentsPopUpMessenger
                             tmp[propsParent.idxMessage].session_messages[
                               idx_sessionMessage
-                            ] = sessionMessage;
+                            ] = sessionMessage
                             value_Context_Message.setState_contentsPopUpMessenger(
                               tmp,
-                            );
+                            )
                             request_updateInteractMess({
                               IdChat: value_Context_Message.idChat,
                               idx_sessionMessage: `${propsParent.idxMessage}/${idx_sessionMessage}`,
                               value_sessionMessage: sessionMessage,
                               state,
                               isNotification,
-                            });
+                            })
                           }}
                         />
                       </PopUp_>,
-                    ]);
+                    ])
                   }}
                 >
                   <Icon_Plus />
@@ -604,7 +578,7 @@ function MainSessionMessage({
           {stateShowMoreOpt && (
             <PopUp_
               work_case_unmount={() => {
-                set_stateShowMoreOpt(false);
+                set_stateShowMoreOpt(false)
               }}
             >
               <ListOptMoreSessionMessage
@@ -629,7 +603,7 @@ function MainSessionMessage({
             >
               <span
                 onClick={(event) => {
-                  set_stateListInteractMess(true);
+                  set_stateListInteractMess(true)
                 }}
               >
                 <Icon_Smile />
@@ -640,14 +614,14 @@ function MainSessionMessage({
                     slug_sender: propsParent.slug_sender,
                     name_sender: propsParent.name_sender,
                     sessionMessage,
-                  });
+                  })
                 }}
               >
                 <Icon_Share />
               </span>
               <span
                 onClick={(event) => {
-                  set_stateShowMoreOpt(true);
+                  set_stateShowMoreOpt(true)
                 }}
               >
                 <Icon_Ellipsis />
@@ -659,11 +633,11 @@ function MainSessionMessage({
         </div>
       </div>
     </div>
-  );
+  )
 }
 export function SessionMessageNotification({ sessionMessage, obj_IsMeSender }) {
-  const [state, dispatch] = useStore();
-  const value_Context_Message = useContext(Context_Message);
+  const [state, dispatch] = useStore()
+  const value_Context_Message = useContext(Context_Message)
   return (
     <div
       style={{
@@ -674,38 +648,29 @@ export function SessionMessageNotification({ sessionMessage, obj_IsMeSender }) {
       {sessionMessage.notification.callVideo && (
         <Render_notification_callVideo
           data={sessionMessage.notification.callVideo}
-          handleClick={() => {
-            fetch(`${HOST_SERVER}/chat/joinChatVideo`, {
-              method: 'POST',
-              body: JSON.stringify({
+          handleClick={async () => {
+            const data = await createRequest('POST', '/chat/joinChatVideo', {
+              body: {
                 slug_caller: sessionMessage.notification.callVideo.slug_caller,
-              }),
-              headers: {
-                'Content-Type': 'application/json',
               },
-              credentials: 'include',
             })
-              .then((res) => res.text())
-              .then((dataJson) => {
-                var data = JSON.parse(dataJson).result;
-                dispatch(
-                  add_popup_call_video(
-                    <PopUpCallVideo
-                      membersChat={value_Context_Message.membersChat}
-                      idChat={value_Context_Message.idChat}
-                      account_caller={data.account_caller}
-                      isResponse={true}
-                      avatarCallVideo={value_Context_Message.avatarChat}
-                      nameCallVideo={value_Context_Message.nameChat}
-                    />,
-                  ),
-                );
-              });
+            dispatch(
+              add_popup_call_video(
+                <PopUpCallVideo
+                  membersChat={value_Context_Message.membersChat}
+                  idChat={value_Context_Message.idChat}
+                  account_caller={data.account_caller}
+                  isResponse={true}
+                  avatarCallVideo={value_Context_Message.avatarChat}
+                  nameCallVideo={value_Context_Message.nameChat}
+                />,
+              ),
+            )
           }}
         />
       )}
     </div>
-  );
+  )
 }
 
 Message.propTypes = {
@@ -715,17 +680,17 @@ Message.propTypes = {
   name_sender: PropTypes.string.isRequired,
   slug_sender: PropTypes.string.isRequired,
   component_contentCenter: PropTypes.object,
-};
+}
 
 SessionMessage.propTypes = {
   obj_sessionMessage: PropTypes.object.isRequired,
   isReply: PropTypes.bool,
-};
+}
 
 SessionMessageNotification.propTypes = {
   sessionMessage: PropTypes.object.isRequired,
   obj_IsMeSender: PropTypes.object.isRequired,
-};
+}
 
 MainSessionMessage.propTypes = {
   sessionMessage: PropTypes.object.isRequired,
@@ -733,12 +698,12 @@ MainSessionMessage.propTypes = {
   propsParent: PropTypes.object.isRequired,
   name_sender: PropTypes.string.isRequired,
   slug_sender: PropTypes.string.isRequired,
-};
+}
 
 DocumentMessage.propTypes = {
   nameFile: PropTypes.string.isRequired,
   sizeFile: PropTypes.number.isRequired,
-};
+}
 
 ListOptMoreSessionMessage.propTypes = {
   idx_sessionMessage: PropTypes.number.isRequired,
@@ -747,7 +712,7 @@ ListOptMoreSessionMessage.propTypes = {
   obj_stateShowMoreOpt: PropTypes.object.isRequired,
   state: PropTypes.object.isRequired,
   dispatch: PropTypes.object.isRequired,
-};
+}
 
-export default Message;
+export default Message
 /* eslint-disable no-unused-vars */

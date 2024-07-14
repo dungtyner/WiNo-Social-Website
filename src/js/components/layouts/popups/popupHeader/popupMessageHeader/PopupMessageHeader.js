@@ -407,9 +407,7 @@ function PopupCreateGroupChat({ initSuggestMembers }) {
 
           <div className="section-selectedMembersInNewGroup">
             {state_membersSelected.map((member, idx) => {
-              var shortName = `${member.user_fname} ${member.user_lname}`.split(
-                ' ',
-              )
+              var shortName = `${member.fname} ${member.lname}`.split(' ')
               return (
                 <div key={idx} className="item-selectedMembersInNewGroup">
                   <LabelCircle urlImg={member.avatar_account} />
@@ -488,9 +486,7 @@ function ItemSelectMember({ member, OBJ_useState_listSelectEd }) {
           set_state_selectEd(!state_selectEd)
         }}
         component_Left={<LabelCircle urlImg={member.avatar_account} />}
-        children_centerItemOpt={
-          <b>{`${member.user_fname} ${member.user_lname}`}</b>
-        }
+        children_centerItemOpt={<b>{`${member.fname} ${member.lname}`}</b>}
         component_Right={
           state_selectEd ? (
             <span>

@@ -3,12 +3,12 @@ import LogoWebsite from '../../../../logo/logoWebsite/LogoWebsite'
 import FormAccount from '../formAccount/FormAccount.module.scss'
 import { createRequest } from '../../../../../utilities/requests'
 function RestorePass() {
-  const [gmail, setGmail] = useState('')
+  const [email, setemail] = useState('')
   const [password, setPassword] = useState('')
   const handleRestorePass = async function (e) {
     e.preventDefault()
     const res = await createRequest('POST', '/account/restore-pass', {
-      body: { password, gmail },
+      body: { password, email },
     })
 
     if ('ok' === res.mess) {
@@ -30,7 +30,7 @@ function RestorePass() {
               name="email"
               placeholder="Enter email address"
               onChange={(e) => {
-                setGmail(e.currentTarget.value)
+                setemail(e.currentTarget.value)
               }}
             />
           </div>

@@ -230,7 +230,7 @@ function PopUpAddMember({ data_new_Member, value_Context_Message }) {
         <div>
           <div className="section_selectedAddMembers">
             {state_listSelectedSlug_Member.map((new_mb, idx) => {
-              var name_new_mb = `${new_mb.user_fname} ${new_mb.user_lname}`
+              var name_new_mb = `${new_mb.fname} ${new_mb.lname}`
               return (
                 <div key={idx} className="item-NameSelectedNewMember">
                   <LabelCircle urlImg={new_mb.avatar_account} />
@@ -299,7 +299,7 @@ function PopUpAddMember({ data_new_Member, value_Context_Message }) {
                             notification: new notificationMess({
                               join_chat: new notification_join_chat_Mess({
                                 slug_performer: state.account.slug_personal,
-                                name_affecter: `${new_mb.user_fname} ${new_mb.user_lname}`,
+                                name_affecter: `${new_mb.fname} ${new_mb.lname}`,
                                 slug_affecter: new_mb.slug_personal,
                               }),
                             }),
@@ -341,7 +341,7 @@ function ItemAddMember({
           <div>
             {
               <b>
-                {data_new_Member.user_fname} {data_new_Member.user_lname}
+                {data_new_Member.fname} {data_new_Member.lname}
               </b>
             }
           </div>
@@ -406,7 +406,7 @@ function PopUpEditNickNameMember({ dataMembers, value_Context_Message }) {
 function ItemEditNickNameMember({ dataMember, value_Context_Message }) {
   var tmp_nameMember = dataMember.nick_name
     ? dataMember.nick_name
-    : `${dataMember.detail.user_fname} ${dataMember.detail.user_lname}`
+    : `${dataMember.detail.fname} ${dataMember.detail.lname}`
   const [state_EditNickName, set_state_EditNickName] = useState(false)
   const ref_item_textNickName = useRef(null)
   const [state_textNickName, set_state_textNickName] = useState(tmp_nameMember)

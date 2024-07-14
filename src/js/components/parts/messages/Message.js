@@ -462,7 +462,7 @@ function MainSessionMessage({
                           sessionMessage.interact.push(
                             new interactMessage({
                               value_interact: interactMess,
-                              name_interact_er: `${state.account.user_fname} ${state.account.user_lname}`,
+                              name_interact_er: `${state.account.fname} ${state.account.lname}`,
                               slug_interact_er: state.account.slug_personal,
                               time_interact: new Date().toISOString(),
                             }),
@@ -533,7 +533,7 @@ function MainSessionMessage({
                               sessionMessage.interact.push(
                                 new interactMessage({
                                   value_interact: emojiData.emoji,
-                                  name_interact_er: `${state.account.user_fname} ${state.account.user_lname}`,
+                                  name_interact_er: `${state.account.fname} ${state.account.lname}`,
                                   slug_interact_er: state.account.slug_personal,
                                   time_interact: new Date().toISOString(),
                                 }),

@@ -5,20 +5,20 @@ import LogoWebsite from '../../../../logo/logoWebsite/LogoWebsite'
 import { createRequest } from '../../../../../utilities/requests'
 
 function Register() {
-  const [user_fname, setUser_fname] = useState('')
-  const [user_lname, setUser_lname] = useState('')
-  const [gmail, setGmail] = useState('')
+  const [fname, setfname] = useState('')
+  const [lname, setlname] = useState('')
+  const [email, setemail] = useState('')
   const [password, setPassword] = useState('')
   const [birthday, setBirthday] = useState('')
   const [gender, setGender] = useState('1')
   const handleSignUp = async function (e) {
     e.preventDefault()
-    const res = await createRequest('POST', '/account/signup', {
+    const res = await createRequest('POST', '/auth/sign-up', {
       body: {
         password,
-        gmail,
-        user_fname,
-        user_lname,
+        email,
+        fname,
+        lname,
         birthday,
         gender,
       },
@@ -44,7 +44,7 @@ function Register() {
                 name="fname"
                 placeholder="First name"
                 onChange={(e) => {
-                  setUser_fname(e.currentTarget.value)
+                  setfname(e.currentTarget.value)
                 }}
               />
             </div>
@@ -56,7 +56,7 @@ function Register() {
                 name="lname"
                 placeholder="Last name"
                 onChange={(e) => {
-                  setUser_lname(e.currentTarget.value)
+                  setlname(e.currentTarget.value)
                 }}
               />
             </div>
@@ -69,7 +69,7 @@ function Register() {
               name="email"
               placeholder="Enter mobile number or email address"
               onChange={(e) => {
-                setGmail(e.currentTarget.value)
+                setemail(e.currentTarget.value)
               }}
             />
           </div>

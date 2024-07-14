@@ -118,7 +118,7 @@ export function SidebarFriendRequest() {
                   >
                     <ItemOpt
                       children_centerItemOpt={
-                        <b>{`${friend.user_fname} ${friend.user_lname}`}</b>
+                        <b>{`${friend.fname} ${friend.lname}`}</b>
                       }
                       component_Left={
                         <LabelCircle urlImg={friend.avatar_account} />
@@ -172,7 +172,7 @@ export function SidebarFriendResponse() {
                   >
                     <ItemOpt
                       children_centerItemOpt={
-                        <b>{`${friend.user_fname} ${friend.user_lname}`}</b>
+                        <b>{`${friend.fname} ${friend.lname}`}</b>
                       }
                       component_Left={
                         <LabelCircle urlImg={friend.avatar_account} />
@@ -259,7 +259,7 @@ export function SidebarFriendList() {
                     {/* <Link key={idx}  to={`${friend.slug_personal}`}> */}
                     <ItemOpt
                       children_centerItemOpt={
-                        <b>{`${friend.user_fname} ${friend.user_lname}`}</b>
+                        <b>{`${friend.fname} ${friend.lname}`}</b>
                       }
                       component_Left={
                         <LabelCircle urlImg={friend.avatar_account} />

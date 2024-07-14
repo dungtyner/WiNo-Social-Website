@@ -79,12 +79,12 @@ function SettingUser() {
         const response = await AccountAPI.getId(state.account._id)
 
         set_user(response)
-        set_username(response.user_fname + ' ' + response.user_lname)
+        set_username(response.fname + ' ' + response.lname)
         set_password(response.password)
-        set_user_fname(response.user_fname)
-        set_user_lname(response.user_lname)
+        set_fname(response.fname)
+        set_lname(response.lname)
         set_birthday(response.birthday)
-        set_gmail(response.gmail)
+        set_email(response.email)
       }
 
       fetchData()
@@ -95,25 +95,25 @@ function SettingUser() {
 
   const [username, set_username] = useState('')
   const [password, set_password] = useState('')
-  const [user_fname, set_user_fname] = useState('')
-  const [user_lname, set_user_lname] = useState('')
+  const [fname, set_fname] = useState('')
+  const [lname, set_lname] = useState('')
   const [birthday, set_birthday] = useState('')
-  const [gmail, set_gmail] = useState('')
+  const [email, set_email] = useState('')
 
   const handler_Update = () => {
     const fetchData = async () => {
       const query = {
         id_user: state.account._id,
-        user_fname: user_fname,
-        user_lname: user_lname,
+        fname: fname,
+        lname: lname,
         birthday: birthday,
-        gmail: gmail,
+        email: email,
       }
 
       await AccountAPI.updateInfo(query)
-      state.account.user_fname = user_fname
-      state.account.user_lname = user_lname
-      set_username(`${user_fname} ${user_lname}`)
+      state.account.fname = fname
+      state.account.lname = lname
+      set_username(`${fname} ${lname}`)
       dispatch(set_data_account(state.account))
     }
 
@@ -160,7 +160,7 @@ function SettingUser() {
                     className=""
                     style={{ fontWeight: '600', paddingLeft: '10px' }}
                   >
-                    {state.account.user_fname + ' ' + state.account.user_lname}
+                    {state.account.fname + ' ' + state.account.lname}
                   </span>
                 </div>
               </div>
@@ -280,8 +280,8 @@ function SettingUser() {
                       id="standard-basic"
                       variant="outlined"
                       color="success"
-                      value={user_fname}
-                      onChange={(e) => set_user_fname(e.target.value)}
+                      value={fname}
+                      onChange={(e) => set_fname(e.target.value)}
                     />
                   </div>
                 </div>
@@ -294,8 +294,8 @@ function SettingUser() {
                       id="standard-basic"
                       variant="outlined"
                       color="success"
-                      value={user_lname}
-                      onChange={(e) => set_user_lname(e.target.value)}
+                      value={lname}
+                      onChange={(e) => set_lname(e.target.value)}
                     />
                   </div>
                 </div>
@@ -327,15 +327,15 @@ function SettingUser() {
                 </div>
                 <div className="txt_edit_setting_form">
                   <div className="title_setting_form">
-                    <span style={{ fontWeight: '600' }}>Gmail</span>
+                    <span style={{ fontWeight: '600' }}>email</span>
                   </div>
                   <div className="txt_input_edit">
                     <TextField
                       id="standard-basic"
                       variant="outlined"
                       color="success"
-                      value={gmail}
-                      onChange={(e) => set_gmail(e.target.value)}
+                      value={email}
+                      onChange={(e) => set_email(e.target.value)}
                     />
                   </div>
                 </div>

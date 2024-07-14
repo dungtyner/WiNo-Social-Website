@@ -25,9 +25,7 @@ export default function Sidebar({ mode, setMode, isShowTittle }) {
                 <SidebarRow
                   isShowTittle={isShowTittle}
                   src={state.account.avatar_account}
-                  title={
-                    state.account.user_fname + ' ' + state.account.user_lname
-                  }
+                  title={state.account.fname + ' ' + state.account.lname}
                 />
               </ListItemButton>
             </ListItem>

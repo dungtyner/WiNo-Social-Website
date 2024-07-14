@@ -594,7 +594,7 @@ function renderMyScreen({
   //   new contentPopUpMessenger({
   //     isMe: true,
   //     name_sender:
-  //     state.account.user_fname + " " + state.account.user_lname,
+  //     state.account.fname + " " + state.account.lname,
   //     avatar_sender: state.account.avatar_account,
   //     session_messages: value_content_sessionMessage,
   //     slug_sender: state.account.slug_personal,

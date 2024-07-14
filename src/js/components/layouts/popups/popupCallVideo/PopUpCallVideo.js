@@ -219,7 +219,7 @@ function PopUpCallVideo({
                     nameJoiner: `${
                       accepter.member.nick_name
                         ? accepter.member.nick_name
-                        : `${accepter.account_joiner.user_fname} ${accepter.account_joiner.user_lname}`
+                        : `${accepter.account_joiner.fname} ${accepter.account_joiner.lname}`
                     }`,
                   },
                 })
@@ -413,7 +413,7 @@ function PopUpCallVideo({
                               nameJoiner: `${
                                 member.nick_name
                                   ? member.nick_name
-                                  : `${data.account_joiner.user_fname} ${data.account_joiner.user_lname}`
+                                  : `${data.account_joiner.fname} ${data.account_joiner.lname}`
                               }`,
                             },
                           })
@@ -470,7 +470,7 @@ function PopUpCallVideo({
                   data={{
                     nameJoiner: account_caller.member.nick_name
                       ? account_caller.member.nick_name
-                      : `${account_caller.user_fname} ${account_caller.user_lname}`,
+                      : `${account_caller.fname} ${account_caller.lname}`,
                   }}
                   stream={refStreamMainCamera.current.stream}
                 />
@@ -483,7 +483,7 @@ function PopUpCallVideo({
                       nameJoiner: ref_state_list_accepter.current[0].member
                         .nick_name
                         ? ref_state_list_accepter.current[0].member.nick_name
-                        : `${ref_state_list_accepter.current[0].account_joiner.user_fname} ${ref_state_list_accepter.current[0].account_joiner.user_lname}`,
+                        : `${ref_state_list_accepter.current[0].account_joiner.fname} ${ref_state_list_accepter.current[0].account_joiner.lname}`,
                       // account_joiner
                     }}
                     stream={refStreamMainCamera.current.stream}
@@ -562,7 +562,7 @@ function PopUpCallVideo({
                                               <b>{`${
                                                 data.member.nick_name
                                                   ? data.member.nick_name
-                                                  : `${data.account_joiner.user_fname} ${data.account_joiner.user_lname}`
+                                                  : `${data.account_joiner.fname} ${data.account_joiner.lname}`
                                               }`}</b>
                                             }
                                           />

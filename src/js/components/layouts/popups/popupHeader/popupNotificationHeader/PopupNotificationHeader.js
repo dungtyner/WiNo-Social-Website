@@ -115,7 +115,7 @@ function NotificationResponseNewFriend({
                 <LabelCircle urlImg={item.data_requester.avatar_account} />
                 {
                   <div>
-                    <b>{`${item.data_requester.user_fname} ${item.data_requester.user_lname}`}</b>{' '}
+                    <b>{`${item.data_requester.fname} ${item.data_requester.lname}`}</b>{' '}
                     Sent a friend request
                     <div>
                       <b>{dateTo_textAgo(new Date(item.time_request))}</b>
@@ -182,7 +182,7 @@ function NotificationAcceptFriend({ dataNotification, state, dispatch }) {
                 <LabelCircle urlImg={item.data_accepter.avatar_account} />
                 {
                   <div>
-                    <b>{`${item.data_accepter.user_fname} ${item.data_accepter.user_lname}`}</b>{' '}
+                    <b>{`${item.data_accepter.fname} ${item.data_accepter.lname}`}</b>{' '}
                     has accepted Your friend request
                     <div>
                       <i>
@@ -211,8 +211,8 @@ PopupNotificationHeader.propTypes = {
           data_requester: PropTypes.shape({
             slug_personal: PropTypes.string.isRequired,
             avatar_account: PropTypes.string.isRequired,
-            user_fname: PropTypes.string.isRequired,
-            user_lname: PropTypes.string.isRequired,
+            fname: PropTypes.string.isRequired,
+            lname: PropTypes.string.isRequired,
           }).isRequired,
           time_request: PropTypes.string.isRequired,
           isSeen: PropTypes.bool.isRequired,
@@ -223,8 +223,8 @@ PopupNotificationHeader.propTypes = {
           data_accepter: PropTypes.shape({
             slug_personal: PropTypes.string.isRequired,
             avatar_account: PropTypes.string.isRequired,
-            user_fname: PropTypes.string.isRequired,
-            user_lname: PropTypes.string.isRequired,
+            fname: PropTypes.string.isRequired,
+            lname: PropTypes.string.isRequired,
           }).isRequired,
           time_accept: PropTypes.string.isRequired,
           isSeen: PropTypes.bool.isRequired,
@@ -242,8 +242,8 @@ NotificationResponseNewFriend.propTypes = {
           data_requester: PropTypes.shape({
             slug_personal: PropTypes.string.isRequired,
             avatar_account: PropTypes.string.isRequired,
-            user_fname: PropTypes.string.isRequired,
-            user_lname: PropTypes.string.isRequired,
+            fname: PropTypes.string.isRequired,
+            lname: PropTypes.string.isRequired,
           }).isRequired,
           time_request: PropTypes.string.isRequired,
           isSeen: PropTypes.bool.isRequired,
@@ -269,8 +269,8 @@ NotificationAcceptFriend.propTypes = {
           data_accepter: PropTypes.shape({
             slug_personal: PropTypes.string.isRequired,
             avatar_account: PropTypes.string.isRequired,
-            user_fname: PropTypes.string.isRequired,
-            user_lname: PropTypes.string.isRequired,
+            fname: PropTypes.string.isRequired,
+            lname: PropTypes.string.isRequired,
           }).isRequired,
           isSeen: PropTypes.bool.isRequired,
           time_accept: PropTypes.instanceOf(Date).isRequired,

@@ -5,7 +5,6 @@ import { List, ListItem, ListItemButton } from '@mui/material'
 import PropTypes from 'prop-types'
 
 export default function Widgets({ friendsOnline = [] }) {
-  console.log(friendsOnline)
   return (
     <div className="widgets">
       <List>
@@ -15,7 +14,7 @@ export default function Widgets({ friendsOnline = [] }) {
               <ListItemButton component="a" href="#">
                 <SidebarRow
                   src={el.avatar_account}
-                  title={el.user_fname + '_' + el.user_lname}
+                  title={el.fname + '_' + el.lname}
                 />
               </ListItemButton>
             </ListItem>

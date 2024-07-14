@@ -8,16 +8,16 @@ import { SITE_KEY_RECAPTCHA } from '../../../../../config'
 
 function Login() {
   const captchaRef = useRef(null)
-  const [gmail, setGmail] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const handleSignIn = async function (e) {
     e.preventDefault()
-    const token = captchaRef.current.getValue()
-    if (token !== '') {
-      const body = { password, gmail, token }
-      const res = await createRequest('POST', '/account/signin', { body })
+    const recaptcha_token = captchaRef.current.getValue()
+    if (recaptcha_token !== '') {
+      const body = { password, email, recaptcha_token }
+      const res = await createRequest('POST', '/auth/sign-in', { body })
 
-      if ('ok' === res.status) {
+      if (res.is_success) {
         sessionStorage.setItem('noReload', 2)
         window.location.reload()
       }
@@ -39,7 +39,7 @@ function Login() {
               name="email"
               placeholder="Enter mobile number or email address"
               onChange={(e) => {
-                setGmail(e.currentTarget.value)
+                setEmail(e.currentTarget.value)
               }}
             />
           </div>

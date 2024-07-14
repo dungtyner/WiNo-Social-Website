@@ -142,7 +142,7 @@ function Header({ avatar_account, slug_personal, account }) {
                               fontSize: '20px',
                               color: 'rgb(38, 157, 54)',
                             }}
-                          >{`${value.user_fname} ${value.user_lname}`}</span>
+                          >{`${value.fname} ${value.lname}`}</span>
                         </div>
                       </Link>
                     </span>

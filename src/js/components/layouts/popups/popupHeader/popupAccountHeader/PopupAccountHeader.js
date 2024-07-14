@@ -66,9 +66,7 @@ function PopupAccountHeader() {
             <ItemOpt
               handleClick={(event) => {}}
               component_Left={<LabelCircle urlImg={account.avatar_account} />}
-              children_centerItemOpt={
-                account.user_fname + ' ' + account.user_lname
-              }
+              children_centerItemOpt={account.fname + ' ' + account.lname}
             />
           </Link>
 

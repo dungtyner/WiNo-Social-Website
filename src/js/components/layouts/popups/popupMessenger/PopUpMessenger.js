@@ -116,9 +116,9 @@ function PopUpMessenger({
               state.account.slug_personal ==
               content_messages.account.slug_personal,
             name_sender:
-              content_messages.account.user_fname +
+              content_messages.account.fname +
               ' ' +
-              content_messages.account.user_lname,
+              content_messages.account.lname,
             avatar_account: content_messages.account.avatar_account,
             session_messages:
               content_messages.value_content_sessionMessage.session_messages,
@@ -132,9 +132,9 @@ function PopUpMessenger({
               state.account.slug_personal ==
               content_messages.account.slug_personal,
             name_sender:
-              content_messages.account.user_fname +
+              content_messages.account.fname +
               ' ' +
-              content_messages.account.user_lname,
+              content_messages.account.lname,
             avatar_sender: content_messages.account.avatar_account,
             session_messages:
               content_messages.value_content_sessionMessage.session_messages,

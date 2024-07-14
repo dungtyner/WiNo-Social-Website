@@ -194,7 +194,7 @@ function App({ result }) {
     var slugs = get_slug(window.location.href)
 
     if (!slugs) slugs = []
-    console.log('stateURL', slugs)
+
     if (
       slugs.length >= 2 &&
       slugs[0] === 'account' &&
@@ -278,9 +278,9 @@ function App({ result }) {
                             <Home
                               avatar_account={result.account.avatar_account}
                               full_name={
-                                result.account.user_fname +
+                                result.account.fname +
                                 ' ' +
-                                result.account.user_lname
+                                result.account.lname
                               }
                               data_account={result.account}
                             />

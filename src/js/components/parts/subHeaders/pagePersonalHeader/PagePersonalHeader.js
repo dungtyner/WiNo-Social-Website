@@ -76,7 +76,7 @@ function PagePersonalHeader({ stateAccount }) {
           }
         >
           <NamePersonal
-            textName={account.user_fname + ' ' + account.user_lname}
+            textName={account.fname + ' ' + account.lname}
             elOfficial={<i className="fa-solid fa-circle-check"></i>}
           />
           <div

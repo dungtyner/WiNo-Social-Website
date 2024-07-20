@@ -110,7 +110,6 @@ function App({ result }) {
 
         if (!slugs) slugs = []
         if (slugs.length >= 2 && slugs[0] === 'account') {
-          console.log(slugs)
           set_state_slugs(slugs)
         }
       } else if (JSON.parse(sessionStorage.getItem('noReload')) < 0) {
@@ -200,13 +199,6 @@ function App({ result }) {
       slugs[0] === 'account' &&
       slugs[1] === 'personal'
     ) {
-      console.log(
-        `/${slugs
-          .map((slug) => {
-            return slug
-          })
-          .join('/')}`,
-      )
       set_state_slugs(slugs)
     } else if (slugs.length >= 1 && slugs[0] === 'friends') {
       set_state_slugs(slugs)

@@ -55,7 +55,7 @@ function TabPersonalHeader({
 TabPersonalHeader.propTypes = {
   idx: PropTypes.number,
   textTab: PropTypes.string,
-  para_isActing: PropTypes.string,
+  para_isActing: PropTypes.number,
   handleClick: PropTypes.func,
   slug_personal: PropTypes.string.isRequired,
 }

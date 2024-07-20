@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router'
+// import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 import PagePersonalStyles from '../pagePersonal/PagePersonal.module.css'
 import { Fragment, useEffect, useState } from 'react'
@@ -10,40 +10,40 @@ import AccountAPI from '../../../../API/AccountAPI'
 import Users_Activity from '../../../../API/UsersActivity'
 import { useStore } from '../../../../store/'
 import PropTypes from 'prop-types'
-import { createRequest } from '../../../../utilities/requests'
+// import { createRequest } from '../../../../utilities/requests'
 
 export const Context_PagePersonal = createContext()
 function PagePersonal({ slugs }) {
   const [stateAccount, set_stateAccount] = useState(null)
-  const navigate = useNavigate()
-  useEffect(() => {
-    var fetchAPI = async () => {
-      if (slugs) {
-        const data = await createRequest(
-          'GET',
-          `/${slugs.map((slug) => slug).join('/')}`,
-        )
-        navigate(
-          `/${slugs
-            .map((slug) => {
-              return slug
-            })
-            .join('/')}`,
-          { replace: true },
-        )
-        if (data.result) {
-          set_stateAccount(
-            Object.assign(
-              { id_chatPersonalPage: data.id_chatPersonalPage },
-              data.result,
-            ),
-          )
-        }
-      }
-    }
+  // const navigate = useNavigate()
+  // useEffect(() => {
+  //   var fetchAPI = async () => {
+  //     if (slugs) {
+  //       // const data = await createRequest(
+  //       //   'GET',
+  //       //   `/${slugs.map((slug) => slug).join('/')}`,
+  //       // )
+  //       // navigate(
+  //       //   `/${slugs
+  //       //     .map((slug) => {
+  //       //       return slug
+  //       //     })
+  //       //     .join('/')}`,
+  //       //   { replace: true },
+  //       // )
+  //       // if (data.result) {
+  //       //   set_stateAccount(
+  //       //     Object.assign(
+  //       //       { id_chatPersonalPage: data.id_chatPersonalPage },
+  //       //       data.result,
+  //       //     ),
+  //       //   )
+  //       // }
+  //     }
+  //   }
 
-    fetchAPI()
-  }, [])
+  //   fetchAPI()
+  // }, [])
   /* eslint-disable no-unused-vars */
   const [user, set_user] = useState({})
   const [state, dispatch] = useStore()
@@ -53,9 +53,22 @@ function PagePersonal({ slugs }) {
   /* eslint-disable no-unused-vars */
   useEffect(() => {
     const fetchData = async () => {
-      const response = await AccountAPI.getId(state.account._id)
+      const response = await AccountAPI.getBySlug(
+        slugs[slugs.indexOf('personal') + 1],
+      )
 
-      set_user(response)
+      const data = response.data
+
+      if (data.result) {
+        set_stateAccount(
+          Object.assign(
+            { id_chatPersonalPage: data.id_chatPersonalPage },
+            data.result,
+          ),
+        )
+      }
+
+      set_user(data)
     }
 
     fetchData()
@@ -64,11 +77,9 @@ function PagePersonal({ slugs }) {
   useEffect(() => {
     const fetch_users_activity = async () => {
       const response = await Users_Activity.getUsersActivity(state.account._id)
-      console.log(response)
-
       set_user_activity(response)
 
-      if (response.list_image.length > 0) {
+      if (response?.list_image.length > 0) {
         set_check_list_image(true)
       } else {
         set_check_list_image(false)
@@ -99,8 +110,8 @@ function PagePersonal({ slugs }) {
                 </div>
                 <div className={PagePersonalStyles['content-pagePersonal']}>
                   {/* <Outlet/> */}
-                  {user_activity.list_image &&
-                    user_activity.list_image.map((value) => (
+                  {user_activity?.list_image &&
+                    user_activity?.list_image.map((value) => (
                       <div
                         className={
                           PagePersonalStyles['content-pagePersonal-post-img']
@@ -108,7 +119,7 @@ function PagePersonal({ slugs }) {
                         key={value.id_image_post}
                       >
                         <Link
-                          to={`/post/${value.id_image_post}_${user_activity.id_user}`}
+                          to={`/post/${value.id_image_post}_${user_activity?.id_user}`}
                         >
                           <img
                             src={value.image_body}
@@ -138,7 +149,7 @@ function PagePersonal({ slugs }) {
 }
 
 PagePersonal.propTypes = {
-  slugs: PropTypes.object.isRequired,
+  slugs: PropTypes.array.isRequired,
 }
 
 export default PagePersonal

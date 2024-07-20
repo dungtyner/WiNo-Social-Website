@@ -7,7 +7,7 @@ function RestorePass() {
   const [password, setPassword] = useState('')
   const handleRestorePass = async function (e) {
     e.preventDefault()
-    const res = await createRequest('POST', '/account/restore-pass', {
+    const res = await createRequest('POST', '/auth/restore-pass', {
       body: { password, email },
     })
 

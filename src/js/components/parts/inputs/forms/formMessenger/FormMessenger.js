@@ -102,7 +102,10 @@ function FormMessenger({ idChat }) {
   }
 
   const handleSubmitMess = (event, isClick) => {
+    console.log(isClick)
+
     if (event.key === 'Enter' || isClick) {
+      console.log(stateTextMess)
       var value_content_sessionMessage = cast_inputs_to_valueContentMessNew({
         listFile: listFile,
         stateTextMess: stateTextMess,
@@ -561,7 +564,7 @@ function submitSaveMessage({
   listFile,
   idChat,
 }) {
-  var form = new FormData()
+  const form = new FormData()
   form.append('idChat', idChat)
   form.append('socket', JSON.stringify(state.socket.id))
 

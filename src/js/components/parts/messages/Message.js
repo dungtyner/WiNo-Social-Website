@@ -124,7 +124,10 @@ function ListOptMoreSessionMessage({
       <div className="body-OptMoreSessionMessage">
         <div
           onClick={async (event) => {
-            const data = await createRequest('GET', '/chat/getListBoxChat')
+            const { data } = await createRequest(
+              'GET',
+              '/chat/get-list-box-chat',
+            )
             dispatch(
               add_popup_review(
                 <PopUpReviews
@@ -711,7 +714,7 @@ ListOptMoreSessionMessage.propTypes = {
   idChat: PropTypes.string.isRequired,
   obj_stateShowMoreOpt: PropTypes.object.isRequired,
   state: PropTypes.object.isRequired,
-  dispatch: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
 }
 
 export default Message

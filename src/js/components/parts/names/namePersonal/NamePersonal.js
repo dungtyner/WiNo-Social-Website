@@ -17,7 +17,7 @@ function NamePersonal({ elOfficial = '', textName }) {
 }
 
 NamePersonal.propTypes = {
-  elOfficial: PropTypes.string,
+  elOfficial: PropTypes.object,
   textName: PropTypes.string.isRequired,
 }
 

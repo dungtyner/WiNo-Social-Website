@@ -12,7 +12,7 @@ function Tmp_add_popup_content(component_PopUp) {
 function LabelCircle({
   urlImg,
   el_Icon,
-  numCount,
+  numCount = 0,
   objDetail,
   typeLabelCircle = '',
   sizeLabel = 'SMALL',
@@ -139,8 +139,8 @@ function LabelCircle({
 
 LabelCircle.propTypes = {
   urlImg: PropTypes.string.isRequired,
-  el_Icon: PropTypes.node.isRequired,
-  numCount: PropTypes.number.isRequired,
+  el_Icon: PropTypes.node,
+  numCount: PropTypes.number,
   objDetail: PropTypes.object.isRequired,
   typeLabelCircle: PropTypes.string,
   sizeLabel: PropTypes.string,

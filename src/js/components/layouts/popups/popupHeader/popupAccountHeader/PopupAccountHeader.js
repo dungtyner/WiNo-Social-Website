@@ -31,7 +31,7 @@ var listItemOptAccountHeader = [
     title_itemOpt: 'Sign Out',
     isSummary: false,
     handleClick: async (event, state) => {
-      const result = await createRequest('/account/sign-out/')
+      const result = await createRequest('GET', '/account/sign-out/')
 
       if (result.status === 200) {
         state.socket.emit(`I'M_SIGN_OUT`, state.account)

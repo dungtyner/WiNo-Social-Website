@@ -40,14 +40,14 @@ export function get_slug(url) {
   return new URL(url).pathname.match(/[^/]+/g)
 }
 export function req_requestAddFriend(account) {
-  createRequest('POST', '/friend/requestAddFriend', {
+  createRequest('POST', '/friend/request-add-friend', {
     body: {
       slug_friend: account.slug_personal,
     },
   })
 }
-export const req_remove_requestAddFriend = (account) => {
-  createRequest('POST', '/friend/remove_requestAddFriend', {
+export const cancelRequestAddFriend = (account) => {
+  createRequest('POST', '/friend/cancel-request-add-friend', {
     body: {
       slug_friend: account.slug_personal,
     },

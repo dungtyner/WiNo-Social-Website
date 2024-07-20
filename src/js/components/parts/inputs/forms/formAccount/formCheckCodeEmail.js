@@ -6,7 +6,7 @@ function CheckCodeEmail() {
   const [code, setCode] = useState('')
   const handleRestorePass = async function (e) {
     e.preventDefault()
-    const res = await createRequest('POST', '/account/CheckCodeEmail', {
+    const res = await createRequest('POST', '/auth/check-code-email', {
       body: { code },
     })
 

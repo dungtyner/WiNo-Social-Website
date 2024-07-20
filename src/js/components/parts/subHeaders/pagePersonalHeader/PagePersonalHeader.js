@@ -23,7 +23,7 @@ import ItemOpt from '../../item/itemOpt/ItemOpt'
 import {
   req_acceptAddNewFriend,
   req_refuse_requestAddFriend,
-  req_remove_requestAddFriend,
+  cancelRequestAddFriend,
   req_requestAddFriend,
   req_unfriend,
 } from '../../../../store/functions'
@@ -212,7 +212,7 @@ function ButtonHeaderWithSlugPersonal({ account, state, dispatch }) {
       ) : isRequestFriend ? (
         <ButtonNormal
           handleClick={() => {
-            req_remove_requestAddFriend(account)
+            cancelRequestAddFriend(account)
           }}
           textBtn={'Cancel Request'}
           elIcon={<Icon_Question isHot={false} />}
@@ -251,7 +251,7 @@ PagePersonalHeader.propTypes = {
 ButtonHeaderWithSlugPersonal.propTypes = {
   account: PropTypes.object.isRequired,
   state: PropTypes.object.isRequired,
-  dispatch: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
 }
 
 export default PagePersonalHeader

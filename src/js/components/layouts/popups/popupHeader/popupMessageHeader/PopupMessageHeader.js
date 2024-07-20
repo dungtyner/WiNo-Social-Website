@@ -57,9 +57,10 @@ function PopupMessageHeader({ listChat = [] }) {
                 <ItemOpt
                   key={idx}
                   handleClick={async () => {
-                    const data = await createRequest(
+                    const { data } = await createRequest(
                       'GET',
-                      '/friend/getListFriend?limit=20',
+                      '/friend/get-list-friend',
+                      { query: { limit: 20 } },
                     )
                     dispatch(
                       add_popup_review(
@@ -352,12 +353,12 @@ export const req_getDetailChat = async ({
       dispatch(delete_pop_content(popUpContent))
     }
   })
-  const data = await createRequest(
-    'GET',
-    `/chat/getDetailChat?_id=${JSON.stringify(
-      data_Chat_id,
-    )}&isSeen=${data_Chat_isSeen}`,
-  )
+  const { data } = await createRequest('GET', '/chat/get-detail-chat', {
+    query: {
+      _id: data_Chat_id,
+      is_seen: data_Chat_isSeen,
+    },
+  })
 
   dispatch(
     actions.add_popup_messenger(

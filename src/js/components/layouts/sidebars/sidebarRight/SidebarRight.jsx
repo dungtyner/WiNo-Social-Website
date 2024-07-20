@@ -26,5 +26,5 @@ export default function Widgets({ friendsOnline = [] }) {
 }
 
 Widgets.propTypes = {
-  friendsOnline: PropTypes.object,
+  friendsOnline: PropTypes.array,
 }

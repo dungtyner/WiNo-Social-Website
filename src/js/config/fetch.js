@@ -4,11 +4,13 @@ const _fetch = async (method, path, { query = {}, body = null }) => {
 
   return await fetch(url, {
     method: method,
-    headers: {
-      'Content-Type': 'application/json',
-    },
     credentials: 'include',
-    body: body === null ? null : JSON.stringify(body),
+    body:
+      body === null
+        ? null
+        : body instanceof FormData
+          ? body
+          : JSON.stringify(body),
   })
 }
 

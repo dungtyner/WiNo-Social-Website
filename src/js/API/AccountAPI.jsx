@@ -4,9 +4,9 @@ const AccountAPI = {
     const path = '/account'
     return await createRequest('GET', path, { query })
   },
-  getId: async (id) => {
-    const path = '/account/:id'
-    return await createRequest('GET', path, { id })
+  getBySlug: async (slug) => {
+    const path = '/account/:slug'
+    return await createRequest('GET', path, { query: { slug } })
   },
 
   searchAccounts: async (query = {}) => {

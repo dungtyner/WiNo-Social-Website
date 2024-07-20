@@ -795,7 +795,7 @@ PopUpMessenger.propTypes = {
   avatarChat: PropTypes.string.isRequired,
   last_interact: PropTypes.object.isRequired,
   membersChat: PropTypes.object,
-  contentsPopUpMessenger: PropTypes.object,
+  contentsPopUpMessenger: PropTypes.array,
 }
 
 export default PopUpMessenger

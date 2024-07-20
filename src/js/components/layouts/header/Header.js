@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Avatar } from '@mui/material'
-import queryString from 'query-string'
 import FormSearch from '../../parts/inputs/forms/formSearch/FormSearch.js'
 import PopupAccountHeader from '../popups/popupHeader/popupAccountHeader/PopupAccountHeader'
 import LabelCircle from '../../parts/labels/labelCircle/LabelCircle.js'
@@ -85,12 +84,11 @@ function Header({ avatar_account, slug_personal, account }) {
   useEffect(() => {
     if (show_search) {
       const fetchData = async () => {
-        const params = {
+        const query = {
           keyword: keyword,
         }
-        const query = '?' + queryString.stringify(params)
         const response = await AccountAPI.searchAccounts(query)
-        set_list_search(response)
+        set_list_search(response.data)
       }
       fetchData()
     }
@@ -175,7 +173,10 @@ function Header({ avatar_account, slug_personal, account }) {
                   })
                 }
 
-                const data = await createRequest('GET', '/chat/getListBoxChat')
+                const { data } = await createRequest(
+                  'GET',
+                  '/chat/get-list-box-chat',
+                )
                 handle_renderPopHeader(
                   event,
                   isChecked,
@@ -222,7 +223,7 @@ function Header({ avatar_account, slug_personal, account }) {
               }}
             />
             <LabelCircle
-              key={3}
+              key={2}
               handleClick={(
                 event,
                 isChecked,

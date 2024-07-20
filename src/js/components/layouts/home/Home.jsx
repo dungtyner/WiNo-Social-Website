@@ -152,9 +152,11 @@ export default function Home({ avatar_account, full_name, data_account }) {
 
       const data = await createRequest('POST', '/friend/posts', { body })
 
-      data.result.map((postFriend) => {
-        set_list_post_home(list_post_home.concat(postFriend.reverse()))
-      })
+      if (data) {
+        data.result.map((postFriend) => {
+          set_list_post_home(list_post_home.concat(postFriend.reverse()))
+        })
+      }
     }
     await fetchAPI()
   }, [])

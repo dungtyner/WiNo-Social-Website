@@ -31,7 +31,7 @@
     "scripts": {
         "postinstall": "bash ./scripts/postinstall.sh",
         "build": "npm run postinstall && react-scripts build  --no-cache",
-        "start": "npm run postinstall && react-scripts start",
+        "start": "npm run postinstall && react-scripts start --no-cache",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "lint": "eslint src/*.{js,jsx}",

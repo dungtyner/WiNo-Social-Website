@@ -52,7 +52,7 @@ function PopUpMessenger({
   const [isShowMoveDownMess, set_isShowMoveDownMess] = useState(false)
   const [state_name_chat, set_state_name_chat] = useState(nameChat)
   const [state_avatar_chat, set_state_avatar_chat] = useState(avatarChat)
-
+  console.log(state_name_chat)
   const refContentPopUp = useRef(null)
 
   const [stateCountMess, set_stateCountMess] = useState([])
@@ -75,7 +75,7 @@ function PopUpMessenger({
       var last_content_mess =
         state_contentsPopUpMessenger[state_contentsPopUpMessenger.length - 1]
       var last_session_mess = null
-      console.log(content_messages.value_content_sessionMessage)
+      console.log(content_messages.message)
       if (last_content_mess) {
         // console.log('_SENDING',last_content_mess.session_messages.length);
         last_session_mess =
@@ -84,12 +84,11 @@ function PopUpMessenger({
           ]
         if (
           state_contentsPopUpMessenger.length > 0 &&
-          content_messages.value_content_sessionMessage.session_messages
+          content_messages.message.session_messages
         ) {
           if (
             last_session_mess.time_send !=
-            content_messages.value_content_sessionMessage.session_messages[0]
-              .time_send
+            content_messages.message.session_messages[0].time_send
           ) {
             setState_contentsPopUpMessenger(() => [
               ...state_tmp,
@@ -97,12 +96,9 @@ function PopUpMessenger({
                 isMe:
                   state.account.slug_personal ==
                   content_messages.account.slug_personal,
-                name_sender:
-                  content_messages.value_content_sessionMessage.name_sender,
+                name_sender: content_messages.message.name_sender,
                 avatar_account: content_messages.account.avatar_account,
-                session_messages:
-                  content_messages.value_content_sessionMessage
-                    .session_messages,
+                session_messages: content_messages.message.session_messages,
                 slug_sender: content_messages.account.slug_personal,
               }),
             ])
@@ -120,8 +116,7 @@ function PopUpMessenger({
               ' ' +
               content_messages.account.lname,
             avatar_account: content_messages.account.avatar_account,
-            session_messages:
-              content_messages.value_content_sessionMessage.session_messages,
+            session_messages: content_messages.message.session_messages,
             slug_sender: content_messages.account.slug_personal,
           }),
         ])
@@ -136,8 +131,7 @@ function PopUpMessenger({
               ' ' +
               content_messages.account.lname,
             avatar_sender: content_messages.account.avatar_account,
-            session_messages:
-              content_messages.value_content_sessionMessage.session_messages,
+            session_messages: content_messages.message.session_messages,
             slug_sender: content_messages.account.slug_personal,
           }),
         ])

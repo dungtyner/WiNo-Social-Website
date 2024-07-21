@@ -168,9 +168,9 @@ function PopupSettingMessenger() {
                 )}
                 <ItemOpt
                   handleClick={() => {
-                    createRequest('POST', '/chat/getMembers', {
-                      body: {
-                        idChat: value_Context_Message.idChat,
+                    createRequest('POST', '/chat/:id/get-members', {
+                      query: {
+                        id: value_Context_Message.idChat,
                       },
                     }).then((data) => {
                       dispatch(
@@ -189,10 +189,8 @@ function PopupSettingMessenger() {
 
                 <ItemOpt
                   handleClick={() => {
-                    createRequest('POST', '/chat/removeChat', {
-                      body: {
-                        idChat: value_Context_Message.idChat,
-                      },
+                    createRequest('POST', '/chat/:id/remove', {
+                      query: { id: value_Context_Message.idChat },
                     })
                     dispatch(
                       delete_popup_messenger({
@@ -452,13 +450,12 @@ function ItemEditNickNameMember({ dataMember, value_Context_Message }) {
           state_EditNickName ? (
             <span
               onClick={() => {
-                // console.log('loadasd');
                 set_state_EditNickName(false)
-                createRequest('POST', '/chat/updateNickname', {
+                createRequest('POST', '/chat/:id/member/update-nickname', {
+                  query: { id: value_Context_Message.idChat },
                   body: {
-                    idChat: value_Context_Message.idChat,
-                    new_nickname: state_textNickName,
-                    slug_member: dataMember.slug_member,
+                    nickname: state_textNickName,
+                    slugMember: dataMember.slug_member,
                     content_message: new contentPopUpMessenger({
                       slug_sender: state.account.slug_personal,
                       session_messages: [
@@ -497,6 +494,7 @@ function ItemEditNickNameMember({ dataMember, value_Context_Message }) {
 }
 
 function PopUpEditNameChat({ nameChat, idChat }) {
+  console.log(nameChat)
   const [state_textarea, set_state_textarea] = useState(nameChat)
   const [state_acceptSubmit, set_state_acceptSubmit] = useState(true)
   const [state, dispatch] = useStore()
@@ -535,9 +533,11 @@ function PopUpEditNameChat({ nameChat, idChat }) {
             />
             <ButtonNormal
               handleClick={() => {
-                createRequest('POST', '/chat/modifyNameChat', {
+                createRequest('POST', '/chat/:id/modify-name-box-chat', {
+                  query: {
+                    id: idChat,
+                  },
                   body: {
-                    idChat,
                     nameChat: state_textarea,
                     content_message: new contentPopUpMessenger({
                       slug_sender: state.account.slug_personal,

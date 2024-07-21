@@ -106,7 +106,7 @@ function FormMessenger({ idChat }) {
 
     if (event.key === 'Enter' || isClick) {
       console.log(stateTextMess)
-      var value_content_sessionMessage = cast_inputs_to_valueContentMessNew({
+      const value_content_sessionMessage = cast_inputs_to_valueContentMessNew({
         listFile: listFile,
         stateTextMess: stateTextMess,
         reply: value_Context_Message.stateReplyMess,
@@ -253,7 +253,7 @@ function FormMessenger({ idChat }) {
                     <Grid
                       onGifClick={(gif, event) => {
                         event.preventDefault()
-                        var value_content_sessionMessage =
+                        const value_content_sessionMessage =
                           cast_inputs_to_valueContentMessNew({
                             stateTextMess: stateTextMess,
                             gif: gif.id,
@@ -565,23 +565,23 @@ function submitSaveMessage({
   idChat,
 }) {
   const form = new FormData()
-  form.append('idChat', idChat)
-  form.append('socket', JSON.stringify(state.socket.id))
-
   for (let i = 0; i < listFile.length; i++) {
     form.append('listFile', listFile[i])
   }
-  form.append(
-    'value_content_sessionMessage',
-    JSON.stringify(
-      new contentPopUpMessenger({
+
+  createRequest('POST', '/chat/:box-chat-id/upload-media-message', {
+    query: { 'box-chat-id': idChat },
+    body: form,
+  })
+
+  createRequest('POST', '/chat/:box-chat-id/send-message', {
+    query: { 'box-chat-id': idChat },
+    body: {
+      message: new contentPopUpMessenger({
         slug_sender: state.account.slug_personal,
         session_messages: value_content_sessionMessage,
       }),
-    ),
-  )
-  createRequest('POST', '/chat/saveMessage', {
-    body: form,
+    },
   })
 }
 function renderMyScreen({
@@ -731,7 +731,7 @@ function MicRecorderMess({
             className="btnSubmit-micRecorderMess"
             onClick={(event) => {
               saveRecorder.current((blob) => {
-                var valueContentMessNew = cast_inputs_to_valueContentMessNew({
+                const valueContentMessNew = cast_inputs_to_valueContentMessNew({
                   gif: null,
                   listFile: [new File([blob], blob.name, { type: blob.type })],
                   reply: null,

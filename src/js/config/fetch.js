@@ -1,9 +1,14 @@
 import { BACKEND_API_URL } from '../config'
 const _fetch = async (method, path, { query = {}, body = null }) => {
   const url = prepareUrl(path, query)
+  const headers = {}
+  if (body !== null && !(body instanceof FormData)) {
+    headers['Content-Type'] = 'application/json'
+  }
 
   return await fetch(url, {
     method: method,
+    headers: headers,
     credentials: 'include',
     body:
       body === null

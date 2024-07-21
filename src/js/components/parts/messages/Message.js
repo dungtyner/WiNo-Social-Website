@@ -143,13 +143,17 @@ function ListOptMoreSessionMessage({
                         component_Right={
                           <ButtonNormal
                             handleClick={(event) => {
-                              createRequest('POST', '/chat/shareMessage', {
-                                body: {
-                                  idChat_src: idChat,
-                                  idChat_send: chat._id,
-                                  idx_sessionMessage,
+                              createRequest(
+                                'POST',
+                                '/chat/forward-to-message',
+                                {
+                                  body: {
+                                    boxChatIdFrom: idChat,
+                                    boxChatIdTo: chat._id,
+                                    sessionMessageIndex: idx_sessionMessage,
+                                  },
                                 },
-                              })
+                              )
                             }}
                             isEnable={true}
                             styles={{
@@ -174,7 +178,7 @@ function ListOptMoreSessionMessage({
           className="item-optMoreSessionMessage"
           onClick={() => {
             obj_stateShowMoreOpt.set_stateShowMoreOpt(false)
-            request_removeSessionMess({
+            removeSessionMess({
               idx_sessionMessage,
               slug_sender,
               idChat,
@@ -251,35 +255,29 @@ function SessionMessage({ obj_sessionMessage, isReply = false }) {
     return shortLassSessionMess(obj_sessionMessage)
   }
 }
-function request_updateInteractMess({
+function updateInteractMess({
   IdChat,
   idx_sessionMessage,
   value_sessionMessage,
   state,
   isNotification,
 }) {
-  createRequest('POST', '/chat/updateInteractMess', {
+  createRequest('POST', '/chat/:id/update-interact-message', {
+    query: { id: IdChat },
     body: {
-      IdChat,
-      idx_sessionMessage,
-      value_sessionMessage,
+      sessionMessageIndex: idx_sessionMessage,
+      sessionMessageValue: value_sessionMessage,
       socket: state.socketChat.id,
       isNotification,
     },
   })
 }
-function request_removeSessionMess({
-  idx_sessionMessage,
-  slug_sender,
-  idChat,
-  state,
-}) {
-  createRequest('POST', '/chat/removeSessionMess', {
+function removeSessionMess({ idx_sessionMessage, slug_sender, idChat, state }) {
+  createRequest('POST', '/chat/:id/remove-session-message', {
+    query: { id: idChat },
     body: {
-      idx_sessionMessage,
-      slug_sender,
-      idChat,
-      socket: state.socketChat.id,
+      sessionMessageIndex: idx_sessionMessage,
+      slugSender: slug_sender,
     },
   })
 }
@@ -306,7 +304,7 @@ function MainSessionMessage({
   slug_sender,
 }) {
   const [state, dispatch] = useStore()
-  var list_valueInteract = sessionMessage.interact.map((el) => {
+  const list_valueInteract = (sessionMessage.interact ?? []).map((el) => {
     return el.value_interact
   })
   var list_valueInteractUnique = list_valueInteract.filter(onlyUnique)
@@ -327,7 +325,6 @@ function MainSessionMessage({
     }
   }, [stateShowPickerEmoji])
 
-  console.log(sessionMessage)
   return sessionMessage.notification ? (
     <SessionMessageNotification
       obj_IsMeSender={{ name_sender, slug_sender }}
@@ -366,7 +363,7 @@ function MainSessionMessage({
       )}
       <div className="sessionContent-message" id={sessionMessage.time_send}>
         <SessionMessage obj_sessionMessage={sessionMessage} />
-        {sessionMessage.interact.length > 0 && (
+        {sessionMessage.interact && sessionMessage.interact.length > 0 && (
           <div className={`sessionMessage_interact`}>
             {sessionMessage.interact.length > 1 &&
               sessionMessage.interact.length}
@@ -489,7 +486,7 @@ function MainSessionMessage({
                         value_Context_Message.setState_contentsPopUpMessenger(
                           tmp,
                         )
-                        request_updateInteractMess({
+                        updateInteractMess({
                           IdChat: value_Context_Message.idChat,
                           idx_sessionMessage: `${propsParent.idxMessage}/${idx_sessionMessage}`,
                           value_sessionMessage: sessionMessage,
@@ -560,7 +557,7 @@ function MainSessionMessage({
                             value_Context_Message.setState_contentsPopUpMessenger(
                               tmp,
                             )
-                            request_updateInteractMess({
+                            updateInteractMess({
                               IdChat: value_Context_Message.idChat,
                               idx_sessionMessage: `${propsParent.idxMessage}/${idx_sessionMessage}`,
                               value_sessionMessage: sessionMessage,

@@ -78,7 +78,7 @@ function PopupMessageHeader({ listChat = [] }) {
           <FormSearch
             handler_Search={async (value) => {
               if (value.trim().length > 0) {
-                const data = await createRequest('GET', '/chat/search', {
+                const { data } = await createRequest('GET', '/chat/search', {
                   query: { keyword: value },
                 })
                 if (data.result.length > 0) {
@@ -359,6 +359,8 @@ export const req_getDetailChat = async ({
       is_seen: data_Chat_isSeen,
     },
   })
+
+  console.log(data)
 
   dispatch(
     actions.add_popup_messenger(

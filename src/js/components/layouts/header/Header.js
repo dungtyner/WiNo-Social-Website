@@ -165,12 +165,18 @@ function Header({ avatar_account, slug_personal, account }) {
               ) => {
                 if (stateCountMess.length > 0) {
                   const query = {
-                    listNotification: stateCountMess,
+                    boxChatIds: stateCountMess,
                   }
 
-                  await createRequest('GET', '/chat/clearNotificationChat', {
-                    query,
-                  })
+                  console.log(stateCountMess)
+
+                  await createRequest(
+                    'GET',
+                    '/chat/clear-notification-box-chat',
+                    {
+                      query,
+                    },
+                  )
                 }
 
                 const { data } = await createRequest(
@@ -202,14 +208,14 @@ function Header({ avatar_account, slug_personal, account }) {
                 if (stateCountNotification > 0) {
                   await createRequest(
                     'GET',
-                    '/notification/clearCountNotification',
+                    '/notification/clear-count-notification',
                   )
                   set_stateCountNotification(0)
                 }
 
-                var data = await createRequest(
+                const { data } = await createRequest(
                   'GET',
-                  '/notification/request_getNotification',
+                  '/notification/get-notification',
                 )
                 handle_renderPopHeader(
                   event,
